@@ -1,7 +1,15 @@
-import Hello from 'src/components/Hello';
+import { Layout } from './layout/Layout';
+import { Providers } from './providers/Providers';
+import { Routes } from './Routes';
 
 function App() {
-  return <Hello />;
+  return (
+    <Providers>
+      <Layout>
+        <Routes />
+      </Layout>
+    </Providers>
+  );
 }
 
 export default App;

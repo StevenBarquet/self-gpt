@@ -1,18 +1,19 @@
 // ---Dependencies
 import React, { ReactNode } from 'react';
+import { BrowserRouter } from 'react-router-dom';
 
 interface Props {
   children: ReactNode;
 }
 
 /**
- * Layout Component:  Descripción del comportamiento...
+ * Providers Component:  Descripción del comportamiento...
  * @param {Props} props - Parámetros del componente como: ...
  */
-export function Layout({ children }: Props) {
+export function Providers({ children }: Props) {
   // -----------------------CONSTS, HOOKS, STATES
   // -----------------------MAIN METHODS
   // -----------------------AUX METHODS
   // -----------------------RENDER
-  return <>{children}</>;
+  return <BrowserRouter>{children}</BrowserRouter>;
 }
