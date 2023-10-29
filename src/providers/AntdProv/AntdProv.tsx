@@ -1,5 +1,5 @@
 // ---Dependencies
-import { ConfigProvider } from 'antd';
+import { ConfigProvider, theme } from 'antd';
 import React, { ReactNode } from 'react';
 
 interface Props {
@@ -15,5 +15,16 @@ export function AntdProv({ children }: Props) {
   // -----------------------MAIN METHODS
   // -----------------------AUX METHODS
   // -----------------------RENDER
-  return <ConfigProvider theme={undefined}>{children}</ConfigProvider>;
+  return (
+    <ConfigProvider
+      theme={{
+        algorithm: theme.defaultAlgorithm,
+        token: {
+          colorPrimary: '#8824fa',
+        },
+      }}
+    >
+      {children}
+    </ConfigProvider>
+  );
 }
