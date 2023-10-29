@@ -12,9 +12,11 @@
     "prettier:fix": "npm run prettier -- --write",
     "format": "npm run prettier:fix && npm run lint:fix",
     "space_3": "-----------------------------------------------------------------",
-    "generate-comp": "npx plop --plopfile generators/plopfile.js"
+    "generate-comp": "npx plop --plopfile generators/plopfile.js",
+    "generate-store": "npx plop --plopfile generators/plopfile-store.js"
   },
   "dependencies": {
+    "antd": "^5.10.2",
     "qwik-forge-grid": "2.3.3",
     "react": "18.2.0",
     "react-dom": "18.2.0",

@@ -33,9 +33,15 @@ type PersistFn = (
   options: PersistOptions<{{pascalCase name}}Store>,
 ) => StateCreator<{{pascalCase name}}Store>;
 
+const withPersist = (persist as PersistFn)(actions, { name: '{{pascalCase name}}StorageKey' });
+
 export const use{{pascalCase name}}Store = create<{{pascalCase name}}Store>(
   (persist as PersistFn)(actions, {
     name: '{{pascalCase name}}StorageKey',
     storage: createJSONStorage(() => AsyncStorage),
   }),
+);
+
+export const use{{pascalCase name}}Store = create<{{pascalCase name}}Store>()(
+  devtools(withPersist, { name: '{{pascalCase name}}' }),
 );

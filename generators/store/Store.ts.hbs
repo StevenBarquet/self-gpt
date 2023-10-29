@@ -26,3 +26,7 @@ const actions: StateCreator<{{pascalCase name}}Store> = (set) => ({
 // ------------BOILERPLATE-----
 
 export const use{{pascalCase name}} = create<{{pascalCase name}}Store>(actions);
+
+export const use{{pascalCase name}}Store = create<{{pascalCase name}}Store>()(
+  devtools(actions, { name: '{{pascalCase name}}' }),
+);
