@@ -1,0 +1,86 @@
+//----------------------Main Colors------------------
+//----------------------Green
+$colorGreen: #0a9989;
+$colorGreen1: mix($colorGreen, white, 10%);
+$colorGreen2: mix($colorGreen, white, 20%);
+$colorGreen3: mix($colorGreen, white, 30%);
+$colorGreen4: mix($colorGreen, white, 40%);
+$colorGreen5: mix($colorGreen, white, 50%);
+$colorGreen6: mix($colorGreen, white, 60%);
+$colorGreen7: mix($colorGreen, white, 70%);
+$colorGreen8: mix($colorGreen, white, 80%);
+$colorGreen9: mix($colorGreen, white, 90%);
+$colorGreen10: mix($colorGreen, white, 100%); // color base
+$colorGreen11: mix($colorGreen, black, 90%);
+$colorGreen12: mix($colorGreen, black, 80%);
+$colorGreen13: mix($colorGreen, black, 70%);
+$colorGreen14: mix($colorGreen, black, 60%);
+$colorGreen15: mix($colorGreen, black, 50%);
+$colorGreen16: mix($colorGreen, black, 40%);
+$colorGreen17: mix($colorGreen, black, 30%);
+$colorGreen18: mix($colorGreen, black, 20%);
+$colorGreen19: mix($colorGreen, black, 10%);
+$colorGreen20: mix($colorGreen, black, 0%);
+$colorSecondary1: #7dfff0;
+$colorSecondary2: #00ffe0;
+$colorSecondary3: #06c3ad;
+$colorSecondary4: #0a9989;
+$colorSecondary5: #077c6e;
+$colorSecondary6: #045f53;
+$colorSecondary7: #013d33;
+
+//----------------------Purple
+$colorPurple: #8824fa;
+$colorPurple1: mix($colorPurple, white, 10%);
+$colorPurple2: mix($colorPurple, white, 20%);
+$colorPurple3: mix($colorPurple, white, 30%);
+$colorPurple4: mix($colorPurple, white, 40%);
+$colorPurple5: mix($colorPurple, white, 50%);
+$colorPurple6: mix($colorPurple, white, 60%);
+$colorPurple7: mix($colorPurple, white, 70%);
+$colorPurple8: mix($colorPurple, white, 80%);
+$colorPurple9: mix($colorPurple, white, 90%);
+$colorPurple10: mix($colorPurple, white, 100%); // color base
+$colorPurple11: mix($colorPurple, black, 90%);
+$colorPurple12: mix($colorPurple, black, 80%);
+$colorPurple13: mix($colorPurple, black, 70%);
+$colorPurple14: mix($colorPurple, black, 60%);
+$colorPurple15: mix($colorPurple, black, 50%);
+$colorPurple16: mix($colorPurple, black, 40%);
+$colorPurple17: mix($colorPurple, black, 30%);
+$colorPurple18: mix($colorPurple, black, 20%);
+$colorPurple19: mix($colorPurple, black, 10%);
+$colorPurple20: mix($colorPurple, black, 0%);
+
+//----------------------Dark
+$colorDark1: #717171;
+$colorDark2: #5e5e5e;
+$colorDark3: #555555;
+$colorDark4: #474747;
+$colorDark5: #303030;
+$colorDark6: #1d1d1d;
+$colorDark7: #000000;
+// ---Default
+$colorDark: $colorDark5;
+
+//----------------------Light
+$colorLight1: #ffffff;
+$colorLight2: #e9e9e9;
+$colorLight3: #dbdbdb;
+$colorLight4: #cacaca;
+$colorLight5: #bababa;
+$colorLight6: #b0b0b0;
+$colorLight7: #a5a5a5;
+// ---Default
+$colorLight: $colorLight1;
+
+//----------------------Specials------------------
+$colorSuccess: #3ab415;
+$colorWarning: #f1df17;
+$colorError: #ff4d4f;
+
+//----------------------Sizes------------------
+$headerHeight: 64px;
+$headerHeightMobile: 90px;
+$footerHeight: 80px;
+$footerHeightMobile: 200px;

@@ -1,4 +1,4 @@
-import Hello from '~/components/Hello';
+import Hello from 'src/components/Hello';
 
 function App() {
   return <Hello />;

@@ -1,0 +1,43 @@
+@import "animations";
+@import "variables";
+@import "./utils";
+
+// ----------------------------------Layout------------------------------------
+
+main {
+  font-family: "Inter";
+  font-size: 16px;
+  > div:first-child {
+    @include onlyIn(desk) {
+      min-height: calc(100vh - ($headerHeight + $footerHeight));
+    }
+    @include onlyIn(mob) {
+      min-height: calc(100vh - ($headerHeightMobile + $footerHeightMobile));
+    }
+  }
+}
+// -----------TRUE GLOBAL
+
+.center-block {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+// Hace que el texto dentro del contenedor no sea seleccionable
+.unselectable {
+  -webkit-user-select: none; /* Safari */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* IE10+/Edge */
+  user-select: none;
+}
+
+.loading-icon {
+  animation: sb-spin 1.3s infinite linear;
+}
+
+.customHelper {
+  color: $colorError;
+  margin: 3px 0px 8px 0px;
+}

@@ -1,8 +1,10 @@
-import logo from '~/logo.svg';
+import logo from 'src/logo.svg';
+import styles from './test.module.scss';
 
 const Hello = () => {
   return (
     <div
+      className={styles.Hello}
       style={{
         display: 'flex',
         flexDirection: 'column',
@@ -12,6 +14,7 @@ const Hello = () => {
         paddingTop: '50px',
       }}
     >
+      <section>Prueba MLG</section>
       <img src={logo} alt='Logo' style={{ height: '150px' }} />
       <ul
         style={{

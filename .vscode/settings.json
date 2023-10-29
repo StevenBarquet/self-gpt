@@ -1,7 +1,59 @@
 {
-  "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "editor.formatOnSave": true,
-  "editor.formatOnPaste": false,
-  // Runs Prettier, then ESLint
-  "editor.codeActionsOnSave": ["source.formatDocument", "source.fixAll.eslint"]
+  "css.lint.unknownAtRules": "ignore",
+  "material-icon-theme.activeIconPack": "qwik",
+  "editor.tabSize": 2,
+  "editor.detectIndentation": false,
+  "search.exclude": {
+    "package-lock.json": true
+  },
+  "editor.defaultFormatter": "dbaeumer.vscode-eslint",
+  "editor.formatOnSave": false,
+  "editor.codeActionsOnSave": ["source.addMissingImports", "source.fixAll.eslint"],
+  // Overriding multiple language files isn't available on VScode yet
+  "[json]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[jsonc]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "cSpell.words": [
+    "adelántate",
+    "Barquet",
+    "facebook",
+    "Fcol",
+    "forgemytech",
+    "LOCALSTORAGE",
+    "logearte",
+    "Mcol",
+    "Qwik",
+    "spanish",
+    "trpc",
+    "webp"
+  ],
+  "material-icon-theme.folders.associations": {
+    "store": "Redux-store",
+    "Store": "Redux-store",
+    "appConfig": "config",
+    "AppConfig": "config",
+    "Providers": "context",
+    "providers": "context",
+    "GlobalLayout": "layout",
+    "globalLayout": "layout",
+    "authRouter": "secure",
+    "AuthRouter": "secure",
+    "publicRouter": "public",
+    "tRPC": "cluster",
+    "TRPC": "cluster",
+    "trcp": "cluster",
+    "services3rdP": "connection",
+    "entities": "components"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[scss]": {
+    "editor.defaultFormatter": "sibiraj-s.vscode-scss-formatter"
+  }
 }
