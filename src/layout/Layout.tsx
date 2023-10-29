@@ -1,18 +1,20 @@
 // ---Dependencies
 import React from "react";
 
+interface Props {}
 
 /**
- * {{pascalCase name}} Component:  Descripción del comportamiento...
+ * Layout Component:  Descripción del comportamiento...
+ * @param {Props} props - Parámetros del componente como: ...
  */
-export function {{pascalCase name}}() {
+export function Layout({}:Props) {
   // -----------------------CONSTS, HOOKS, STATES
   // -----------------------MAIN METHODS
   // -----------------------AUX METHODS
   // -----------------------RENDER
   return (
-    <div className="{{pascalCase name}}">
-      <p>{{pascalCase name}}</p>
+    <div >
+      <p>Layout</p>
     </div>
   );
 }

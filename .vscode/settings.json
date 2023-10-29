@@ -7,7 +7,7 @@
     "package-lock.json": true
   },
   "editor.defaultFormatter": "dbaeumer.vscode-eslint",
-  "editor.formatOnSave": false,
+  "editor.formatOnSave": true,
   "editor.codeActionsOnSave": ["source.addMissingImports", "source.fixAll.eslint"],
   // Overriding multiple language files isn't available on VScode yet
   "[json]": {

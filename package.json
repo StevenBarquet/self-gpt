@@ -10,7 +10,9 @@
     "lint:fix": "npm run lint -- --fix",
     "prettier": "npx prettier src --check",
     "prettier:fix": "npm run prettier -- --write",
-    "format": "npm run prettier:fix && npm run lint:fix"
+    "format": "npm run prettier:fix && npm run lint:fix",
+    "space_3": "-----------------------------------------------------------------",
+    "generate-comp": "npx plop --plopfile generators/plopfile.js"
   },
   "dependencies": {
     "qwik-forge-grid": "2.3.3",

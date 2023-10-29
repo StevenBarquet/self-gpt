@@ -1,5 +1,5 @@
 // ---Dependencies
-import { component$ } from '@builder.io/qwik';
+import React from "react";
 // ---Styles
 import style from './{{pascalCase name}}.module.scss';
 
@@ -9,14 +9,14 @@ interface Props {}
  * {{pascalCase name}} Component:  Descripción del comportamiento...
  * @param {Props} props - Parámetros del componente como: ...
  */
-export const {{pascalCase name}} = component$<Props>((props) =>  {
+export function {{pascalCase name}}({}:Props) {
   // -----------------------CONSTS, HOOKS, STATES
   // -----------------------MAIN METHODS
   // -----------------------AUX METHODS
   // -----------------------RENDER
   return (
-    <div class={style['{{pascalCase name}}']}>
+    <div className={style['{{pascalCase name}}']}>
       <p>{{pascalCase name}}</p>
     </div>
   );
-})
+}

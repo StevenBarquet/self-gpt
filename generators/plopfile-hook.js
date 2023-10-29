@@ -25,7 +25,7 @@ module.exports = (plop) => {
       const hook = {
         type: 'add',
         path: '{{path}}/{{camelCase name}}.ts',
-        templateFile: `templates/others/hook${propsType}.ts.hbs`,
+        templateFile: `others/hook${propsType}.ts.hbs`,
       };
 
       return [hook];

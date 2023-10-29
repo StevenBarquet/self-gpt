@@ -33,13 +33,13 @@ module.exports = (plop) => {
       const compTemplate = {
         type: 'add',
         path: '{{path}}/{{pascalCase name}}/{{pascalCase name}}.tsx',
-        templateFile: `templates/components/${styleType}${propsType}Component.tsx.hbs`,
+        templateFile: `components/${styleType}${propsType}Component.tsx.hbs`,
       };
 
       const styles = {
         type: 'add',
         path: '{{path}}/{{pascalCase name}}/{{pascalCase name}}.module.scss',
-        templateFile: `templates/components/compStyles.module.scss.hbs`,
+        templateFile: `components/compStyles.module.scss.hbs`,
       };
 
       let actions = [compTemplate];

@@ -1,19 +1,19 @@
 // ---Dependencies
-import { component$ } from '@builder.io/qwik';
+import React from "react";
 // ---Styles
 import style from './{{pascalCase name}}.module.scss';
 
 /**
  * {{pascalCase name}} Component:  Descripción del comportamiento...
  */
-export const {{pascalCase name}} = component$(() =>  {
+export function {{pascalCase name}}() {
   // -----------------------CONSTS, HOOKS, STATES
   // -----------------------MAIN METHODS
   // -----------------------AUX METHODS
   // -----------------------RENDER
   return (
-    <div class={style['{{pascalCase name}}'] }>
+    <div className={style['{{pascalCase name}}'] }>
       <p>{{pascalCase name}}</p>
     </div>
   );
-})
+}
