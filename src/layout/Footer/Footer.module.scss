@@ -1,0 +1,23 @@
+@import '/src/styles/variables';
+@import '/src/styles/animations';
+@import '/src/styles/utils';
+
+.Footer {
+  // ajusta la altura de $footerHeight
+  font-family: "Inter";
+  background-color: $colorPurple5;
+
+  display: grid;
+  align-items: center;
+  justify-content: center;
+  @include onlyIn(desk) {
+    height: $footerHeight;
+  }
+  @include onlyIn(mob) {
+    height: $footerHeightMobile;
+  }
+}
+// // desk mob xs sm md lg xl xxl
+// @include onlyIn(lg) {
+//   background-color: #f28181;
+// }

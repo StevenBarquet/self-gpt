@@ -1,5 +1,7 @@
 // ---Dependencies
 import React, { ReactNode } from 'react';
+import { Navbar } from './Navbar/Navbar';
+import { Footer } from './Footer/Footer';
 
 interface Props {
   children: ReactNode;
@@ -14,5 +16,11 @@ export function Layout({ children }: Props) {
   // -----------------------MAIN METHODS
   // -----------------------AUX METHODS
   // -----------------------RENDER
-  return <>{children}</>;
+  return (
+    <>
+      <Navbar />
+      <main>{children}</main>
+      <Footer />
+    </>
+  );
 }

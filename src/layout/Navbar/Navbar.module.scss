@@ -1,0 +1,25 @@
+@import "/src/styles/variables";
+@import "/src/styles/animations";
+@import "/src/styles/utils";
+
+.Navbar {
+  font-family: "Inter";
+  background-color: $colorPurple5;
+  display: grid;
+  align-items: center;
+  @include onlyIn(desk) {
+    height: $headerHeight;
+  }
+  @include onlyIn(mob) {
+    height: $headerHeightMobile;
+  }
+  a {
+    padding: 10px 0;
+    text-align: center;
+    display: block;
+  }
+  a:first-child {
+    text-align: start;
+    padding-left: 10px;
+  }
+}

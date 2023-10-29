@@ -4015,11 +4015,6 @@ queue-microtask@^1.2.2:
   resolved "https://registry.npmjs.org/queue-microtask/-/queue-microtask-1.2.3.tgz"
   integrity sha512-NuaNSa6flKT5JaSYQzJok04JzTL1CA6aGhv5rfLW3PgqA+M2ChpZQnAC8h8i4ZFkBS8X5RqkDBHA7r4hej3K9A==
 
-qwik-forge-grid@2.3.3:
-  version "2.3.3"
-  resolved "https://registry.yarnpkg.com/qwik-forge-grid/-/qwik-forge-grid-2.3.3.tgz#2e64bcc9c168998d7f55ab6c0af13e503fbc52bb"
-  integrity sha512-s+pvaOOxrdhfulunfpJX2qWVKAfBeBE4muh5R28K2VTjl8zamB1eLEy70QIeZjOHCw1VnHUAb0JrUxc5riNMhg==
-
 rc-cascader@~3.18.1:
   version "3.18.1"
   resolved "https://registry.yarnpkg.com/rc-cascader/-/rc-cascader-3.18.1.tgz#e488e9cd9ace1617e06ee4c8eadf435a11de2d29"
@@ -4381,6 +4376,11 @@ react-fast-compare@^3.1.1:
   version "3.2.2"
   resolved "https://registry.yarnpkg.com/react-fast-compare/-/react-fast-compare-3.2.2.tgz#929a97a532304ce9fee4bcae44234f1ce2c21d49"
   integrity sha512-nsO+KSNgo1SbJqJEYRE9ERzo7YtYbou/OqjSQKxV7jcKox7+usiUVZOAC+XnDOABXggQTno0Y1CpVnuWEc1boQ==
+
+react-forge-grid@2.2.2:
+  version "2.2.2"
+  resolved "https://registry.yarnpkg.com/react-forge-grid/-/react-forge-grid-2.2.2.tgz#456c2e4347a861ed1d7a183a71fd8c4917c9002d"
+  integrity sha512-XlU6anCjet9+WeMUOkKxLMPoCH61rU7YQO7rgifsVwAv68NezeIbervnkWIwTuZjOGguMm0REtBrWd4oHsVFuQ==
 
 react-helmet@6.1.0:
   version "6.1.0"
