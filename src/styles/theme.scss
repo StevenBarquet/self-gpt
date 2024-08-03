@@ -22,7 +22,7 @@ p {
   white-space: pre-line;
   font-size: 16px;
   span {
-    color: $colorPurple;
+    color: $primaryColor;
   }
 }
 
@@ -31,5 +31,5 @@ h1 {
 }
 
 .pinkRightBorder {
-  border-right: 1px solid $colorPurple;
+  border-right: 1px solid $primaryColor;
 }

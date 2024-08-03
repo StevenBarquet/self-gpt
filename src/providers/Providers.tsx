@@ -2,6 +2,7 @@
 import React, { ReactNode } from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import { AntdProv } from './AntdProv/AntdProv';
+import { useScreenBreakpoints } from './useScreenBreakpoints';
 
 interface Props {
   children: ReactNode;
@@ -13,6 +14,7 @@ interface Props {
  */
 export function Providers({ children }: Props) {
   // -----------------------CONSTS, HOOKS, STATES
+  useScreenBreakpoints();
   // -----------------------MAIN METHODS
   // -----------------------AUX METHODS
   // -----------------------RENDER

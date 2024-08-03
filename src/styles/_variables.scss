@@ -1,79 +1,65 @@
 //----------------------Main Colors------------------
-//----------------------Purple
-$colorPurple: #8824fa;
-$colorPurple1: mix($colorPurple, white, 10%);
-$colorPurple2: mix($colorPurple, white, 20%);
-$colorPurple3: mix($colorPurple, white, 30%);
-$colorPurple4: mix($colorPurple, white, 40%);
-$colorPurple5: mix($colorPurple, white, 50%);
-$colorPurple6: mix($colorPurple, white, 60%);
-$colorPurple7: mix($colorPurple, white, 70%);
-$colorPurple8: mix($colorPurple, white, 80%);
-$colorPurple9: mix($colorPurple, white, 90%);
-$colorPurple10: mix($colorPurple, white, 100%); // color base
-$colorPurple11: mix($colorPurple, black, 90%);
-$colorPurple12: mix($colorPurple, black, 80%);
-$colorPurple13: mix($colorPurple, black, 70%);
-$colorPurple14: mix($colorPurple, black, 60%);
-$colorPurple15: mix($colorPurple, black, 50%);
-$colorPurple16: mix($colorPurple, black, 40%);
-$colorPurple17: mix($colorPurple, black, 30%);
-$colorPurple18: mix($colorPurple, black, 20%);
-$colorPurple19: mix($colorPurple, black, 10%);
-$colorPurple20: mix($colorPurple, black, 0%);
-
-//----------------------Pink
-$colorPink: #fa24b3;
-$colorPink1: mix($colorPink, white, 10%);
-$colorPink2: mix($colorPink, white, 20%);
-$colorPink3: mix($colorPink, white, 30%);
-$colorPink4: mix($colorPink, white, 40%);
-$colorPink5: mix($colorPink, white, 50%);
-$colorPink6: mix($colorPink, white, 60%);
-$colorPink7: mix($colorPink, white, 70%);
-$colorPink8: mix($colorPink, white, 80%);
-$colorPink9: mix($colorPink, white, 90%);
-$colorPink10: mix($colorPink, white, 100%); // color base
-$colorPink11: mix($colorPink, black, 90%);
-$colorPink12: mix($colorPink, black, 80%);
-$colorPink13: mix($colorPink, black, 70%);
-$colorPink14: mix($colorPink, black, 60%);
-$colorPink15: mix($colorPink, black, 50%);
-$colorPink16: mix($colorPink, black, 40%);
-$colorPink17: mix($colorPink, black, 30%);
-$colorPink18: mix($colorPink, black, 20%);
-$colorPink19: mix($colorPink, black, 10%);
-$colorPink20: mix($colorPink, black, 0%);
+//----------------------Primary
+$primaryColor: #228f1e;
+$primaryColor1: mix($primaryColor, white, 10%);
+$primaryColor2: mix($primaryColor, white, 20%);
+$primaryColor3: mix($primaryColor, white, 30%);
+$primaryColor4: mix($primaryColor, white, 40%);
+$primaryColor5: mix($primaryColor, white, 50%);
+$primaryColor6: mix($primaryColor, white, 60%);
+$primaryColor7: mix($primaryColor, white, 70%);
+$primaryColor8: mix($primaryColor, white, 80%);
+$primaryColor9: mix($primaryColor, white, 90%);
+$primaryColor10: mix($primaryColor, white, 100%); // color base
+$primaryColor11: mix($primaryColor, black, 90%);
+$primaryColor12: mix($primaryColor, black, 80%);
+$primaryColor13: mix($primaryColor, black, 70%);
+$primaryColor14: mix($primaryColor, black, 60%);
+$primaryColor15: mix($primaryColor, black, 50%);
+$primaryColor16: mix($primaryColor, black, 40%);
+$primaryColor17: mix($primaryColor, black, 30%);
+$primaryColor18: mix($primaryColor, black, 20%);
+$primaryColor19: mix($primaryColor, black, 10%);
+$primaryColor20: mix($primaryColor, black, 0%);
 
 //----------------------Dark
-$colorDark1: #717171;
-$colorDark2: #5e5e5e;
-$colorDark3: #555555;
-$colorDark4: #474747;
-$colorDark5: #303030;
-$colorDark6: #1d1d1d;
-$colorDark7: #000000;
-// ---Default
-$colorDark: $colorDark5;
+$dark: #000000;
+$dark1: mix($dark, white, 10%);
+$dark2: mix($dark, white, 20%);
+$dark3: mix($dark, white, 30%);
+$dark4: mix($dark, white, 40%);
+$dark5: mix($dark, white, 50%);
+$dark6: mix($dark, white, 60%);
+$dark7: mix($dark, white, 70%);
+$dark8: mix($dark, white, 80%);
+$dark9: mix($dark, white, 90%);
+$dark10: mix($dark, white, 100%);
 
 //----------------------Light
-$colorLight1: #ffffff;
-$colorLight2: #e9e9e9;
-$colorLight3: #dbdbdb;
-$colorLight4: #cacaca;
-$colorLight5: #bababa;
-$colorLight6: #b0b0b0;
-$colorLight7: #a5a5a5;
-// ---Default
-$colorLight: $colorLight1;
+$light: #ffffff;
+$light1: mix($light, black, 90%);
+$light2: mix($light, black, 80%);
+$light3: mix($light, black, 70%);
+$light4: mix($light, black, 60%);
+$light5: mix($light, black, 50%);
+$light6: mix($light, black, 40%);
+$light7: mix($light, black, 30%);
+$light8: mix($light, black, 20%);
+$light9: mix($light, black, 10%);
+$light10: mix($light, black, 0%);
 
 //----------------------Specials------------------
 $colorSuccess: #3ab415;
 $colorWarning: #f1df17;
 $colorError: #ff4d4f;
 
+@mixin barsGradient() {
+  background-image: linear-gradient(to right, #11111b 0%, #292b32 50%, #0d0f16 100%);
+  color: #ffffff;
+}
+
 //----------------------Sizes------------------
-$headerHeight: 64px;
-$headerHeightMobile: 90px;
+$headerHeight: 58px;
+$headerHeightMobile: 58px;
 $footerHeight: 80px;
 $footerHeightMobile: 200px;

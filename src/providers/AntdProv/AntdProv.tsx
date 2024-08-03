@@ -1,6 +1,9 @@
 // ---Dependencies
 import { ConfigProvider, theme } from 'antd';
 import React, { ReactNode } from 'react';
+import colors from './appColors.module.scss';
+
+export const appColors = colors;
 
 interface Props {
   children: ReactNode;
@@ -20,7 +23,7 @@ export function AntdProv({ children }: Props) {
       theme={{
         algorithm: theme.defaultAlgorithm,
         token: {
-          colorPrimary: '#8824fa',
+          colorPrimary: colors.primaryColor || undefined,
         },
       }}
     >

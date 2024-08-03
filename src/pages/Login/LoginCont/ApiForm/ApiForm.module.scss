@@ -1,0 +1,30 @@
+@import "/src/styles/variables";
+@import "/src/styles/animations";
+@import "/src/styles/utils";
+
+.ApiForm {
+  font-family: "Inter";
+  min-height: 100vh;
+  padding: 50px 25px 20px 25px;
+
+  h1 {
+    color: $primaryColor12;
+    text-align: center;
+    font-weight: 800;
+  }
+  .DBValidate,
+  .SingleValidate {
+    margin-top: 35px;
+  }
+
+  .continue {
+    width: 90%;
+    margin: 25px auto;
+    display: block;
+  }
+}
+
+// // desk mob xs sm md lg xl xxl
+// @include onlyIn(lg) {
+//   background-color: #f28181;
+// }

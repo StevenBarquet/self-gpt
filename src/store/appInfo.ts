@@ -1,12 +1,16 @@
 import { create, StateCreator } from 'zustand';
-import { devtools, persist, PersistOptions } from 'zustand/middleware';
+import { devtools } from 'zustand/middleware';
 
 interface State {
-  count: number;
+  isMobile: boolean;
+  winSize?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl';
+  width?: number;
+  clientLoaded: boolean;
 }
 
 const initialState: State = {
-  count: 0,
+  isMobile: false,
+  clientLoaded: false,
 };
 
 export interface AppInfoStore extends State {
@@ -18,8 +22,6 @@ export interface AppInfoStore extends State {
 
 const actions: StateCreator<AppInfoStore> = (set) => ({
   ...initialState,
-  increment: () => set((state) => ({ count: state.count + 1 })),
-  decrement: () => set((state) => ({ count: state.count - 1 })),
   update: (data) => set((state) => ({ ...state, ...data })),
   updateNested: (key, data) => set((state) => ({ ...state, [key]: data })),
   set: (data) => set(() => data),
@@ -27,13 +29,5 @@ const actions: StateCreator<AppInfoStore> = (set) => ({
 });
 
 // ------------BOILERPLATE-----
-type PersistFn = (
-  config: StateCreator<AppInfoStore>,
-  options: PersistOptions<AppInfoStore>,
-) => StateCreator<AppInfoStore>;
 
-const withPersist = (persist as PersistFn)(actions, { name: 'AppInfoStorageKey' });
-
-export const useAppInfoStore = create<AppInfoStore>()(
-  devtools(withPersist, { name: 'AppInfoStorageKey' }),
-);
+export const useAppInfoStore = create<AppInfoStore>()(devtools(actions, { name: 'AppInfo' }));
