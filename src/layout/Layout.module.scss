@@ -1,0 +1,35 @@
+@import "/src/styles/variables";
+@import "/src/styles/animations";
+@import "/src/styles/utils";
+
+.Layout {
+  font-family: "Inter";
+
+  .ant-layout-sider-children {
+    background-color: $primaryColor10;
+  }
+
+  .ant-layout-header {
+    padding: 0;
+    background: $light;
+  }
+
+  .ant-btn {
+    font-size: 16px;
+    width: 64px;
+    height: 64px;
+  }
+
+  .ant-layout-content {
+    margin: 24px 16px;
+    padding: 24px;
+    min-height: 280px;
+    background: $light;
+    border-radius: 12px;
+  }
+}
+
+// // desk mob xs sm md lg xl xxl
+// @include onlyIn(lg) {
+//   background-color: #f28181;
+// }
