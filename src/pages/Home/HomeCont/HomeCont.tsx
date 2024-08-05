@@ -3,7 +3,6 @@ import { ReactElement, useState } from 'react';
 import style from './HomeCont.module.scss';
 import { RoutingRules } from 'src/providers/RoutingRules/RoutingRules';
 import { Layout } from 'src/layout/Layout';
-import { Icon } from '@iconify/react';
 import { Button, Input } from 'antd';
 import { useInput } from 'src/utils/hooks/useInput';
 import { DynamicIcon } from 'src/common/DynamicIcon/DynamicIcon';
@@ -26,7 +25,7 @@ export function HomeCont(): ReactElement {
     try {
       const stream = await openai.chat.completions.create({
         messages: [{ role: 'system', content: 'You are a helpful assistant.' }],
-        model: 'gpt-3.5-turbo',
+        model: '',
       });
       console.log(stream);
     } catch (error: any) {

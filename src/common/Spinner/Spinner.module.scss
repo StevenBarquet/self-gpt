@@ -1,0 +1,31 @@
+@import "/src/styles/variables";
+@import "/src/styles/animations";
+@import "/src/styles/utils";
+
+.Spinner {
+  font-family: "Inter";
+  text-align: center;
+  padding: 7px 0;
+
+  svg {
+    font-size: 25px;
+    animation-name: spin;
+    animation-duration: 2s; /* Ajusta la duración según tus necesidades */
+    animation-timing-function: linear; /* La velocidad de la animación es constante */
+    animation-iteration-count: infinite; /* La animación se repite indefinidamente */
+  }
+}
+
+// // desk mob xs sm md lg xl xxl
+// @include onlyIn(lg) {
+//   background-color: #f28181;
+// }
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

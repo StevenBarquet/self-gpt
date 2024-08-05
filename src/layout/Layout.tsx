@@ -5,6 +5,8 @@ import { useBoolean } from 'src/utils/hooks/useBoolean';
 import { Icon } from '@iconify/react';
 import { useAppInfoStore } from 'src/store/appInfo';
 import style from './Layout.module.scss';
+import { Panel } from './Panel/Panel';
+import { AntdProvDark } from 'src/providers/AntdProvDark/AntdProv';
 
 const { Header, Sider, Content } = AntLayout;
 
@@ -18,22 +20,24 @@ interface Props {
  */
 export function Layout({ children }: Props) {
   // -----------------------CONSTS, HOOKS, STATES
-  const { value, toggle } = useBoolean();
+  const { value, toggle } = useBoolean(true);
   const { isMobile } = useAppInfoStore();
   // -----------------------MAIN METHODS
   // -----------------------AUX METHODS
   // -----------------------RENDER
   return (
     <AntLayout className={style['Layout']}>
-      <Sider
-        width={isMobile ? '82%' : 470}
-        collapsedWidth={isMobile ? 20 : undefined}
-        trigger={null}
-        collapsible
-        collapsed={!value}
-      >
-        {value ? null : 'Menu'}
-      </Sider>
+      <AntdProvDark>
+        <Sider
+          width={isMobile ? '82%' : 470}
+          collapsedWidth={isMobile ? 20 : undefined}
+          trigger={null}
+          collapsible
+          collapsed={value}
+        >
+          {value ? null : <Panel />}
+        </Sider>
+      </AntdProvDark>
       <AntLayout>
         <Header>
           <Button

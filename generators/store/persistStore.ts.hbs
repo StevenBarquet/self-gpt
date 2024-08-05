@@ -1,6 +1,5 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { create, StateCreator } from 'zustand';
-import { createJSONStorage, persist, PersistOptions } from 'zustand/middleware';
+import { create, type StateCreator } from 'zustand';
+import { devtools, persist, type PersistOptions } from 'zustand/middleware';
 
 interface State {
   count: number;
@@ -17,12 +16,11 @@ export interface {{pascalCase name}}Store extends State {
   reset: () => void;
 }
 
+// Si quieres ocupar logica compleja, puedes manejar las actions en otro archivo
 const actions: StateCreator<{{pascalCase name}}Store> = (set) => ({
   ...initialState,
-  increment: () => set((state) => ({ count: state.count + 1 })),
-  decrement: () => set((state) => ({ count: state.count - 1 })),
   update: (data) => set((state) => ({ ...state, ...data })),
-  updateNested: (key, data) => set((state) => ({ ...state, [key]: data })),
+  updateNested: (key, data) => set((state) => ({ ...state, [key]: { ...state[key], ...data } })),
   set: (data) => set(() => data),
   reset: () => set(() => initialState),
 });
@@ -34,13 +32,6 @@ type PersistFn = (
 ) => StateCreator<{{pascalCase name}}Store>;
 
 const withPersist = (persist as PersistFn)(actions, { name: '{{pascalCase name}}StorageKey' });
-
-export const use{{pascalCase name}}Store = create<{{pascalCase name}}Store>(
-  (persist as PersistFn)(actions, {
-    name: '{{pascalCase name}}StorageKey',
-    storage: createJSONStorage(() => AsyncStorage),
-  }),
-);
 
 export const use{{pascalCase name}}Store = create<{{pascalCase name}}Store>()(
   devtools(withPersist, { name: '{{pascalCase name}}' }),
