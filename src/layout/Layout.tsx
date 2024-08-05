@@ -37,6 +37,7 @@ export function Layout({ children }: Props) {
       <AntLayout>
         <Header>
           <Button
+            className='collapseBtn'
             type='text'
             icon={value ? <Icon icon='ri:menu-unfold-fill' /> : <Icon icon='ri:menu-fold-fill' />}
             onClick={toggle}

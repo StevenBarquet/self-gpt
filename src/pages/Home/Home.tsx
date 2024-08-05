@@ -14,7 +14,7 @@ export default function Home(): ReactElement {
   return (
     <>
       <Helmet>
-        <title>Inicio</title>
+        <title>Self GPT - Same but private and pay as you go</title>
       </Helmet>
       <HomeCont />
     </>
