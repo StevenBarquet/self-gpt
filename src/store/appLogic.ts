@@ -4,14 +4,27 @@ import { WithId } from 'src/utils/functions/typesUtils';
 import { create, type StateCreator } from 'zustand';
 import { devtools } from 'zustand/middleware';
 
+export const MAIN_SCREENS = {
+  empty: 'empty',
+  gptConversation: 'gptConversation',
+  gptCreate: 'gptCreate',
+  chat: 'chat',
+};
+
 interface State {
   GPTs: WithId<GPT>[];
   Conversations: WithId<Conversation>[];
+  mainScreen: keyof typeof MAIN_SCREENS;
+  selectedContext: string; // id de la conversación
+  selectedModel: GPT['defaultModel'];
 }
 
 const initialState: State = {
   GPTs: [],
   Conversations: [],
+  mainScreen: 'empty',
+  selectedContext: '',
+  selectedModel: 'gpt-4o-mini',
 };
 
 export interface AppLogicStore extends State {

@@ -38,6 +38,7 @@ export function useSupabase() {
       const { data } = await supabase
         .from('conversations')
         .select('*')
+        .not('fromContext', 'eq', true)
         .order('timestamp', { ascending: false });
 
       return data as unknown as null | WithId<Conversation>[];

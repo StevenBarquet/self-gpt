@@ -1,0 +1,64 @@
+@import "/src/styles/variables";
+@import "/src/styles/animations";
+@import "/src/styles/utils";
+
+.GptCard {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-evenly;
+
+  .options {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 15%;
+    svg {
+      font-size: 22px;
+    }
+  }
+
+  .gptBtn {
+    font-family: "Inter";
+    box-shadow: 1px 2px 1px black;
+    width: 82%;
+    height: 76px;
+    margin: 5px auto;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+  }
+
+  section {
+    width: 75%;
+    padding: 8px;
+    text-align: start;
+  }
+
+  .DynamicIcon {
+    width: 25%;
+    svg {
+      font-size: 40px;
+    }
+  }
+
+  h5,
+  p {
+    margin: 0;
+  }
+
+  h5 {
+    font-size: 22px;
+    @include limitTextLines(1);
+  }
+  p {
+    font-size: 14px;
+    @include limitTextLines(1);
+  }
+}
+
+// // desk mob xs sm md lg xl xxl
+// @include onlyIn(lg) {
+//   background-color: #f28181;
+// }

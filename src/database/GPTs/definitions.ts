@@ -6,4 +6,5 @@ export type GPT = {
   defaultModel: ChatCompletionCreateParamsNonStreaming['model']; // 'some GPT model';
   timestamp: string; // Date.toIsoString()
   description: string;
+  conversation: string; // id de la conversación por defecto
 };

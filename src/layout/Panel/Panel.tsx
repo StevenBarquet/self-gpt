@@ -8,6 +8,7 @@ import { Icon } from '@iconify/react';
 import { useSupabase } from 'src/utils/app/useSupabase';
 import { useAppLogicStore } from 'src/store/appLogic';
 import { Spinner } from 'src/common/Spinner/Spinner';
+import { Gpts } from './Gpts/Gpts';
 
 /**
  * Panel Component:  Descripción del comportamiento...
@@ -26,7 +27,7 @@ export function Panel() {
           GPTs <Icon icon='carbon:area-custom' />
         </div>
       ),
-      children: isLoading ? <Spinner /> : 'Contenido cargado',
+      children: isLoading ? <Spinner /> : <Gpts />,
     },
     {
       key: 'chats',
