@@ -5,6 +5,7 @@ import { WithId } from '../functions/typesUtils';
 import { GPT } from 'src/database/GPTs/definitions';
 import { Conversation } from 'src/database/Conversations/definitions';
 import { useState } from 'react';
+import { Message } from 'src/database/Messages/definitions';
 
 /**
  * Operaciones con supabase :D
@@ -35,13 +36,77 @@ export function useSupabase() {
 
   async function getConversations() {
     try {
+      setIsLoading(true);
       const { data } = await supabase
         .from('conversations')
         .select('*')
-        .not('fromContext', 'eq', true)
+        // .not('gptOnly', 'eq', true)
         .order('timestamp', { ascending: false });
 
       return data as unknown as null | WithId<Conversation>[];
+    } catch (error: any) {
+      console.log(error);
+      await swalApiError(error?.message || 'Error al conectarse con SUPABASE');
+      return null;
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+  async function createNewChat() {
+    try {
+      setIsLoading(true);
+      const currentDate = new Date().toISOString();
+
+      const { data, error } = await supabase
+        .from('conversations')
+        .insert([{ timestamp: currentDate }])
+        .select()
+        .single();
+
+      if (error) throw error;
+
+      return data as unknown as WithId<Conversation>;
+    } catch (error: any) {
+      console.log(error);
+      await swalApiError(error?.message || 'Error al conectarse con SUPABASE');
+      return null;
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+  async function addContext(context: Message[]) {
+    try {
+      console.log('addContext');
+
+      console.log(context);
+
+      setIsLoading(true);
+
+      const { data, error } = await supabase.from('messages').insert(context);
+
+      if (error) throw error;
+
+      return data as unknown as WithId<Message>[];
+    } catch (error: any) {
+      console.log(error);
+      await swalApiError(error?.message || 'Error al conectarse con SUPABASE');
+      return null;
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+  async function getChat(chatId: string) {
+    try {
+      const { data } = await supabase
+        .from('messages')
+        .select('*')
+        .eq('conversation', chatId)
+        .order('timestamp', { ascending: true });
+
+      return data as unknown as null | WithId<Message>[];
     } catch (error: any) {
       console.log(error);
       await swalApiError(error?.message || 'Error al conectarse con SUPABASE');
@@ -57,5 +122,8 @@ export function useSupabase() {
     isLoading,
     getGPts,
     getConversations,
+    getChat,
+    createNewChat,
+    addContext,
   };
 }

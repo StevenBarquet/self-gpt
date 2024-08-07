@@ -15,7 +15,7 @@ interface Props extends WithId<GPT> {}
  * GptCard Component:  Descripción del comportamiento...
  * @param {Props} props - Parámetros del componente como: ...
  */
-export function GptCard({ icon, name, description, defaultModel, conversation }: Props) {
+export function GptCard({ icon, name, description, defaultmodel, id }: Props) {
   // -----------------------CONSTS, HOOKS, STATES
   const [visible, setVisible] = useState(false);
   const { update } = useAppLogicStore();
@@ -29,8 +29,8 @@ export function GptCard({ icon, name, description, defaultModel, conversation }:
   function onClickGpt() {
     update({
       mainScreen: 'gptConversation',
-      selectedContext: conversation,
-      selectedModel: defaultModel,
+      selectedModel: defaultmodel,
+      selectedGpt: id,
     });
   }
   // -----------------------AUX METHODS

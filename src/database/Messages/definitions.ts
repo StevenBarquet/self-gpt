@@ -9,7 +9,7 @@ export type Message = {
   model: ChatCompletionCreateParamsNonStreaming['model'];
   timestamp: string; // Date.toIsoString()
   context: boolean;
-  originalContext: boolean;
-  GPT: string; // foreign key to GPTs
+  originalcontext: boolean;
+  gpt: string; // foreign key to GPTs
   conversation: string; // foreign key to GPTs
 };

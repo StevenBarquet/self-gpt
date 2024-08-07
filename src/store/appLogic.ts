@@ -15,16 +15,18 @@ interface State {
   GPTs: WithId<GPT>[];
   Conversations: WithId<Conversation>[];
   mainScreen: keyof typeof MAIN_SCREENS;
-  selectedContext: string; // id de la conversación
-  selectedModel: GPT['defaultModel'];
+  selectedContext?: string; // id de la conversación
+  selectedModel: GPT['defaultmodel'];
+  selectedGpt?: string; // id del gpt
+  panelTab: 'gpts' | 'chats';
 }
 
 const initialState: State = {
   GPTs: [],
   Conversations: [],
   mainScreen: 'empty',
-  selectedContext: '',
   selectedModel: 'gpt-4o-mini',
+  panelTab: 'gpts',
 };
 
 export interface AppLogicStore extends State {

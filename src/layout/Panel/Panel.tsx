@@ -9,6 +9,7 @@ import { useSupabase } from 'src/utils/app/useSupabase';
 import { useAppLogicStore } from 'src/store/appLogic';
 import { Spinner } from 'src/common/Spinner/Spinner';
 import { Gpts } from './Gpts/Gpts';
+import { Chats } from './Chats/Chats';
 
 /**
  * Panel Component:  Descripción del comportamiento...
@@ -16,7 +17,7 @@ import { Gpts } from './Gpts/Gpts';
 export function Panel() {
   // -----------------------CONSTS, HOOKS, STATES
   const { getGPts, getConversations, isLoading } = useSupabase();
-  const { update, GPTs } = useAppLogicStore();
+  const { update, GPTs, panelTab } = useAppLogicStore();
   useEffect(() => initialPopulate(), []);
 
   const items: TabsProps['items'] = [
@@ -36,11 +37,12 @@ export function Panel() {
           Chats <Icon icon='heroicons-outline:chat' />
         </div>
       ),
-      children: isLoading ? <Spinner /> : 'Content of Tab Pane 2',
+      children: isLoading ? <Spinner /> : <Chats />,
     },
   ];
   // -----------------------MAIN METHODS
   const onChange = (key: string) => {
+    update({ panelTab: key as 'gpts' | 'chats' });
     if (key === 'gpts') handleGpts();
     else handleConversations();
   };
@@ -63,7 +65,7 @@ export function Panel() {
   // -----------------------RENDER
   return (
     <div className={style['Panel']}>
-      <Tabs items={items} onChange={onChange} centered />
+      <Tabs activeKey={panelTab} items={items} onChange={onChange} centered />
     </div>
   );
 }
