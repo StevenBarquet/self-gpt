@@ -33,10 +33,13 @@ export function useOpenAiCtlr({ allMessages, setAllMessages }: Props) {
   } = useAppLogicStore();
 
   const { OPEN_AI_API_KEY } = useKeysStore();
-  const { createNewChat, addContext } = useSupabase();
+  const { createNewChat, addContext, populateConversations } = useSupabase();
 
   const openai = new OpenAI({ apiKey: OPEN_AI_API_KEY, dangerouslyAllowBrowser: true });
   const inputCtlr = useInput();
+
+  const [ctxCheck, setCtxCheck] = useState(false);
+  const lastCtxCheck = copyLastContext();
 
   // -----------------------MAIN METHODS
 
@@ -57,11 +60,15 @@ export function useOpenAiCtlr({ allMessages, setAllMessages }: Props) {
         stream: true,
       });
 
+      let aiAnswerinMemory: string = '';
+
       for await (const chunk of stream) {
         const message = chunk.choices[0]?.delta?.content || '';
         const cleanMsg = message === 'undefined' ? '' : message;
+        aiAnswerinMemory += cleanMsg;
         accumulateAiAnswer(cleanMsg);
       }
+
       // Si llegamos aquí ya terminó y respondió
       const conversationId = await getConversationId(isNewChat);
 
@@ -70,7 +77,7 @@ export function useOpenAiCtlr({ allMessages, setAllMessages }: Props) {
       const question: Message = {
         content: inputCtlr.value!,
         gpt: selectedGpt!,
-        context: false, // Se necesita controlar con un checkbox
+        context: ctxCheck,
         model: selectedModel,
         role: 'user',
         conversation: conversationId, // Hay que cambiar este por la conversación actual o la que se crea
@@ -78,9 +85,9 @@ export function useOpenAiCtlr({ allMessages, setAllMessages }: Props) {
         timestamp: questionDate,
       };
       const answer: Message = {
-        content: aiAnswer!,
+        content: aiAnswerinMemory!,
         gpt: selectedGpt!,
-        context: false, // Se necesita controlar con un checkbox
+        context: ctxCheck,
         model: selectedModel,
         role: 'assistant',
         conversation: conversationId, // Hay que cambiar este por la conversación actual o la que se crea
@@ -101,6 +108,17 @@ export function useOpenAiCtlr({ allMessages, setAllMessages }: Props) {
       setSdkLoading(false);
     }
   }
+
+  // /**Copia la bandera de contexto del último mensaje al siguiente prompt */
+  function copyLastContext() {
+    if (!allMessages) return;
+    const messages = allMessages.filter((e) => !e.originalcontext);
+    if (!!messages.length) {
+      const lastMsgCtx = messages[messages.length - 1].context;
+      return lastMsgCtx;
+    }
+    return;
+  }
   // -----------------------AUX METHODS
   function validateMessages() {
     if (!allMessages?.length) {
@@ -120,8 +138,6 @@ export function useOpenAiCtlr({ allMessages, setAllMessages }: Props) {
   function preAskCleanAndDate() {
     setAiAnswer(''); // Última respuesta
     setSdkLoading(true); // Spinner carga On
-    console.log(2);
-    console.log({ inputValue: inputCtlr.value, skdLoading, aiAnswer });
 
     const questionDate = new Date().toISOString();
     return questionDate;
@@ -139,9 +155,10 @@ export function useOpenAiCtlr({ allMessages, setAllMessages }: Props) {
     return selectedConversation!;
   }
 
-  function postSuccessQuestion(isNewChat: boolean, conversationId: string) {
+  async function postSuccessQuestion(isNewChat: boolean, conversationId: string) {
     inputCtlr.setValue('');
     if (isNewChat) {
+      await populateConversations();
       onClickConversation(conversationId);
     }
   }
@@ -152,5 +169,11 @@ export function useOpenAiCtlr({ allMessages, setAllMessages }: Props) {
     ondAsk,
     inputCtlr,
     aiAnswer,
+
+    ctxCtlr: {
+      value: ctxCheck,
+      lastCtxCheck,
+      toggle: () => setCtxCheck((s) => !s),
+    },
   };
 }

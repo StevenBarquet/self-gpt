@@ -1,5 +1,5 @@
 // ---Dependencies
-import { Button, Input } from 'antd';
+import { Button, Checkbox, Input } from 'antd';
 import React, { KeyboardEvent } from 'react';
 import { Fcol, Frow } from 'react-forge-grid';
 import { basicResponsive } from 'src/utils/functions/responsiveUtils';
@@ -8,13 +8,18 @@ import { type useInput } from 'src/utils/hooks/useInput';
 interface Props extends ReturnType<typeof useInput> {
   disable?: boolean;
   ondAsk: () => void;
+  ctxCtlr: {
+    value: boolean;
+    lastCtxCheck: boolean | undefined;
+    toggle: () => void;
+  };
 }
 
 /**
  * ChatInput Component:  Descripción del comportamiento...
  * @param {Props} props - Parámetros del componente como: ...
  */
-export function ChatInput({ onChange, value, disable, ondAsk }: Props) {
+export function ChatInput({ onChange, value, disable, ondAsk, ctxCtlr }: Props) {
   // -----------------------CONSTS, HOOKS, STATES
   // -----------------------MAIN METHODS
   async function onKeyPress(event: KeyboardEvent<unknown>) {
@@ -35,17 +40,17 @@ export function ChatInput({ onChange, value, disable, ondAsk }: Props) {
         />
       </Fcol>
       <Fcol {...basicResponsive(20)}>
-        <Button
-          onClick={ondAsk}
-          style={{ height: 53 }}
-          type='primary'
-          disabled={disable || !value.length}
-          block
-        >
+        <Button onClick={ondAsk} type='primary' disabled={disable || !value.length} block>
           Send
-          <br />
-          (Shift + Enter)
         </Button>
+        <div style={{ textAlign: 'center' }}>
+          <span>In context: </span>{' '}
+          <Checkbox
+            defaultChecked={ctxCtlr.lastCtxCheck}
+            checked={ctxCtlr.value}
+            onClick={ctxCtlr.toggle}
+          />
+        </div>
       </Fcol>
     </Frow>
   );

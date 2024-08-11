@@ -32,6 +32,7 @@ export function ChatCard({
   // -----------------------CONSTS, HOOKS, STATES
   const gpt = onGetGpt(gpt_base!);
   const [visible, setVisible] = useState(false);
+  const smallTooltip = name?.substring(0, 65) + '...';
   // -----------------------MAIN METHODS
   const showTooltip = () => {
     setVisible(true);
@@ -49,7 +50,7 @@ export function ChatCard({
   if (!gpt) return null; // No debería existir una conversación sin gpt de referencia
   return (
     <div className={style['ChatCard']}>
-      <Tooltip title={name}>
+      <Tooltip title={smallTooltip}>
         <Button
           onClick={onClick}
           type='text'

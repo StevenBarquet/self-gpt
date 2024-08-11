@@ -13,7 +13,7 @@ export function usePanelActions() {
       selectedGpt: id,
       selectedConversation: undefined, // Limpia previa conversación seleccionada
       panelTab: 'gpts', // Swichea a la tab del panel "gpts"
-      // aiAnswer: '', // Limpia la última respuesta del chat
+      aiAnswer: '', // Limpia la última respuesta del chat
     });
   }
   function onClickConversation(id: string) {
@@ -26,7 +26,7 @@ export function usePanelActions() {
       selectedGpt: undefined,
       selectedConversation: id, // Limpia previa conversación seleccionada
       panelTab: 'chats', // Swichea a la tab del panel "chats"
-      // aiAnswer: '', // Limpia la última respuesta del chat
+      aiAnswer: '', // Limpia la última respuesta del chat
     });
   }
   // -----------------------HOOK DATA
