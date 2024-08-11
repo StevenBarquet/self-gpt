@@ -40,13 +40,11 @@ export async function swalApiConfirm({
 }) {
   await appSwal
     .fire({
-      title: '¿Estás seguro?',
-      text:
-        confirmMsg ||
-        'El proceso no puede revertirse o podría cambiar seriamente una funcionalidad.',
+      title: 'You sure?',
+      text: confirmMsg || 'This process may not be reversible',
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonText: 'Si, continuar',
+      confirmButtonText: 'Yes, continue',
     })
     .then(async (result) => {
       if (result.isConfirmed) {

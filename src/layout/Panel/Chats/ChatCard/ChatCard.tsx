@@ -11,6 +11,7 @@ import { GPT } from 'src/database/GPTs/definitions';
 
 interface Props extends WithId<Conversation> {
   onClickConversation: (id: string) => void;
+  onDelete: (id: string) => void;
   isActive: boolean;
   onGetGpt: (id: string) => WithId<GPT> | undefined;
 }
@@ -19,7 +20,15 @@ interface Props extends WithId<Conversation> {
  * ChatCard Component:  Descripción del comportamiento...
  * @param {Props} props - Parámetros del componente como: ...
  */
-export function ChatCard({ name, onClickConversation, isActive, id, onGetGpt, gpt_base }: Props) {
+export function ChatCard({
+  name,
+  onClickConversation,
+  isActive,
+  id,
+  onGetGpt,
+  gpt_base,
+  onDelete,
+}: Props) {
   // -----------------------CONSTS, HOOKS, STATES
   const gpt = onGetGpt(gpt_base!);
   const [visible, setVisible] = useState(false);
@@ -30,9 +39,11 @@ export function ChatCard({ name, onClickConversation, isActive, id, onGetGpt, gp
       setVisible(false);
     }, 5000); // Oculta el tooltip después de 8 segundos
   };
+
   function onClick() {
     onClickConversation(id);
   }
+
   // -----------------------AUX METHODS
   // -----------------------RENDER
   if (!gpt) return null; // No debería existir una conversación sin gpt de referencia
@@ -51,7 +62,7 @@ export function ChatCard({ name, onClickConversation, isActive, id, onGetGpt, gp
         </Button>
       </Tooltip>
       <div className='options'>
-        <Button danger type='text'>
+        <Button onClick={() => onDelete(id)} danger type='text'>
           <Icon icon='bi:trash-fill' />
         </Button>
         <Tooltip title={name} visible={visible}>

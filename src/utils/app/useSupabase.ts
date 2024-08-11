@@ -6,6 +6,7 @@ import { GPT } from 'src/database/GPTs/definitions';
 import { Conversation } from 'src/database/Conversations/definitions';
 import { useState } from 'react';
 import { Message } from 'src/database/Messages/definitions';
+import { useAppLogicStore } from 'src/store/appLogic';
 
 /**
  * Operaciones con supabase :D
@@ -15,6 +16,7 @@ export function useSupabase() {
   const { SUPABASE_KEY, SUPABASE_URL } = useKeysStore();
   const supabase = createClient(SUPABASE_URL!, SUPABASE_KEY!);
   const [isLoading, setIsLoading] = useState(false);
+  const { update } = useAppLogicStore();
   // -----------------------MAIN METHODS
   async function getGPts() {
     try {
@@ -53,6 +55,16 @@ export function useSupabase() {
     }
   }
 
+  async function populateGpts() {
+    const data = await getGPts();
+    if (data) update({ GPTs: data });
+  }
+
+  async function populateConversations() {
+    const data = await getConversations();
+    if (data) update({ Conversations: data });
+  }
+
   async function createNewChat({ name, gpt_base }: { name: string; gpt_base: string }) {
     try {
       setIsLoading(true);
@@ -67,6 +79,29 @@ export function useSupabase() {
       if (error) throw error;
 
       return data as unknown as WithId<Conversation>;
+    } catch (error: any) {
+      console.log(error);
+      await swalApiError(error?.message || 'Error al conectarse con SUPABASE');
+      return null;
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+  async function deleteConversation(conversationId: string) {
+    try {
+      setIsLoading(true);
+
+      // Elimina la conversación
+      const { error: deleteConversationError } = await supabase
+        .from('conversations')
+        .delete()
+        .match({ id: conversationId });
+
+      if (deleteConversationError) throw deleteConversationError;
+
+      console.log('Conversación eliminada exitosamente.');
+      await populateConversations(); // Volver a cargar conversaciones
     } catch (error: any) {
       console.log(error);
       await swalApiError(error?.message || 'Error al conectarse con SUPABASE');
@@ -120,10 +155,11 @@ export function useSupabase() {
   return {
     supabase,
     isLoading,
-    getGPts,
-    getConversations,
+    populateGpts,
+    populateConversations,
     getChat,
     createNewChat,
     addContext,
+    deleteConversation,
   };
 }

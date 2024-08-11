@@ -16,7 +16,7 @@ import { Chats } from './Chats/Chats';
  */
 export function Panel() {
   // -----------------------CONSTS, HOOKS, STATES
-  const { getGPts, getConversations, isLoading } = useSupabase();
+  const { populateGpts, populateConversations, isLoading } = useSupabase();
   const { update, GPTs, panelTab } = useAppLogicStore();
   useEffect(() => initialPopulate(), []);
 
@@ -43,25 +43,17 @@ export function Panel() {
   // -----------------------MAIN METHODS
   const onChange = (key: string) => {
     update({ panelTab: key as 'gpts' | 'chats' });
-    if (key === 'gpts') handleGpts();
-    else handleConversations();
+    if (key === 'gpts') populateGpts();
+    else populateConversations();
   };
 
   function initialPopulate() {
     if (!GPTs.length) {
-      handleGpts();
-      handleConversations();
+      populateGpts();
+      populateConversations();
     }
   }
-  // -----------------------AUX METHODS
-  async function handleGpts() {
-    const data = await getGPts();
-    if (data) update({ GPTs: data });
-  }
-  async function handleConversations() {
-    const data = await getConversations();
-    if (data) update({ Conversations: data });
-  }
+
   // -----------------------RENDER
   return (
     <div className={style['Panel']}>
