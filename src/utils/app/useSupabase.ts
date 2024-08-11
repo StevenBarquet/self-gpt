@@ -40,7 +40,7 @@ export function useSupabase() {
       const { data } = await supabase
         .from('conversations')
         .select('*')
-        // .not('gptOnly', 'eq', true)
+        // .not('gptonly', 'eq', true)
         .order('timestamp', { ascending: false });
 
       return data as unknown as null | WithId<Conversation>[];
@@ -53,14 +53,14 @@ export function useSupabase() {
     }
   }
 
-  async function createNewChat() {
+  async function createNewChat({ name, gpt_base }: { name: string; gpt_base: string }) {
     try {
       setIsLoading(true);
       const currentDate = new Date().toISOString();
 
       const { data, error } = await supabase
         .from('conversations')
-        .insert([{ timestamp: currentDate }])
+        .insert<Partial<Conversation>>([{ timestamp: currentDate, name, gpt_base }])
         .select()
         .single();
 

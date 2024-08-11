@@ -1,4 +1,4 @@
-import { type Dispatch, type SetStateAction, useState, ChangeEvent } from 'react';
+import { useState, ChangeEvent } from 'react';
 
 /**
  * Una simple abstracción para jugar con un input, tener operaciones comunes y

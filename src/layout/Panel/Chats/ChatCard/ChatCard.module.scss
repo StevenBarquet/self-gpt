@@ -2,7 +2,7 @@
 @import "/src/styles/animations";
 @import "/src/styles/utils";
 
-.GptCard {
+.ChatCard {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -18,7 +18,7 @@
     }
   }
 
-  .gptBtn {
+  .chatBtn {
     font-family: "Inter";
     box-shadow: 1px 2px 1px black;
     width: 82%;
@@ -47,18 +47,10 @@
     }
   }
 
-  h5,
   p {
     margin: 0;
-  }
-
-  h5 {
-    font-size: 22px;
-    @include limitTextLines(1);
-  }
-  p {
     font-size: 14px;
-    @include limitTextLines(1);
+    @include limitTextLines(2);
   }
 }
 

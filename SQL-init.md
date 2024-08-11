@@ -2,7 +2,9 @@ CREATE TABLE Conversations (
 id UUID DEFAULT uuid_generate_v4(),
 timestamp TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
 pinnedOrder INTEGER,
-gptOnly BOOLEAN DEFAULT FALSE,
+gptonly BOOLEAN DEFAULT FALSE,
+name TEXT,
+gpt_base UUID REFERENCES GPTs(id), // Esta tabla sigue existiendo aunque borre una Conversation
 PRIMARY KEY(id)
 );
 
@@ -80,7 +82,7 @@ timestamp TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
 context BOOLEAN NOT NULL,
 originalcontext BOOLEAN NOT NULL,
 GPT UUID REFERENCES GPTs(id),
-conversation UUID REFERENCES Conversations(id),
+conversation UUID REFERENCES Conversations(id) ON DELETE CASCADE,
 PRIMARY KEY(id)
 );
 

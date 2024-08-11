@@ -1,24 +1,27 @@
 // ---Dependencies
 import React, { useState } from 'react';
 // ---Styles
-import style from './GptCard.module.scss';
+import style from './ChatCard.module.scss';
 import { WithId } from 'src/utils/functions/typesUtils';
-import { GPT } from 'src/database/GPTs/definitions';
-import { DynamicIcon } from 'src/common/DynamicIcon/DynamicIcon';
+import { Conversation } from 'src/database/Conversations/definitions';
 import { Button, Tooltip } from 'antd';
+import { DynamicIcon } from 'src/common/DynamicIcon/DynamicIcon';
 import { Icon } from '@iconify/react';
+import { GPT } from 'src/database/GPTs/definitions';
 
-interface Props extends WithId<GPT> {
-  onClickGpt: (id: string) => void;
+interface Props extends WithId<Conversation> {
+  onClickConversation: (id: string) => void;
   isActive: boolean;
+  onGetGpt: (id: string) => WithId<GPT> | undefined;
 }
 
 /**
- * GptCard Component:  Descripción del comportamiento...
+ * ChatCard Component:  Descripción del comportamiento...
  * @param {Props} props - Parámetros del componente como: ...
  */
-export function GptCard({ icon, name, description, id, isActive, onClickGpt }: Props) {
+export function ChatCard({ name, onClickConversation, isActive, id, onGetGpt, gpt_base }: Props) {
   // -----------------------CONSTS, HOOKS, STATES
+  const gpt = onGetGpt(gpt_base!);
   const [visible, setVisible] = useState(false);
   // -----------------------MAIN METHODS
   const showTooltip = () => {
@@ -28,22 +31,22 @@ export function GptCard({ icon, name, description, id, isActive, onClickGpt }: P
     }, 5000); // Oculta el tooltip después de 8 segundos
   };
   function onClick() {
-    onClickGpt(id);
+    onClickConversation(id);
   }
   // -----------------------AUX METHODS
   // -----------------------RENDER
+  if (!gpt) return null; // No debería existir una conversación sin gpt de referencia
   return (
-    <div className={style['GptCard']}>
-      <Tooltip title={description}>
+    <div className={style['ChatCard']}>
+      <Tooltip title={name}>
         <Button
           onClick={onClick}
           type='text'
-          className={`gptBtn ${isActive ? 'gptBtn-active' : ''}`}
+          className={`chatBtn ${isActive ? 'chatBtn-active' : ''}`}
         >
-          <DynamicIcon icon={icon} />
+          <DynamicIcon icon={gpt.icon} />
           <section>
-            <h5>{name}</h5>
-            <p>{description}</p>
+            <p>{name}</p>
           </section>
         </Button>
       </Tooltip>
@@ -51,7 +54,7 @@ export function GptCard({ icon, name, description, id, isActive, onClickGpt }: P
         <Button danger type='text'>
           <Icon icon='bi:trash-fill' />
         </Button>
-        <Tooltip title={description} visible={visible}>
+        <Tooltip title={name} visible={visible}>
           <Button onClick={showTooltip} type='text'>
             <Icon icon='memory:tooltip-above-help' />
           </Button>
