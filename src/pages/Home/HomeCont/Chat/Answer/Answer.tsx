@@ -5,6 +5,7 @@ import { a11yDark, docco } from 'react-syntax-highlighter/dist/esm/styles/hljs';
 
 // ---Styles
 import style from './Answer.module.scss';
+import { UpdatePanel } from '../common/UpdatePanel/UpdatePanel';
 
 interface Props {
   text: string;
@@ -32,6 +33,7 @@ export function Answer({ text }: Props) {
           </SyntaxHighlighter>
         ))}
       </section>
+      <UpdatePanel content={text} />
     </div>
   );
 }

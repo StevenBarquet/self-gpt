@@ -2,6 +2,7 @@
 import React from 'react';
 // ---Styles
 import style from './Question.module.scss';
+import { UpdatePanel } from '../common/UpdatePanel/UpdatePanel';
 
 interface Props {
   text: string;
@@ -20,6 +21,7 @@ export function Question({ text }: Props) {
   return (
     <div className={style['Question']}>
       <section>{text}</section>
+      <UpdatePanel content={text} />
     </div>
   );
 }

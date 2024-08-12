@@ -1,0 +1,26 @@
+@import "/src/styles/variables";
+@import "/src/styles/animations";
+@import "/src/styles/utils";
+
+.UpdatePanel {
+  font-family: "Inter";
+  border: 1px solid $primaryColor2;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); // Sombra ligera para profundidad
+  border-top: none;
+  border-radius: 0 0 10px 10px;
+  background-color: #f8f8ff; // Color de fondo suave para los mensajes entrantes
+  padding: 6px;
+
+  position: relative;
+  bottom: 10px;
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+}
+
+// // desk mob xs sm md lg xl xxl
+// @include onlyIn(lg) {
+//   background-color: #f28181;
+// }

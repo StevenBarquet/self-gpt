@@ -113,10 +113,6 @@ export function useSupabase() {
 
   async function addContext(context: Message[]) {
     try {
-      console.log('addContext');
-
-      console.log(context);
-
       setIsLoading(true);
 
       const { data, error } = await supabase.from('messages').insert(context);
@@ -134,6 +130,7 @@ export function useSupabase() {
   }
 
   async function getChat(chatId: string) {
+    setIsLoading(true);
     try {
       const { data } = await supabase
         .from('messages')
@@ -150,6 +147,34 @@ export function useSupabase() {
       setIsLoading(false);
     }
   }
+
+  async function toggleContext(message: WithId<Message>) {
+    setIsLoading(true);
+
+    try {
+      // Se obtiene el nuevo valor alternando el valor actual
+      const newContextValue = !message.context;
+
+      // Se actualiza el mensaje en la base de datos
+      const { error } = await supabase
+        .from('messages')
+        .update({ context: newContextValue })
+        .eq('id', message.id); // Asegúrate de que 'id' es el nombre de la columna clave primaria
+
+      if (error) {
+        throw error; // Lanza el error si hay problemas
+      }
+
+      // Devuelve el nuevo valor del contexto o el mensaje actualizado como desees
+      return { ...message, context: newContextValue };
+    } catch (error: any) {
+      console.log(error);
+      await swalApiError(error?.message || 'Error al actualizar el contexto en Supabase');
+      return null;
+    } finally {
+      setIsLoading(false);
+    }
+  }
   // -----------------------AUX METHODS
   // -----------------------RENDER
   return {
@@ -161,5 +186,6 @@ export function useSupabase() {
     createNewChat,
     addContext,
     deleteConversation,
+    toggleContext,
   };
 }

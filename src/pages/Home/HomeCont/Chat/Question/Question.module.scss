@@ -4,19 +4,30 @@
 
 .Question {
   font-family: "Inter";
-  margin: 10px 0; // Espaciado vertical entre mensajes
+  margin: 10px 0; // Espaciado veritcal entre mensajes
   padding: 10px; // Espaciado interior
+
+  .UpdatePanel,
+  section {
+    width: 88%; // Limita el ancho del mensaje
+    margin: 10px 0 10px 12%;
+    @include onlyIn(mob) {
+      width: 95%; // Limita el ancho del mensaje
+      margin: 8px 0 8px 5%;
+    }
+  }
 
   section {
     border: 1px solid $primaryColor2;
-    border-radius: 10px; // Bordes redondeados
+    border-bottom: none;
+    border-radius: 10px 10px 0 0px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); // Sombra ligera para profundidad
     background-color: #f8f8ff; // Color de fondo suave para los mensajes entrantes
     font-size: 14px; // Tamaño de fuente
     line-height: 1.5;
-    width: 88%; // Limita el ancho del mensaje
-    margin: 10px 0 10px 12%;
     padding: 10px;
+    white-space: pre-wrap;
+    @include limitTextLines(6);
 
     @include onlyIn(mob) {
       width: 95%; // Limita el ancho del mensaje
