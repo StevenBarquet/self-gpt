@@ -39,11 +39,10 @@ export function ApiForm({}: Props) {
     const openai = new OpenAI({ apiKey, dangerouslyAllowBrowser: true });
 
     try {
-      const stream = await openai.chat.completions.create({
+      await openai.chat.completions.create({
         messages: [{ role: 'system', content: 'You are a helpful assistant.' }],
         model: 'gpt-3.5-turbo',
       });
-      console.log(stream);
 
       setValidGpt({ valid: true, key: apiKey });
     } catch (error: any) {

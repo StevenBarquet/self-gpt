@@ -100,7 +100,7 @@ export function useOpenAiCtlr({ allMessages, reloadChatMsgs }: Props) {
 
       postSuccessQuestion(isNewChat, conversationId);
 
-      console.log({ result, allMessages });
+      // console.log({ result, allMessages });
     } catch (error: any) {
       console.log(error);
       await swalApiError(error?.message || 'Error al conectarse con OpenAi');
