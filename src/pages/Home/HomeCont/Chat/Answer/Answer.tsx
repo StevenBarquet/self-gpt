@@ -6,19 +6,24 @@ import { a11yDark, docco } from 'react-syntax-highlighter/dist/esm/styles/hljs';
 // ---Styles
 import style from './Answer.module.scss';
 import { UpdatePanel } from '../common/UpdatePanel/UpdatePanel';
+import { WithId } from 'src/utils/functions/typesUtils';
+import { Message } from 'src/database/Messages/definitions';
+import { CopyButton } from 'src/common/CopyButton/CopyButton';
 
 interface Props {
-  text: string;
+  message?: WithId<Message>;
+  aiAnswer?: string;
+  reloadChatMsgs: () => void;
 }
 
-// TODO: Mapear los textos para separar los lenguajes ```scss CÓDIGO ``` y tener un formateo más limpio (en lugar de usar markdown)
-
 /**
- * Answer Component:  TODO: Mapear los textos para separar los lenguajes y tener un formateo más limpio (en lugar de usar markdown)
+ * Answer Component:
  * @param {Props} props - Parámetros del componente como: ...
  */
-export function Answer({ text }: Props) {
+export function Answer({ message, aiAnswer, reloadChatMsgs }: Props) {
   // -----------------------CONSTS, HOOKS, STATES
+  if (!message && !aiAnswer) return null;
+  const text = aiAnswer || message!.content; // Necesita recibir aiAnswer o Message
   const formated = !!text.length ? formatText(text) : null;
   // -----------------------MAIN METHODS
   // -----------------------AUX METHODS
@@ -28,12 +33,17 @@ export function Answer({ text }: Props) {
     <div className={style['Answer']}>
       <section>
         {formated.map((e, i) => (
-          <SyntaxHighlighter key={`${i}-SyntaxHighlighter`} language={e.language} style={e.theme}>
-            {e.text}
-          </SyntaxHighlighter>
+          <>
+            <SyntaxHighlighter key={`${i}-SyntaxHighlighter`} language={e.language} style={e.theme}>
+              {e.text}
+            </SyntaxHighlighter>
+            {e.language !== 'markdown' ? (
+              <CopyButton key={`${i}-CopyButton`} toCopy={e.text.trim()} />
+            ) : null}
+          </>
         ))}
       </section>
-      <UpdatePanel content={text} />
+      {message ? <UpdatePanel reloadChatMsgs={reloadChatMsgs} message={message} /> : null}
     </div>
   );
 }

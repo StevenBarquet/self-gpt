@@ -111,6 +111,26 @@ export function useSupabase() {
     }
   }
 
+  async function deleteMessage(id: string, reloadMsgs: () => void) {
+    try {
+      setIsLoading(true);
+
+      // Elimina la conversación
+      const { error } = await supabase.from('messages').delete().match({ id });
+
+      if (error) throw error;
+
+      console.log('Message eliminado exitosamente.');
+      reloadMsgs(); // Volver a cargar conversaciones
+    } catch (error: any) {
+      console.log(error);
+      await swalApiError(error?.message || 'Error al conectarse con SUPABASE');
+      return null;
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
   async function addContext(context: Message[]) {
     try {
       setIsLoading(true);
@@ -187,5 +207,6 @@ export function useSupabase() {
     addContext,
     deleteConversation,
     toggleContext,
+    deleteMessage,
   };
 }

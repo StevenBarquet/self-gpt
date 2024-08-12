@@ -1,6 +1,6 @@
 import OpenAI from 'openai';
 import { ChatCompletionMessageParam } from 'openai/resources';
-import { Dispatch, useState } from 'react';
+import { useState } from 'react';
 import { Message } from 'src/database/Messages/definitions';
 import { usePanelActions } from 'src/layout/Panel/usePanelActions';
 import { useAppLogicStore } from 'src/store/appLogic';
@@ -12,13 +12,13 @@ import { useInput } from 'src/utils/hooks/useInput';
 
 interface Props {
   allMessages?: WithId<Message>[];
-  setAllMessages: Dispatch<React.SetStateAction<WithId<Message>[] | undefined>>;
+  reloadChatMsgs: () => void;
 }
 
 /**
  * Descripción:
  */
-export function useOpenAiCtlr({ allMessages, setAllMessages }: Props) {
+export function useOpenAiCtlr({ allMessages, reloadChatMsgs }: Props) {
   // -----------------------CONSTS, HOOKS, STATES
   const { onClickConversation } = usePanelActions();
 
@@ -96,7 +96,7 @@ export function useOpenAiCtlr({ allMessages, setAllMessages }: Props) {
       };
 
       const result = await addContext([question, answer]);
-      if (result) setAllMessages((s) => (s ? [...s, ...result] : result));
+      if (!result) swalApiError('Error adding messages to conversation');
 
       postSuccessQuestion(isNewChat, conversationId);
 
@@ -161,6 +161,7 @@ export function useOpenAiCtlr({ allMessages, setAllMessages }: Props) {
       await populateConversations();
       onClickConversation(conversationId);
     }
+    reloadChatMsgs();
   }
 
   // -----------------------HOOK DATA

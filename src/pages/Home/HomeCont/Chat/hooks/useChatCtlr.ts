@@ -30,15 +30,13 @@ export function useChatCtlr() {
 
   const selectedConversationMemo = useMemo(() => selectedConversation, [selectedConversation]);
   const selectedGptMemo = useMemo(() => selectedGpt, [selectedGpt]);
-  useEffect(() => initialLoad(), [selectedConversationMemo, selectedGptMemo]);
+  const reloadChatMsgs = useCallback(reloadChat, [selectedGpt, selectedConversation]);
+  useEffect(() => reloadChatMsgs(), [selectedConversationMemo, selectedGptMemo]);
 
   const currentGpt = GPTs.find((e) => e.id === selectedGpt);
   const currentConversation = Conversations.find((e) => e.id === selectedConversation);
 
   const { getChat, isLoading } = useSupabase();
-
-  const getInitialLoad = useCallback(initialLoad, [selectedGpt, selectedConversation]);
-  useEffect(() => getInitialLoad(), [getInitialLoad]);
 
   const chatType: IChatTypes = getChatType(); // No sirve ni es util
   // -----------------------MAIN METHODS
@@ -49,7 +47,7 @@ export function useChatCtlr() {
     return 'EXISTING';
   }
 
-  function initialLoad() {
+  function reloadChat() {
     // if (allMessages ) return; // Si ya hay mensajes cargados
 
     // Si existe conversación seleccionada
@@ -92,5 +90,7 @@ export function useChatCtlr() {
     currentGpt,
     currentConversation,
     setAllMessages,
+    /** Recarga la conversación */
+    reloadChatMsgs,
   };
 }

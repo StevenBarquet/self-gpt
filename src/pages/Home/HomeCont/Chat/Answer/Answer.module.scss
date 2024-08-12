@@ -31,6 +31,12 @@
       white-space: pre-wrap !important;
     }
   }
+
+  section .CopyButton {
+    text-align: end;
+    position: relative;
+    top: -10px;
+  }
 }
 
 // // desk mob xs sm md lg xl xxl

@@ -15,10 +15,10 @@ import { Question } from './Question/Question';
  */
 export function Chat() {
   // -----------------------CONSTS, HOOKS, STATES
-  const { allMessages, isLoading, setAllMessages, messages } = useChatCtlr();
+  const { allMessages, isLoading, reloadChatMsgs, messages } = useChatCtlr();
   const { inputCtlr, ondAsk, skdLoading, aiAnswer, ctxCtlr } = useOpenAiCtlr({
     allMessages,
-    setAllMessages,
+    reloadChatMsgs,
   });
 
   // -----------------------MAIN METHODS
@@ -33,13 +33,13 @@ export function Chat() {
           {/* <ChatStart /> */}
           {messages?.map((e, i) =>
             e.role === 'assistant' ? (
-              <Answer text={e.content} key={`$answer-${i}`} />
+              <Answer reloadChatMsgs={reloadChatMsgs} message={e} key={`$answer-${i}`} />
             ) : (
-              <Question key={`$Question-${i}`} text={e.content} />
+              <Question reloadChatMsgs={reloadChatMsgs} key={`$Question-${i}`} message={e} />
             ),
           )}
           {/** Respuesta actual */}
-          <Answer text={aiAnswer} />
+          <Answer reloadChatMsgs={reloadChatMsgs} aiAnswer={aiAnswer} />
         </>
       )}
       <ChatInput
