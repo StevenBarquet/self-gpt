@@ -15,7 +15,7 @@ import { Question } from './Question/Question';
  */
 export function Chat() {
   // -----------------------CONSTS, HOOKS, STATES
-  const { allMessages, isLoading, reloadChatMsgs, messages } = useChatCtlr();
+  const { allMessages, isLoading, reloadChatMsgs, messages, bottomRef } = useChatCtlr();
   const { inputCtlr, ondAsk, skdLoading, aiAnswer, ctxCtlr } = useOpenAiCtlr({
     allMessages,
     reloadChatMsgs,
@@ -48,6 +48,7 @@ export function Chat() {
         disable={isLoading || skdLoading}
         ondAsk={ondAsk}
       />
+      <div ref={bottomRef} />
     </div>
   );
 }

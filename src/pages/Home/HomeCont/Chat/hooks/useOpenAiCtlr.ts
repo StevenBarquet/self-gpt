@@ -95,8 +95,7 @@ export function useOpenAiCtlr({ allMessages, reloadChatMsgs }: Props) {
         timestamp: answerDate,
       };
 
-      const result = await addContext([question, answer]);
-      if (!result) swalApiError('Error adding messages to conversation');
+      await addContext([question, answer]);
 
       postSuccessQuestion(isNewChat, conversationId);
 

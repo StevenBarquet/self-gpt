@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Message } from 'src/database/Messages/definitions';
 import { useAppLogicStore } from 'src/store/appLogic';
 import { useSupabase } from 'src/utils/app/useSupabase';
@@ -23,6 +23,7 @@ type IChatTypes = keyof typeof CHAT_TYPES;
 /** Descripción:  */
 export function useChatCtlr() {
   // -----------------------CONSTS, HOOKS, STATES
+  const bottomRef = useRef<HTMLDivElement>(null);
   const { mainScreen, selectedConversation, GPTs, selectedGpt, Conversations } = useAppLogicStore();
 
   const [allMessages, setAllMessages] = useState<WithId<Message>[]>();
@@ -68,6 +69,13 @@ export function useChatCtlr() {
     }
   }
 
+  function scrollToBottom() {
+    if (bottomRef.current) {
+      bottomRef.current.scrollIntoView(true);
+    }
+  }
+  useEffect(() => scrollToBottom(), [allMessages]);
+
   // -----------------------AUX METHODS
   async function getGptContext(conversationId?: string) {
     if (!currentGpt && !conversationId) return;
@@ -86,6 +94,8 @@ export function useChatCtlr() {
     allMessages,
     /** Mensajes en la conversación (sin contexto del gpt) */
     messages,
+    /**Ref que debe vincularse a un div del bottom del chat */
+    bottomRef,
     chatType,
     currentGpt,
     currentConversation,
