@@ -4,9 +4,13 @@
 
 .Layout {
   font-family: "Inter";
+  height: 100vh;
+  display: flex;
 
   .ant-layout-sider-children {
     background-color: $primaryColor16;
+    height: 100%;
+    overflow: auto;
   }
 
   .ant-layout-header {
@@ -30,6 +34,10 @@
     min-height: 280px;
     background: $light;
     border-radius: 12px;
+
+    flex: 1; // Permite que el contenido ocupe todo el espacio disponible
+    min-height: 0; // Para que el flex item se re-dimensione correctamente
+    overflow: auto; // Habilita el scroll interno si el contenido crece
   }
 }
 

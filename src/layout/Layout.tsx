@@ -8,6 +8,7 @@ import style from './Layout.module.scss';
 import { Panel } from './Panel/Panel';
 import { AntdProvDark } from 'src/providers/AntdProvDark/AntdProv';
 import { ModelSelector } from './ModelSelector/ModelSelector';
+import { MessagesPagination } from './MessagesPagination/MessagesPagination';
 
 const { Header, Sider, Content } = AntLayout;
 
@@ -47,6 +48,7 @@ export function Layout({ children }: Props) {
             icon={value ? <Icon icon='ri:menu-unfold-fill' /> : <Icon icon='ri:menu-fold-fill' />}
             onClick={toggle}
           />
+          <MessagesPagination />
           <ModelSelector />
         </Header>
         <Content>{children}</Content>

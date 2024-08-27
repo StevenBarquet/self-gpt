@@ -21,12 +21,12 @@ export function useSupabase() {
   async function getGPts() {
     try {
       setIsLoading(true);
-      const { data } = await supabase
-        .from('gpts')
-        .select('*')
-        .order('timestamp', { ascending: false });
+      const { data } = await supabase.from('gpts').select('*');
+      // .order('timestamp', { ascending: false });
 
-      return data as unknown as null | WithId<GPT>[];
+      const orderedData = data?.sort((a, b) => b.timestamp.localeCompare(a.timestamp));
+
+      return orderedData as unknown as null | WithId<GPT>[];
     } catch (error: any) {
       console.log(error);
       await swalApiError(error?.message || 'Error al conectarse con SUPABASE');
@@ -39,13 +39,15 @@ export function useSupabase() {
   async function getConversations() {
     try {
       setIsLoading(true);
-      const { data } = await supabase
-        .from('conversations')
-        .select('*')
-        // .not('gptonly', 'eq', true)
-        .order('timestamp', { ascending: false });
+      const { data } = (await supabase.from('conversations').select('*')) as unknown as {
+        data: WithId<Conversation>[] | null;
+      };
+      // .not('gptonly', 'eq', true)
+      // .order('timestamp', { ascending: false }); // No ordenamos en supabase
 
-      return data as unknown as null | WithId<Conversation>[];
+      const orderedData = data?.sort((a, b) => b.timestamp.localeCompare(a.timestamp));
+
+      return orderedData;
     } catch (error: any) {
       console.log(error);
       await swalApiError(error?.message || 'Error al conectarse con SUPABASE');
@@ -139,6 +141,8 @@ export function useSupabase() {
 
       if (error) throw error;
 
+      updateDate(context); // Sin await en segundo plano actualizamos la fecha de la conversación
+
       return data as unknown as WithId<Message>[];
     } catch (error: any) {
       console.log(error);
@@ -146,6 +150,28 @@ export function useSupabase() {
       return null;
     } finally {
       setIsLoading(false);
+    }
+  }
+
+  async function updateDate(msgs: Message[]) {
+    try {
+      const [{ conversation }] = msgs;
+      const currentDate = new Date().toISOString();
+
+      const { data, error } = await supabase
+        .from('conversations')
+        .update({ timestamp: currentDate }) // Actualiza el campo timestamp
+        .eq('id', conversation) // Filtra por el ID de la conversación
+        .select()
+        .single();
+
+      if (error) throw error;
+      await populateConversations();
+      return data as unknown as WithId<Conversation>;
+    } catch (error: any) {
+      console.log(error);
+      await swalApiError(error?.message || 'Error al conectarse con SUPABASE');
+      return null;
     }
   }
 

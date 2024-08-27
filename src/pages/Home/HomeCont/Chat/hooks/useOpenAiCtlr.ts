@@ -30,6 +30,7 @@ export function useOpenAiCtlr({ allMessages, reloadChatMsgs }: Props) {
     aiAnswer,
     setAiAnswer,
     accumulateAiAnswer,
+    update,
   } = useAppLogicStore();
 
   const { OPEN_AI_API_KEY } = useKeysStore();
@@ -159,6 +160,8 @@ export function useOpenAiCtlr({ allMessages, reloadChatMsgs }: Props) {
     if (isNewChat) {
       await populateConversations();
       onClickConversation(conversationId);
+    } else {
+      update({ aiAnswer: '' });
     }
     reloadChatMsgs();
   }

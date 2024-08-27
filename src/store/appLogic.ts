@@ -3,6 +3,7 @@ import { GPT } from 'src/database/GPTs/definitions';
 import { WithId } from 'src/utils/functions/typesUtils';
 import { create, type StateCreator } from 'zustand';
 import { devtools } from 'zustand/middleware';
+import { Message } from 'src/database/Messages/definitions';
 
 export const MAIN_SCREENS = {
   empty: 'empty',
@@ -14,6 +15,9 @@ export const MAIN_SCREENS = {
 interface State {
   GPTs: WithId<GPT>[];
   Conversations: WithId<Conversation>[];
+  allMessages?: WithId<Message>[];
+  pageSize: number;
+  currentPage: number;
   mainScreen: keyof typeof MAIN_SCREENS;
   selectedConversation?: string; // id de la conversación
   selectedModel: GPT['defaultmodel'];
@@ -29,6 +33,8 @@ const initialState: State = {
   selectedModel: 'gpt-4o-mini',
   panelTab: 'gpts',
   aiAnswer: '',
+  currentPage: 1,
+  pageSize: 4,
 };
 
 export interface AppLogicStore extends State {

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef } from 'react';
 import { Message } from 'src/database/Messages/definitions';
 import { useAppLogicStore } from 'src/store/appLogic';
 import { useSupabase } from 'src/utils/app/useSupabase';
@@ -24,10 +24,25 @@ type IChatTypes = keyof typeof CHAT_TYPES;
 export function useChatCtlr() {
   // -----------------------CONSTS, HOOKS, STATES
   const bottomRef = useRef<HTMLDivElement>(null);
-  const { mainScreen, selectedConversation, GPTs, selectedGpt, Conversations } = useAppLogicStore();
+  const {
+    mainScreen,
+    selectedConversation,
+    GPTs,
+    selectedGpt,
+    Conversations,
+    allMessages,
+    currentPage,
+    pageSize,
+    update,
+  } = useAppLogicStore();
 
-  const [allMessages, setAllMessages] = useState<WithId<Message>[]>();
-  const messages = allMessages?.filter((e) => !e.originalcontext);
+  const filteredMessages = allMessages?.filter((e) => !e.originalcontext);
+  const messages = filteredMessages?.slice((currentPage - 1) * pageSize, currentPage * pageSize); // Calcular mensajes a mostrar según la página actual
+  const updateMessages = (msgs: WithId<Message>[]) => {
+    const totalPages = Math.ceil(msgs.filter((e) => !e.originalcontext).length / pageSize);
+    update({ allMessages: msgs, currentPage: totalPages });
+  };
+  const setAllMessages = useCallback(updateMessages, [updateMessages]);
 
   const selectedConversationMemo = useMemo(() => selectedConversation, [selectedConversation]);
   const selectedGptMemo = useMemo(() => selectedGpt, [selectedGpt]);
@@ -48,6 +63,14 @@ export function useChatCtlr() {
     return 'EXISTING';
   }
 
+  /**
+   * Reloads the messages in the chat.
+   * It first checks if there is a selected conversation. If so, it calls the Supabase `getChat` function to retrieve the messages.
+   * If there are no messages, it shows an alert. If there are messages, it finds the first GPT id and calls the Supabase `getGptContext` function to retrieve the context.
+   * It then combines the context and the messages and sets the new value to the `allMessages` state.
+   * If there is no selected conversation, it simply calls the `getGptContext` function to retrieve the messages.
+   * Finally, it sets the retrieved messages to the `allMessages` state.
+   */
   function reloadChat() {
     // if (allMessages ) return; // Si ya hay mensajes cargados
 
@@ -74,7 +97,7 @@ export function useChatCtlr() {
       bottomRef.current.scrollIntoView(true);
     }
   }
-  useEffect(() => scrollToBottom(), [allMessages]);
+  useEffect(() => scrollToBottom(), [allMessages, currentPage, pageSize]);
 
   // -----------------------AUX METHODS
   async function getGptContext(conversationId?: string) {
