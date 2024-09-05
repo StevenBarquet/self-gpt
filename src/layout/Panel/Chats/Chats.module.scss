@@ -4,6 +4,19 @@
 
 .Chats {
   font-family: "Inter";
+  padding-bottom: 45px;
+
+  .ChatFooter {
+    position: fixed; /* Establecemos el footer como fijo */
+    bottom: 0; /* Fijo en la parte inferior */
+    left: 0; /* Alineación al lado izquierdo */
+    width: 82%;
+
+    // desk mob xs sm md lg xl xxl
+    @include onlyIn(desk) {
+      width: 470px;
+    }
+  }
 }
 
 // // desk mob xs sm md lg xl xxl

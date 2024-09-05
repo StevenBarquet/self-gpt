@@ -5,19 +5,30 @@ import style from './GptCard.module.scss';
 import { WithId } from 'src/utils/functions/typesUtils';
 import { GPT } from 'src/database/GPTs/definitions';
 import { DynamicIcon } from 'src/common/DynamicIcon/DynamicIcon';
-import { Button, Tooltip } from 'antd';
+import { Button, Checkbox, Tooltip } from 'antd';
 import { Icon } from '@iconify/react';
 
 interface Props extends WithId<GPT> {
   onClickGpt: (id: string) => void;
   isActive: boolean;
+  isCheckSelected: boolean;
+  toggleSelectOne: (id: string) => void;
 }
 
 /**
  * GptCard Component:  Descripción del comportamiento...
  * @param {Props} props - Parámetros del componente como: ...
  */
-export function GptCard({ icon, name, description, id, isActive, onClickGpt }: Props) {
+export function GptCard({
+  icon,
+  name,
+  description,
+  id,
+  isActive,
+  onClickGpt,
+  isCheckSelected,
+  toggleSelectOne,
+}: Props) {
   // -----------------------CONSTS, HOOKS, STATES
   const [visible, setVisible] = useState(false);
   // -----------------------MAIN METHODS
@@ -34,6 +45,7 @@ export function GptCard({ icon, name, description, id, isActive, onClickGpt }: P
   // -----------------------RENDER
   return (
     <div className={style['GptCard']}>
+      <Checkbox checked={isCheckSelected} onClick={() => toggleSelectOne(id)} />
       <Tooltip title={description}>
         <Button
           onClick={onClick}

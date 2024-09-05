@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import style from './ChatCard.module.scss';
 import { WithId } from 'src/utils/functions/typesUtils';
 import { Conversation } from 'src/database/Conversations/definitions';
-import { Button, Tooltip } from 'antd';
+import { Button, Checkbox, Tooltip } from 'antd';
 import { DynamicIcon } from 'src/common/DynamicIcon/DynamicIcon';
 import { Icon } from '@iconify/react';
 import { GPT } from 'src/database/GPTs/definitions';
@@ -14,6 +14,8 @@ interface Props extends WithId<Conversation> {
   onDelete: (id: string) => void;
   isActive: boolean;
   onGetGpt: (id: string) => WithId<GPT> | undefined;
+  isCheckSelected: boolean;
+  toggleSelectOne: (id: string) => void;
 }
 
 /**
@@ -28,6 +30,8 @@ export function ChatCard({
   onGetGpt,
   gpt_base,
   onDelete,
+  isCheckSelected,
+  toggleSelectOne,
 }: Props) {
   // -----------------------CONSTS, HOOKS, STATES
   const gpt = onGetGpt(gpt_base!);
@@ -50,6 +54,7 @@ export function ChatCard({
   if (!gpt) return null; // No debería existir una conversación sin gpt de referencia
   return (
     <div className={style['ChatCard']}>
+      <Checkbox checked={isCheckSelected} onClick={() => toggleSelectOne(id)} />
       <Tooltip title={smallTooltip}>
         <Button
           onClick={onClick}

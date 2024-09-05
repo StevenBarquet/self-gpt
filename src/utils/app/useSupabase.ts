@@ -95,14 +95,34 @@ export function useSupabase() {
       setIsLoading(true);
 
       // Elimina la conversación
-      const { error: deleteConversationError } = await supabase
-        .from('conversations')
-        .delete()
-        .match({ id: conversationId });
+      const { error } = await supabase.from('conversations').delete().match({ id: conversationId });
 
-      if (deleteConversationError) throw deleteConversationError;
+      if (error) throw error;
 
       console.log('Conversación eliminada exitosamente.');
+      await populateConversations(); // Volver a cargar conversaciones
+    } catch (error: any) {
+      console.log(error);
+      await swalApiError(error?.message || 'Error al conectarse con SUPABASE');
+      return null;
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+  async function batchDeleteConversations(conversationIds: string[]) {
+    try {
+      setIsLoading(true);
+
+      // Elimina las conversaciones en lote
+      const { error: deleteConversationsError } = await supabase
+        .from('conversations')
+        .delete()
+        .in('id', conversationIds); // Usar 'in' para eliminar múltiples IDs
+
+      if (deleteConversationsError) throw deleteConversationsError;
+
+      console.log('Conversaciones eliminadas exitosamente.');
       await populateConversations(); // Volver a cargar conversaciones
     } catch (error: any) {
       console.log(error);
@@ -234,5 +254,6 @@ export function useSupabase() {
     deleteConversation,
     toggleContext,
     deleteMessage,
+    batchDeleteConversations,
   };
 }

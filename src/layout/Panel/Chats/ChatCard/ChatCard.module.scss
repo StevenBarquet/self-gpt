@@ -52,6 +52,10 @@
     font-size: 14px;
     @include limitTextLines(2);
   }
+
+  .ant-checkbox-wrapper {
+    margin-inline: 8px;
+  }
 }
 
 // // desk mob xs sm md lg xl xxl

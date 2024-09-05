@@ -7,6 +7,9 @@ import { useAppLogicStore } from 'src/store/appLogic';
 import { usePanelActions } from '../usePanelActions';
 import { useSupabase } from 'src/utils/app/useSupabase';
 import { swalApiConfirm } from 'src/utils/functions/alertUtils';
+import { useSelection } from 'src/utils/hooks/useSelection';
+import { PanelTitle } from '../common/PanelTitle/PanelTitle';
+import { ChatFooter } from './ChatFooter/ChatFooter';
 
 /**
  * Chats Component:  Descripción del comportamiento...
@@ -14,7 +17,10 @@ import { swalApiConfirm } from 'src/utils/functions/alertUtils';
 export function Chats() {
   // -----------------------CONSTS, HOOKS, STATES
   const { Conversations, selectedConversation, GPTs, update } = useAppLogicStore();
-  const userConversations = Conversations.filter((e) => !e.gptonly); // Filtramos por
+  const userConversations = Conversations.filter((e) => !e.gptonly); // Filtramos por conversaciones de usuario (No las de GPT)
+  const { isSelected, toggleSelectAll, toggleSelectOne, selectedIds } =
+    useSelection(userConversations);
+
   const { onClickConversation } = usePanelActions();
   const { deleteConversation } = useSupabase();
 
@@ -38,6 +44,7 @@ export function Chats() {
   // -----------------------RENDER
   return (
     <div className={style['Chats']}>
+      <PanelTitle title='History' toggleSelectAll={toggleSelectAll} />
       {userConversations.map((e, i) => (
         <ChatCard
           key={`GptCard-${i}`}
@@ -46,8 +53,11 @@ export function Chats() {
           onDelete={onDelete}
           isActive={selectedConversation === e.id}
           onGetGpt={onGetGpt}
+          isCheckSelected={isSelected(e.id)}
+          toggleSelectOne={toggleSelectOne}
         />
       ))}
+      <ChatFooter selectedIds={selectedIds} />
     </div>
   );
 }
