@@ -7,6 +7,7 @@ import { GptCard } from './GptCard/GptCard';
 import { usePanelActions } from '../usePanelActions';
 import { useSelection } from 'src/utils/hooks/useSelection';
 import { PanelTitle } from '../common/PanelTitle/PanelTitle';
+import { GptFooter } from './GptFooter/GptFooter';
 
 /**
  * Gpts Component:  Descripción del comportamiento...
@@ -15,7 +16,7 @@ export function Gpts() {
   // -----------------------CONSTS, HOOKS, STATES
   const { GPTs, selectedGpt } = useAppLogicStore();
   const { onClickGpt } = usePanelActions();
-  const { isSelected, toggleSelectAll, toggleSelectOne } = useSelection(GPTs);
+  const { selectedIds, isSelected, toggleSelectAll, toggleSelectOne } = useSelection(GPTs);
   // -----------------------MAIN METHODS
   // -----------------------AUX METHODS
   // -----------------------RENDER
@@ -32,6 +33,7 @@ export function Gpts() {
           toggleSelectOne={toggleSelectOne}
         />
       ))}
+      <GptFooter selectedIds={selectedIds} />
     </div>
   );
 }

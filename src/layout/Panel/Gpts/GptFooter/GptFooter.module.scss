@@ -1,0 +1,20 @@
+@import "/src/styles/variables";
+@import "/src/styles/animations";
+@import "/src/styles/utils";
+
+.GptFooter {
+  font-family: "Inter";
+  background-color: $primaryColor;
+  padding: 3px 3px;
+
+  .ant-btn {
+    font-size: 20px;
+    text-align: center;
+    padding-bottom: 5px;
+  }
+}
+
+// // desk mob xs sm md lg xl xxl
+// @include onlyIn(lg) {
+//   background-color: #f28181;
+// }
