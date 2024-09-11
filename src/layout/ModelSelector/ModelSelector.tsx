@@ -6,7 +6,7 @@ import { Select } from 'antd';
 import { Message } from 'src/database/Messages/definitions';
 import { useAppLogicStore } from 'src/store/appLogic';
 
-const options: {
+export const modelOptions: {
   value: Message['model'];
   label: string;
   title: string;
@@ -44,7 +44,7 @@ export function ModelSelector() {
         optionFilterProp='label'
         value={selectedModel}
         onChange={onChange}
-        options={options}
+        options={modelOptions}
       />
     </div>
   );

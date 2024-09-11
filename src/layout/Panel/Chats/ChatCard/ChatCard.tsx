@@ -71,7 +71,7 @@ export function ChatCard({
         <Button onClick={() => onDelete(id)} danger type='text'>
           <Icon icon='bi:trash-fill' />
         </Button>
-        <Tooltip title={name} visible={visible}>
+        <Tooltip title={name} open={visible}>
           <Button onClick={showTooltip} type='text'>
             <Icon icon='memory:tooltip-above-help' />
           </Button>

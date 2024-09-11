@@ -5,6 +5,8 @@ import style from './GptFooter.module.scss';
 import { swalApiConfirm } from 'src/utils/functions/alertUtils';
 import { Button } from 'antd';
 import { Icon } from '@iconify/react';
+import { usePanelActions } from '../../usePanelActions';
+import { useSupabase } from 'src/utils/app/useSupabase';
 
 interface Props {
   selectedIds: string[];
@@ -16,11 +18,13 @@ interface Props {
  */
 export function GptFooter({ selectedIds }: Props) {
   // -----------------------CONSTS, HOOKS, STATES
+  const { onCreateGpt } = usePanelActions();
+  const { batchDeleteGpt } = useSupabase();
   // -----------------------MAIN METHODS
   const onDelete = () => {
     swalApiConfirm({
       callback: async () => {
-        // await batchDeleteConversations(selectedIds);
+        await batchDeleteGpt(selectedIds);
       },
       successMsg: 'Selection deleted successfully',
     });
@@ -29,7 +33,7 @@ export function GptFooter({ selectedIds }: Props) {
   // -----------------------RENDER
   return (
     <div className={style['GptFooter']}>
-      <Button block type='text' icon={<Icon icon='gridicons:create' />} onClick={onDelete}>
+      <Button block type='text' icon={<Icon icon='gridicons:create' />} onClick={onCreateGpt}>
         Create
       </Button>
       <Button

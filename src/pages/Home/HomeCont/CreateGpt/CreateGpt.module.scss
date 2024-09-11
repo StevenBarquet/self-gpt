@@ -1,0 +1,47 @@
+@import "/src/styles/variables";
+@import "/src/styles/animations";
+@import "/src/styles/utils";
+
+.CreateGpt {
+  font-family: "Inter";
+  // background-color: rgb(209, 255, 255);
+  .validate {
+    margin: 15px 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    svg {
+      font-size: 25px;
+      color: $primaryColor12;
+    }
+  }
+  .hint {
+    padding: 0 18px;
+    @include onlyIn(mob) {
+      margin-top: 10px;
+    }
+
+    span {
+      color: $primaryColor12;
+    }
+  }
+
+  h3 {
+    text-align: center;
+    color: $primaryColor12;
+  }
+
+  pre,
+  code {
+    margin: auto;
+    width: 95%;
+    max-width: 600px;
+    border-radius: 15px;
+    white-space: pre-wrap !important;
+  }
+}
+
+// // desk mob xs sm md lg xl xxl
+// @include onlyIn(lg) {
+//   background-color: #f28181;
+// }

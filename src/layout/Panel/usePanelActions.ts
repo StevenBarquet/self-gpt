@@ -29,9 +29,18 @@ export function usePanelActions() {
       aiAnswer: '', // Limpia la última respuesta del chat
     });
   }
+  function onCreateGpt() {
+    update({
+      mainScreen: 'gptCreate',
+      selectedGpt: undefined,
+      selectedConversation: undefined,
+      aiAnswer: '',
+    });
+  }
   // -----------------------HOOK DATA
   return {
     onClickGpt,
     onClickConversation,
+    onCreateGpt,
   };
 }

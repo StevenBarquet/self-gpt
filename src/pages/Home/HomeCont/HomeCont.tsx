@@ -5,11 +5,12 @@ import { RoutingRules } from 'src/providers/RoutingRules/RoutingRules';
 import { Layout } from 'src/layout/Layout';
 import { useAppLogicStore } from 'src/store/appLogic';
 import { Chat } from './Chat/Chat';
+import { CreateGpt } from './CreateGpt/CreateGpt';
 
 const screens = {
   empty: <p>Select a GPT or Chat from menu</p>,
   gptConversation: <Chat />,
-  gptCreate: <p>Crear GPT</p>,
+  gptCreate: <CreateGpt />,
   chat: <Chat />,
 };
 

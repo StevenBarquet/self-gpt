@@ -4,7 +4,7 @@ timestamp TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
 pinnedOrder INTEGER,
 gptonly BOOLEAN DEFAULT FALSE,
 name TEXT,
-gpt_base UUID REFERENCES GPTs(id), // Esta tabla sigue existiendo aunque borre una Conversation
+gpt_base UUID REFERENCES GPTs(id) ON DELETE CASCADE, // Esta tabla sigue existiendo aunque borre una Conversation
 PRIMARY KEY(id)
 );
 
@@ -41,7 +41,7 @@ icon TEXT NOT NULL,
 defaultModel VARCHAR NOT NULL,
 timestamp TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
 description TEXT NOT NULL,
-conversation UUID NOT NULL REFERENCES Conversations(id),
+conversation UUID NOT NULL REFERENCES Conversations (id) ON DELETE CASCADE,
 PRIMARY KEY(id)
 );
 
@@ -81,7 +81,7 @@ content TEXT NOT NULL,
 timestamp TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
 context BOOLEAN NOT NULL,
 originalcontext BOOLEAN NOT NULL,
-GPT UUID REFERENCES GPTs(id),
+GPT UUID REFERENCES GPTs(id) ON DELETE CASCADE,
 conversation UUID REFERENCES Conversations(id) ON DELETE CASCADE,
 PRIMARY KEY(id)
 );

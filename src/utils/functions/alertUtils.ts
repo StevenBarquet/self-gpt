@@ -10,7 +10,7 @@ export const appSwal = withReactContent(
 
 export async function swalApiSuccessAuto(message?: string) {
   await appSwal.fire({
-    title: 'Success',
+    title: 'SUCCESS',
     text: message || 'Operation finished ✅✅✅',
     icon: 'success',
     timerProgressBar: true,
@@ -20,7 +20,7 @@ export async function swalApiSuccessAuto(message?: string) {
 
 export async function swalApiError(message?: string) {
   await appSwal.fire({
-    title: 'OPERACIÓN FALLIDA',
+    title: 'FAILED',
     text:
       message || 'Oops! Something went wrong. Please check your internet connection and try again.',
     icon: 'warning',

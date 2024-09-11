@@ -74,7 +74,53 @@ export function useSupabase() {
 
       const { data, error } = await supabase
         .from('conversations')
-        .insert<Partial<Conversation>>([{ timestamp: currentDate, name, gpt_base }])
+        .insert<Partial<Conversation>>({ timestamp: currentDate, name, gpt_base })
+        .select()
+        .single();
+
+      if (error) throw error;
+
+      return data as unknown as WithId<Conversation>;
+    } catch (error: any) {
+      console.log(error);
+      await swalApiError(error?.message || 'Error al conectarse con SUPABASE');
+      return null;
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+  async function createGpt(gpt: Partial<GPT>) {
+    try {
+      setIsLoading(true);
+      const currentDate = new Date().toISOString();
+
+      const { data, error } = await supabase
+        .from('gpts')
+        .insert<Partial<GPT>>([{ timestamp: currentDate, ...gpt }])
+        .select()
+        .single();
+
+      if (error) throw error;
+
+      return data as unknown as WithId<Conversation>;
+    } catch (error: any) {
+      console.log(error);
+      await swalApiError(error?.message || 'Error al conectarse con SUPABASE');
+      return null;
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+  async function createGptConversation() {
+    try {
+      setIsLoading(true);
+      const currentDate = new Date().toISOString();
+
+      const { data, error } = await supabase
+        .from('conversations')
+        .insert<Partial<Conversation>>([{ timestamp: currentDate, gptonly: true }])
         .select()
         .single();
 
@@ -110,6 +156,26 @@ export function useSupabase() {
     }
   }
 
+  async function deleteGpt(id: string) {
+    try {
+      setIsLoading(true);
+
+      // Elimina la conversación
+      const { error } = await supabase.from('gpts').delete().match({ id });
+
+      if (error) throw error;
+
+      console.log('GPT eliminado exitosamente.');
+      await populateGpts(); // Volver a cargar conversaciones
+    } catch (error: any) {
+      console.log(error);
+      await swalApiError(error?.message || 'Error al conectarse con SUPABASE');
+      return null;
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
   async function batchDeleteConversations(conversationIds: string[]) {
     try {
       setIsLoading(true);
@@ -124,6 +190,29 @@ export function useSupabase() {
 
       console.log('Conversaciones eliminadas exitosamente.');
       await populateConversations(); // Volver a cargar conversaciones
+    } catch (error: any) {
+      console.log(error);
+      await swalApiError(error?.message || 'Error al conectarse con SUPABASE');
+      return null;
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+  async function batchDeleteGpt(ids: string[]) {
+    try {
+      setIsLoading(true);
+
+      // Elimina las conversaciones en lote
+      const { error: deleteConversationsError } = await supabase
+        .from('gpts')
+        .delete()
+        .in('id', ids); // Usar 'in' para eliminar múltiples IDs
+
+      if (deleteConversationsError) throw deleteConversationsError;
+
+      console.log('Conversaciones eliminadas exitosamente.');
+      await populateGpts(); // Volver a cargar conversaciones
     } catch (error: any) {
       console.log(error);
       await swalApiError(error?.message || 'Error al conectarse con SUPABASE');
@@ -254,6 +343,10 @@ export function useSupabase() {
     deleteConversation,
     toggleContext,
     deleteMessage,
+    deleteGpt,
     batchDeleteConversations,
+    batchDeleteGpt,
+    createGptConversation,
+    createGpt,
   };
 }

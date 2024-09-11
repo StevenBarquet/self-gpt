@@ -34,14 +34,10 @@ function Nested(props: Props) {
   const { label, children } = props;
   const { isMobile } = useAppInfoStore();
 
-  const newLabelGrid: GridSystem = {
-    ...basicResponsive(25),
-    ...props.labelGrid,
-  };
-  const newInputGrid: GridSystem = {
-    ...basicResponsive(70),
-    ...props.inputGrid,
-  };
+  const newLabelGrid: GridSystem = props.labelGrid || basicResponsive(25);
+
+  const newInputGrid: GridSystem = props.inputGrid || basicResponsive(70);
+
   const currentStyle =
     isMobile && (newLabelGrid.xs === 100 || newLabelGrid.sm === 100)
       ? { textAlign: 'start', padding: '5px 0px' }
