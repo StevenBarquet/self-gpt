@@ -13,17 +13,17 @@ export const MAIN_SCREENS = {
 };
 
 interface State {
-  GPTs: WithId<GPT>[];
-  Conversations: WithId<Conversation>[];
-  allMessages?: WithId<Message>[];
-  pageSize: number;
-  currentPage: number;
+  GPTs: WithId<GPT>[]; // Locally stored gpts
+  Conversations: WithId<Conversation>[]; // Locally stored conversations
+  allMessages?: WithId<Message>[]; // Thread messages of a conversation (without filter)
+  pageSize: number; // For pagination
+  currentPage: number; // For pagination
   mainScreen: keyof typeof MAIN_SCREENS;
   selectedConversation?: string; // id de la conversación
-  selectedModel: GPT['defaultmodel'];
+  selectedModel: GPT['default_model'];
   selectedGpt?: string; // id del gpt
-  panelTab: 'gpts' | 'chats';
-  aiAnswer: string;
+  panelTab: 'gpts' | 'chats'; // Sidebar tabs panel
+  aiAnswer: string; // Real time streaming answer
 }
 
 const initialState: State = {

@@ -34,7 +34,7 @@ export function useOpenAiCtlr({ allMessages, reloadChatMsgs }: Props) {
   } = useAppLogicStore();
 
   const { OPEN_AI_API_KEY } = useKeysStore();
-  const { createNewChat, addContext, populateConversations } = useSupabase();
+  const { createUserChat, addContext, populateConversations } = useSupabase();
 
   const openai = new OpenAI({ apiKey: OPEN_AI_API_KEY, dangerouslyAllowBrowser: true });
   const inputCtlr = useInput();
@@ -145,7 +145,7 @@ export function useOpenAiCtlr({ allMessages, reloadChatMsgs }: Props) {
 
   async function getConversationId(isNewChat: boolean) {
     if (isNewChat) {
-      const newConversation = await createNewChat({
+      const newConversation = await createUserChat({
         name: inputCtlr.value!,
         gpt_base: selectedGpt!,
       });

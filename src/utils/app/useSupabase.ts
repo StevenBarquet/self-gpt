@@ -67,14 +67,14 @@ export function useSupabase() {
     if (data) update({ Conversations: data });
   }
 
-  async function createNewChat({ name, gpt_base }: { name: string; gpt_base: string }) {
+  async function createUserChat({ name, gpt_base }: { name: string; gpt_base: string }) {
     try {
       setIsLoading(true);
       const currentDate = new Date().toISOString();
 
       const { data, error } = await supabase
         .from('conversations')
-        .insert<Partial<Conversation>>({ timestamp: currentDate, name, gpt_base })
+        .insert<Conversation>({ timestamp: currentDate, name, gpt_base, gpt_only: false })
         .select()
         .single();
 
@@ -90,16 +90,11 @@ export function useSupabase() {
     }
   }
 
-  async function createGpt(gpt: Partial<GPT>) {
+  async function createGpt(gpt: GPT) {
     try {
       setIsLoading(true);
-      const currentDate = new Date().toISOString();
 
-      const { data, error } = await supabase
-        .from('gpts')
-        .insert<Partial<GPT>>([{ timestamp: currentDate, ...gpt }])
-        .select()
-        .single();
+      const { data, error } = await supabase.from('gpts').insert<GPT>([gpt]).select().single();
 
       if (error) throw error;
 
@@ -113,14 +108,14 @@ export function useSupabase() {
     }
   }
 
-  async function createGptConversation() {
+  async function createGptConversation(gptId: string) {
     try {
       setIsLoading(true);
       const currentDate = new Date().toISOString();
 
       const { data, error } = await supabase
         .from('conversations')
-        .insert<Partial<Conversation>>([{ timestamp: currentDate, gptonly: true }])
+        .insert<Conversation>([{ timestamp: currentDate, gpt_only: true, gpt_base: gptId }])
         .select()
         .single();
 
@@ -176,7 +171,7 @@ export function useSupabase() {
     }
   }
 
-  async function batchDeleteConversations(conversationIds: string[]) {
+  async function batchDeleteConversations(ids: string[]) {
     try {
       setIsLoading(true);
 
@@ -184,7 +179,7 @@ export function useSupabase() {
       const { error: deleteConversationsError } = await supabase
         .from('conversations')
         .delete()
-        .in('id', conversationIds); // Usar 'in' para eliminar múltiples IDs
+        .in('id', ids); // Usar 'in' para eliminar múltiples IDs
 
       if (deleteConversationsError) throw deleteConversationsError;
 
@@ -250,7 +245,7 @@ export function useSupabase() {
 
       if (error) throw error;
 
-      updateDate(context); // Sin await en segundo plano actualizamos la fecha de la conversación
+      updateChatDate(context); // Sin await en segundo plano actualizamos la fecha de la conversación
 
       return data as unknown as WithId<Message>[];
     } catch (error: any) {
@@ -262,9 +257,9 @@ export function useSupabase() {
     }
   }
 
-  async function updateDate(msgs: Message[]) {
+  async function updateChatDate(msgs: Message[]) {
     try {
-      const [{ conversation }] = msgs;
+      const [{ conversation }] = msgs; // Warning: Si no hay un elemento se rompe
       const currentDate = new Date().toISOString();
 
       const { data, error } = await supabase
@@ -338,7 +333,7 @@ export function useSupabase() {
     populateGpts,
     populateConversations,
     getChat,
-    createNewChat,
+    createUserChat,
     addContext,
     deleteConversation,
     toggleContext,

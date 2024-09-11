@@ -58,7 +58,7 @@ export function CreateGpt() {
       >
         <FBasicSelect
           formik={formik}
-          valueName='defaultmodel'
+          valueName='default_model'
           placeholder='Select model'
           options={modelOptions}
         />

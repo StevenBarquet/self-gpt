@@ -24,10 +24,16 @@ Step 5
 - In supabase
 
   - Go to SQL Editor of your project
-  - Go to SQL-init.md and copy and execute each script in order in Supabase SQL Editor
+  - Copy and paste all the content from ./SQL-INIT.sql and execute e
 
-  ## TODO ideas
+  ## TODO and ideas
 
-  - Buscador para mensajes
-  - Editar nombres de conversaciones
-  - Pinear conversaciones
+  - Search in messages
+  - Search in chats and gpts
+  - Edit conversation names
+  - Pin conversations and gpts maybe
+  - Fix memory leaks
+
+  # Contribute:
+
+  Feel free to contribute to this project, you can create an issue, open a PR or send me an email: mlmjm123@gmail.com.

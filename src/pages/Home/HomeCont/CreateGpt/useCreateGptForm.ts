@@ -3,12 +3,12 @@ import { createGptSchema, validateContext } from './validations';
 import { swalApiError, swalApiSuccessAuto } from 'src/utils/functions/alertUtils';
 import { Message } from 'src/database/Messages/definitions';
 import { useSupabase } from 'src/utils/app/useSupabase';
-import { omitProps } from 'src/utils/functions/dataTransformUtils';
+import { GPT } from 'src/database/GPTs/definitions';
 
 type ICreateGptValues = {
   name: string;
   icon: string;
-  defaultmodel?: string;
+  default_model?: string;
   description: string;
   context: string;
 };
@@ -37,11 +37,14 @@ export function useCreateGptForm() {
     try {
       const ctx = onValidateContext(values.context);
       if (ctx.isError) throw new Error(ctx.errMessage);
-      const conversation = await createGptConversation();
-      if (!conversation) throw new Error('Error creating conversation');
-      const newGpt = { ...omitProps(values, ['context']), conversation: conversation.id };
+
+      const newGpt = buildGpt(values);
       const gpt = await createGpt(newGpt);
       if (!gpt) throw new Error('Error creating GPT');
+
+      const conversation = await createGptConversation(gpt.id);
+      if (!conversation) throw new Error('Error creating conversation');
+
       const ctxMessages = buildCtxMessages({
         values,
         conversation: conversation.id,
@@ -64,6 +67,16 @@ export function useCreateGptForm() {
     }
     return validation;
   }
+
+  function buildGpt(values: ICreateGptValues): GPT {
+    return {
+      name: values.name,
+      icon: values.icon,
+      default_model: values.default_model as GPT['default_model'], // The options in the dropdown are valid options and validated with yup
+      timestamp: new Date().toISOString(),
+      description: values.description,
+    };
+  }
   function buildCtxMessages({
     values,
     ctx,
@@ -81,8 +94,8 @@ export function useCreateGptForm() {
         role: msg.role as Message['role'], // Is already validated with yup
         content: msg.content,
         timestamp: currentDate.toISOString(),
-        model: values.defaultmodel as Message['model'], // The options in the dropdown are valid options
-        originalcontext: true,
+        model: values.default_model as Message['model'], // The options in the dropdown are valid options
+        original_context: true,
         context: true,
         conversation,
         gpt,
