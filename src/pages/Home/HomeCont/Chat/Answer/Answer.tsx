@@ -33,14 +33,14 @@ export function Answer({ message, aiAnswer, reloadChatMsgs }: Props) {
     <div className={style['Answer']}>
       <section>
         {formated.map((e, i) => (
-          <>
+          <React.Fragment key={`${i}-Answer-Fragment`}>
             <SyntaxHighlighter key={`${i}-SyntaxHighlighter`} language={e.language} style={e.theme}>
               {e.text}
             </SyntaxHighlighter>
             {e.language !== 'markdown' ? (
               <CopyButton key={`${i}-CopyButton`} toCopy={e.text.trim()} />
             ) : null}
-          </>
+          </React.Fragment>
         ))}
       </section>
       {message ? <UpdatePanel reloadChatMsgs={reloadChatMsgs} message={message} /> : null}

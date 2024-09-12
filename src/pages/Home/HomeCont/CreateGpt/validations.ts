@@ -14,7 +14,7 @@ export const createGptSchema = yup.object().shape({
     .matches(svgPattern, 'Icon must be valid SVG HTML code')
     .required('Icon is required'),
 
-  defaultmodel: yup.string().required('Default model is required'),
+  default_model: yup.string().required('Default model is required'),
 
   description: yup
     .string()

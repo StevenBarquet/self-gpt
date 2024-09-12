@@ -27,6 +27,7 @@ export function useCreateGptForm() {
     initialValues: INITAL_STATE,
     validationSchema: createGptSchema,
     onSubmit: onSubmit,
+
     onReset: async (_, formikHelpers) => {
       await formikHelpers.setValues(INITAL_STATE);
       return;

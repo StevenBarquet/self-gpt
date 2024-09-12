@@ -29,10 +29,12 @@ Step 5
   ## TODO and ideas
 
   - Search in messages
-  - Search in chats and gpts
+  - Search in chats and GPTs
   - Edit conversation names
-  - Pin conversations and gpts maybe
+  - Pin conversations and GPTs maybe
   - Fix memory leaks
+  - Use url params to select GPTs and Chats
+  - Add stop button in ask section
 
   # Contribute:
 

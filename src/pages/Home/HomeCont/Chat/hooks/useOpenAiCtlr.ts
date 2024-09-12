@@ -82,7 +82,7 @@ export function useOpenAiCtlr({ allMessages, reloadChatMsgs }: Props) {
         model: selectedModel,
         role: 'user',
         conversation: conversationId, // Hay que cambiar este por la conversación actual o la que se crea
-        originalcontext: false,
+        original_context: false,
         timestamp: questionDate,
       };
       const answer: Message = {
@@ -92,7 +92,7 @@ export function useOpenAiCtlr({ allMessages, reloadChatMsgs }: Props) {
         model: selectedModel,
         role: 'assistant',
         conversation: conversationId, // Hay que cambiar este por la conversación actual o la que se crea
-        originalcontext: false,
+        original_context: false,
         timestamp: answerDate,
       };
 
@@ -112,7 +112,7 @@ export function useOpenAiCtlr({ allMessages, reloadChatMsgs }: Props) {
   // /**Copia la bandera de contexto del último mensaje al siguiente prompt */
   function copyLastContext() {
     if (!allMessages) return;
-    const messages = allMessages.filter((e) => !e.originalcontext);
+    const messages = allMessages.filter((e) => !e.original_context);
     if (!!messages.length) {
       const lastMsgCtx = messages[messages.length - 1].context;
       return lastMsgCtx;
@@ -122,9 +122,9 @@ export function useOpenAiCtlr({ allMessages, reloadChatMsgs }: Props) {
   // -----------------------AUX METHODS
   function validateMessages() {
     if (!allMessages?.length) {
-      throw new Error("No hay mensajes o GPT sin contexto'");
+      throw new Error('No hay mensajes o GPT sin contexto');
     }
-    const notOriginalContext = allMessages.find((e) => !e.originalcontext);
+    const notOriginalContext = allMessages.find((e) => !e.original_context);
     if (notOriginalContext) {
       return {
         isNewChat: false,

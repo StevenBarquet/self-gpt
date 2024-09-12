@@ -298,6 +298,26 @@ export function useSupabase() {
     }
   }
 
+  async function getContextConversation(gpt: WithId<GPT>) {
+    setIsLoading(true);
+    try {
+      const { data } = await supabase
+        .from('conversations')
+        .select('*')
+        .filter('gpt_base', 'eq', gpt.id)
+        .filter('gpt_only', 'eq', true)
+        .single();
+
+      return data as unknown as WithId<Conversation>;
+    } catch (error: any) {
+      console.log(error);
+      await swalApiError(error?.message || 'Error al conectarse con SUPABASE');
+      return null;
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
   async function toggleContext(message: WithId<Message>) {
     setIsLoading(true);
 
@@ -332,6 +352,7 @@ export function useSupabase() {
     isLoading,
     populateGpts,
     populateConversations,
+    getContextConversation,
     getChat,
     createUserChat,
     addContext,

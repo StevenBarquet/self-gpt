@@ -17,7 +17,7 @@ import { ChatFooter } from './ChatFooter/ChatFooter';
 export function Chats() {
   // -----------------------CONSTS, HOOKS, STATES
   const { Conversations, selectedConversation, GPTs, update } = useAppLogicStore();
-  const userConversations = Conversations.filter((e) => !e.gptonly); // Filtramos por conversaciones de usuario (No las de GPT)
+  const userConversations = Conversations.filter((e) => !e.gpt_only); // Filtramos por conversaciones de usuario (No las de GPT)
   const { isSelected, toggleSelectAll, toggleSelectOne, selectedIds } =
     useSelection(userConversations);
 

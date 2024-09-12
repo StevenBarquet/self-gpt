@@ -39,7 +39,7 @@ export function Chat() {
             ),
           )}
           {/** Respuesta actual */}
-          <Answer reloadChatMsgs={reloadChatMsgs} aiAnswer={aiAnswer} />
+          <Answer reloadChatMsgs={reloadChatMsgs} aiAnswer={aiAnswer} key='answer-ai' />
         </>
       )}
       <ChatInput

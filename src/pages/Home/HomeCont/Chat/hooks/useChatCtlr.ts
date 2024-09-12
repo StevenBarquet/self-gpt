@@ -36,10 +36,10 @@ export function useChatCtlr() {
     update,
   } = useAppLogicStore();
 
-  const filteredMessages = allMessages?.filter((e) => !e.originalcontext);
+  const filteredMessages = allMessages?.filter((e) => !e.original_context);
   const messages = filteredMessages?.slice((currentPage - 1) * pageSize, currentPage * pageSize); // Calcular mensajes a mostrar según la página actual
   const updateMessages = (msgs: WithId<Message>[]) => {
-    const totalPages = Math.ceil(msgs.filter((e) => !e.originalcontext).length / pageSize);
+    const totalPages = Math.ceil(msgs.filter((e) => !e.original_context).length / pageSize);
     update({ allMessages: msgs, currentPage: totalPages });
   };
   const setAllMessages = useCallback(updateMessages, [updateMessages]);
@@ -52,7 +52,7 @@ export function useChatCtlr() {
   const currentGpt = GPTs.find((e) => e.id === selectedGpt);
   const currentConversation = Conversations.find((e) => e.id === selectedConversation);
 
-  const { getChat, isLoading } = useSupabase();
+  const { getChat, getContextConversation, isLoading } = useSupabase();
 
   const chatType: IChatTypes = getChatType(); // No sirve ni es util
   // -----------------------MAIN METHODS
@@ -72,23 +72,41 @@ export function useChatCtlr() {
    * Finally, it sets the retrieved messages to the `allMessages` state.
    */
   function reloadChat() {
-    // if (allMessages ) return; // Si ya hay mensajes cargados
-
     // Si existe conversación seleccionada
     if (currentConversation) {
-      getChat(currentConversation.id).then((msgs) => {
+      getChat(currentConversation.id).then(async (msgs) => {
+        // Validation
         if (!msgs?.length) {
           swalApiError('Chat with empty messages');
           return;
         }
-        const gpt = GPTs.find((e) => e.id === msgs[0].gpt)!; // Todos los mensajes en el chat tienen mismo gpt id
-        getGptContext(gpt.conversation).then((ctx) => setAllMessages([...ctx!, ...msgs]));
-        setAllMessages(msgs || []);
+
+        // Set messages
+        const gpt = GPTs.find((e) => e.id === msgs[0].gpt)!;
+        const ctxConversation = await getContextConversation(gpt);
+
+        const ctx = await getGptContext(ctxConversation?.id);
+        if (!ctx) {
+          swalApiError('GPT with empty context');
+          return;
+        }
+        setAllMessages([...ctx, ...msgs]);
+
+        // setAllMessages(msgs || []);
       });
 
       // Si existe GPT seleccionado
+    } else if (currentGpt) {
+      getContextConversation(currentGpt).then(async (ctxConversation) => {
+        const ctx = await getGptContext(ctxConversation?.id);
+        if (!ctx) {
+          swalApiError('GPT with empty context');
+          return;
+        }
+        setAllMessages(ctx);
+      });
     } else {
-      getGptContext().then((msgs) => setAllMessages(msgs || []));
+      swalApiError('Invalid chat or GPT selected');
     }
   }
 
@@ -101,8 +119,8 @@ export function useChatCtlr() {
 
   // -----------------------AUX METHODS
   async function getGptContext(conversationId?: string) {
-    if (!currentGpt && !conversationId) return;
-    const msgs = await getChat(currentGpt?.conversation || conversationId!);
+    if (!conversationId) return;
+    const msgs = await getChat(conversationId!);
     if (!msgs) {
       swalApiError('GPT with empty context');
       return;

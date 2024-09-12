@@ -39,7 +39,7 @@ export function FBasicSelect<T>(props: Props<T>): ReactElement {
 
   const safeValueName = String(valueName);
   const errMessage = formik.errors[valueName];
-  const isError = !!errMessage && !!formik.touched[valueName];
+  const isError = !!errMessage && (!!formik.touched[valueName] || formik.submitCount > 0);
 
   const newRowProps: FrowProps = {
     vAlign: 'top',

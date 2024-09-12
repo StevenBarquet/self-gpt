@@ -9,7 +9,7 @@ export function usePanelActions() {
     const gpt = GPTs.find((e) => e.id === id);
     update({
       mainScreen: 'gptConversation',
-      selectedModel: gpt?.defaultmodel,
+      selectedModel: gpt?.default_model,
       selectedGpt: id,
       selectedConversation: undefined, // Limpia previa conversación seleccionada
       panelTab: 'gpts', // Swichea a la tab del panel "gpts"
@@ -22,7 +22,7 @@ export function usePanelActions() {
 
     update({
       mainScreen: 'chat',
-      selectedModel: gpt?.defaultmodel,
+      selectedModel: gpt?.default_model,
       selectedGpt: undefined,
       selectedConversation: id, // Limpia previa conversación seleccionada
       panelTab: 'chats', // Swichea a la tab del panel "chats"
