@@ -11,7 +11,7 @@ import { Pagination } from 'antd';
 export function MessagesPagination() {
   // -----------------------CONSTS, HOOKS, STATES
   const { allMessages, currentPage, pageSize, update } = useAppLogicStore();
-  const msgsLength = allMessages?.filter((e) => !e.originalcontext).length;
+  const msgsLength = allMessages?.filter((e) => !e.original_context).length;
   // -----------------------MAIN METHODS
   const handlePageChange = (page: number) => {
     update({ currentPage: page });
