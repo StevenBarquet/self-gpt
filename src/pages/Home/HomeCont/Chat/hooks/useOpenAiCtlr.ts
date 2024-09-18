@@ -28,6 +28,7 @@ export function useOpenAiCtlr({ allMessages, reloadChatMsgs }: Props) {
     selectedModel,
     selectedConversation,
     aiAnswer,
+    Conversations,
     setAiAnswer,
     accumulateAiAnswer,
     update,
@@ -71,34 +72,34 @@ export function useOpenAiCtlr({ allMessages, reloadChatMsgs }: Props) {
       }
 
       // Si llegamos aquí ya terminó y respondió
-      const conversationId = await getConversationId(isNewChat);
+      const { id, gpt_base } = await getConversationInfo(isNewChat);
 
       const answerDate = new Date().toISOString();
 
       const question: Message = {
         content: inputCtlr.value!,
-        gpt: selectedGpt!,
+        gpt: gpt_base!,
         context: ctxCheck,
         model: selectedModel,
         role: 'user',
-        conversation: conversationId, // Hay que cambiar este por la conversación actual o la que se crea
+        conversation: id, // Hay que cambiar este por la conversación actual o la que se crea
         original_context: false,
         timestamp: questionDate,
       };
       const answer: Message = {
         content: aiAnswerinMemory!,
-        gpt: selectedGpt!,
+        gpt: gpt_base!,
         context: ctxCheck,
         model: selectedModel,
         role: 'assistant',
-        conversation: conversationId, // Hay que cambiar este por la conversación actual o la que se crea
+        conversation: id, // Hay que cambiar este por la conversación actual o la que se crea
         original_context: false,
         timestamp: answerDate,
       };
 
       await addContext([question, answer]);
 
-      postSuccessQuestion(isNewChat, conversationId);
+      postSuccessQuestion(isNewChat, id);
 
       // console.log({ result, allMessages });
     } catch (error: any) {
@@ -143,16 +144,17 @@ export function useOpenAiCtlr({ allMessages, reloadChatMsgs }: Props) {
     return questionDate;
   }
 
-  async function getConversationId(isNewChat: boolean) {
+  async function getConversationInfo(isNewChat: boolean) {
     if (isNewChat) {
       const newConversation = await createUserChat({
         name: inputCtlr.value!,
         gpt_base: selectedGpt!,
       });
       if (!newConversation) throw new Error('Create a conversation was not possible');
-      return newConversation.id;
+      return newConversation;
     }
-    return selectedConversation!;
+    const conversation = Conversations.find((e) => e.id === selectedConversation);
+    return conversation!;
   }
 
   async function postSuccessQuestion(isNewChat: boolean, conversationId: string) {
