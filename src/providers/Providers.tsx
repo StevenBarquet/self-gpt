@@ -3,6 +3,7 @@ import React, { ReactNode } from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import { AntdProv } from './AntdProv/AntdProv';
 import { useScreenBreakpoints } from './useScreenBreakpoints';
+import { OpenAiProvider } from './OpenAiProvider/OpenAiProvider';
 
 interface Props {
   children: ReactNode;
@@ -20,7 +21,9 @@ export function Providers({ children }: Props) {
   // -----------------------RENDER
   return (
     <BrowserRouter>
-      <AntdProv>{children}</AntdProv>
+      <AntdProv>
+        <OpenAiProvider>{children}</OpenAiProvider>
+      </AntdProv>
     </BrowserRouter>
   );
 }

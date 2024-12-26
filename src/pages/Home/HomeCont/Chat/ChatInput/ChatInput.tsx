@@ -24,7 +24,7 @@ export function ChatInput({ onChange, value, disable, ondAsk, ctxCtlr }: Props) 
   // -----------------------MAIN METHODS
   async function onKeyPress(event: KeyboardEvent<unknown>) {
     if (event.key === 'Enter' && !event.shiftKey) {
-      await ondAsk();
+      ondAsk();
     }
   }
   // -----------------------AUX METHODS

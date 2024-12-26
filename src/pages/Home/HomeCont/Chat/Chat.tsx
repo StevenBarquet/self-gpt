@@ -1,25 +1,22 @@
 // ---Dependencies
-import React from 'react';
+import React, { useContext } from 'react';
 // ---Styles
 import style from './Chat.module.scss';
 import { ChatInput } from './ChatInput/ChatInput';
 
 import { Spinner } from 'src/common/Spinner/Spinner';
 import { Answer } from './Answer/Answer';
-import { useChatCtlr } from './hooks/useChatCtlr';
-import { useOpenAiCtlr } from './hooks/useOpenAiCtlr';
 import { Question } from './Question/Question';
+import { OpenAiContext } from 'src/providers/OpenAiProvider/OpenAiProvider';
 
 /**
  * Chat Component:  Descripción del comportamiento...
  */
 export function Chat() {
   // -----------------------CONSTS, HOOKS, STATES
-  const { allMessages, isLoading, reloadChatMsgs, messages, bottomRef } = useChatCtlr();
-  const { inputCtlr, ondAsk, skdLoading, aiAnswer, ctxCtlr } = useOpenAiCtlr({
-    allMessages,
-    reloadChatMsgs,
-  });
+  const { chatCtlr, openAiCtlr } = useContext(OpenAiContext); // Se movio al provider porque OpenAi necesitaba instanciarse singleton
+  const { isLoading, reloadChatMsgs, messages, bottomRef } = chatCtlr;
+  const { inputCtlr, ondAsk, skdLoading, aiAnswer, ctxCtlr } = openAiCtlr;
 
   // -----------------------MAIN METHODS
   // -----------------------AUX METHODS

@@ -8,23 +8,22 @@ import { useAppLogicStore } from 'src/store/appLogic';
 import { useKeysStore } from 'src/store/keys';
 import { useSupabase } from 'src/utils/app/useSupabase';
 import { swalApiError } from 'src/utils/functions/alertUtils';
-import { WithId } from 'src/utils/functions/typesUtils';
 import { useInput } from 'src/utils/hooks/useInput';
 
 interface Props {
-  allMessages?: WithId<Message>[];
   reloadChatMsgs: () => void;
 }
 
 /**
  * Descripción:
  */
-export function useOpenAiCtlr({ allMessages, reloadChatMsgs }: Props) {
+export function useOpenAiCtlr({ reloadChatMsgs }: Props) {
   // -----------------------CONSTS, HOOKS, STATES
   const { onClickConversation } = usePanelActions();
 
   const [skdLoading, setSdkLoading] = useState(false);
   const {
+    allMessages,
     selectedGpt,
     selectedModel,
     selectedConversation,
@@ -187,3 +186,5 @@ export function useOpenAiCtlr({ allMessages, reloadChatMsgs }: Props) {
     },
   };
 }
+
+export type OpenAiCtlr = ReturnType<typeof useOpenAiCtlr>;

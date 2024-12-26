@@ -106,7 +106,7 @@ export function useChatCtlr() {
         setAllMessages(ctx);
       });
     } else {
-      swalApiError('Invalid chat or GPT selected');
+      // swalApiError('Invalid chat or GPT selected');
     }
   }
 
@@ -145,3 +145,5 @@ export function useChatCtlr() {
     reloadChatMsgs,
   };
 }
+
+export type ChatCtlr = ReturnType<typeof useChatCtlr>;
