@@ -1,5 +1,5 @@
 // ---Dependencies
-import React from 'react';
+import React, { useEffect } from 'react';
 // ---Styles
 import style from './ModelSelector.module.scss';
 import { Select } from 'antd';
@@ -30,11 +30,21 @@ export const modelOptions: {
  */
 export function ModelSelector() {
   // -----------------------CONSTS, HOOKS, STATES
-  const { selectedModel, update } = useAppLogicStore();
+  const { selectedModel, update, allMessages } = useAppLogicStore();
+  useEffect(() => copyLastModel(), [allMessages]);
   // -----------------------MAIN METHODS
   const onChange = (value: Message['model']) => {
     update({ selectedModel: value });
   };
+
+  // /**Copia el modelo del último mensaje al siguiente prompt */
+  function copyLastModel() {
+    let conversationModel = modelOptions[0].value;
+    if (allMessages?.length) {
+      conversationModel = allMessages[allMessages.length - 1].model;
+    }
+    update({ selectedModel: conversationModel });
+  }
   // -----------------------AUX METHODS
   // -----------------------RENDER
   return (
