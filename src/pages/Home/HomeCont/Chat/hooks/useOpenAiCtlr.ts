@@ -1,3 +1,4 @@
+import throttle from 'lodash.throttle';
 import OpenAI from 'openai';
 import { ChatCompletionMessageParam } from 'openai/resources';
 import { useState } from 'react';
@@ -30,7 +31,6 @@ export function useOpenAiCtlr({ allMessages, reloadChatMsgs }: Props) {
     aiAnswer,
     Conversations,
     setAiAnswer,
-    accumulateAiAnswer,
     update,
   } = useAppLogicStore();
 
@@ -40,7 +40,7 @@ export function useOpenAiCtlr({ allMessages, reloadChatMsgs }: Props) {
   const openai = new OpenAI({ apiKey: OPEN_AI_API_KEY, dangerouslyAllowBrowser: true });
   const inputCtlr = useInput();
 
-  const [ctxCheck, setCtxCheck] = useState(false);
+  const [ctxCheck, setCtxCheck] = useState(true);
   const lastCtxCheck = copyLastContext();
 
   // -----------------------MAIN METHODS
@@ -62,16 +62,21 @@ export function useOpenAiCtlr({ allMessages, reloadChatMsgs }: Props) {
         stream: true,
       });
 
-      let aiAnswerinMemory: string = '';
+      let aiAnswerInMemory: string = '';
+
+      const updateAnswer = throttle((newText) => {
+        update({ aiAnswer: newText });
+      }, 100);
 
       for await (const chunk of stream) {
         const message = chunk.choices[0]?.delta?.content || '';
         const cleanMsg = message === 'undefined' ? '' : message;
-        aiAnswerinMemory += cleanMsg;
-        accumulateAiAnswer(cleanMsg);
+        aiAnswerInMemory += cleanMsg;
+        updateAnswer(aiAnswerInMemory);
       }
 
       // Si llegamos aquí ya terminó y respondió
+      updateAnswer.cancel();
       const { id, gpt_base } = await getConversationInfo(isNewChat);
 
       const answerDate = new Date().toISOString();
@@ -87,7 +92,7 @@ export function useOpenAiCtlr({ allMessages, reloadChatMsgs }: Props) {
         timestamp: questionDate,
       };
       const answer: Message = {
-        content: aiAnswerinMemory!,
+        content: aiAnswerInMemory!,
         gpt: gpt_base!,
         context: ctxCheck,
         model: selectedModel,
