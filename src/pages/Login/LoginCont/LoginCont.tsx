@@ -17,7 +17,11 @@ export function LoginCont() {
   // -----------------------RENDER
   return (
     <RoutingRules className={style['LoginCont']}>
-      {start ? <ApiForm /> : <Start onClick={() => setStart(true)} />}
+      {start ? (
+        <ApiForm goBack={() => setStart(false)} />
+      ) : (
+        <Start onClick={() => setStart(true)} />
+      )}
     </RoutingRules>
   );
 }

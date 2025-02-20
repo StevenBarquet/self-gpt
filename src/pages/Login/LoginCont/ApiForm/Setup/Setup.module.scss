@@ -1,0 +1,80 @@
+@import "/src/styles/variables";
+@import "/src/styles/animations";
+@import "/src/styles/utils";
+
+.Setup {
+  font-family: "Inter";
+
+  .setup-container {
+    max-width: 32rem;
+    width: 100%;
+    padding: 2rem;
+    background-color: white;
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  .setup-title {
+    font-size: 1.875rem;
+    font-weight: bold;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    color: #1e498f;
+  }
+
+  .setup-steps {
+    list-style-type: decimal;
+    padding-left: 1.5rem;
+    margin-bottom: 2rem;
+    font-size: 1rem;
+
+    li {
+      margin-bottom: 1rem;
+    }
+  }
+
+  .setup-link {
+    color: #1e498f;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  .setup-code {
+    background-color: #edf2f7;
+    padding: 0.25rem;
+    border-radius: 0.25rem;
+  }
+
+  .setup-pre {
+    background-color: #edf2f7;
+    padding: 0.5rem;
+    border-radius: 0.25rem;
+    margin-top: 0.5rem;
+  }
+
+  .setup-instructions {
+    font-size: 0.875rem;
+    color: #4a5568;
+    margin-bottom: 1.5rem;
+  }
+
+  .setup-button-container {
+    position: absolute;
+    top: 15px;
+  }
+  ul li span {
+    color: $primaryColor;
+  }
+  ul li code {
+    background-color: $primaryColor2;
+    border-radius: 4px;
+  }
+}
+
+// // desk mob xs sm md lg xl xxl
+// @include onlyIn(lg) {
+//   background-color: #f28181;
+// }

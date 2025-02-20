@@ -9,14 +9,17 @@ import { swalApiError } from 'src/utils/functions/alertUtils';
 import { createClient } from '@supabase/supabase-js';
 import { Button } from 'antd';
 import { useKeysStore } from 'src/store/keys';
+import { Setup } from './Setup/Setup';
 
-interface Props {}
+interface Props {
+  goBack: () => void;
+}
 
 /**
  * ApiForm Component:  Descripción del comportamiento...
  * @param {Props} props - Parámetros del componente como: ...
  */
-export function ApiForm({}: Props) {
+export function ApiForm({ goBack }: Props) {
   // -----------------------CONSTS, HOOKS, STATES
   const { update } = useKeysStore();
   const [validDB, setValidDB] = useState({ valid: false, url: '', key: '' });
@@ -81,18 +84,24 @@ export function ApiForm({}: Props) {
   // -----------------------RENDER
   return (
     <div className={style['ApiForm']}>
-      <h1>Load your keys here</h1>
-      <DBValidate isValid={validDB.valid} onValidate={onValidateDB} />
-      <SingleValidate label='OPEN_AI_API_KEY' isValid={validGpt.valid} onValidate={onValidateGpt} />
-      <Button
-        className='continue'
-        disabled={!validDB.valid || !validGpt.valid}
-        block
-        onClick={saveKeys}
-        type='primary'
-      >
-        Continue
-      </Button>
+      <Setup goBack={goBack}>
+        <h1>Enter Credentials</h1>
+        <DBValidate isValid={validDB.valid} onValidate={onValidateDB} />
+        <SingleValidate
+          label='OPEN_AI_API_KEY'
+          isValid={validGpt.valid}
+          onValidate={onValidateGpt}
+        />
+        <Button
+          className='continue'
+          disabled={!validDB.valid || !validGpt.valid}
+          block
+          onClick={saveKeys}
+          type='primary'
+        >
+          Continue
+        </Button>
+      </Setup>
     </div>
   );
 }

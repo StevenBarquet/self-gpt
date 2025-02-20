@@ -5,6 +5,9 @@ import style from './Start.module.scss';
 import { Button, Card } from 'antd';
 import { Link } from 'react-router-dom';
 import { Icon } from '@iconify/react';
+import { features } from './features';
+import { motion } from 'framer-motion';
+
 const { Meta } = Card;
 interface Props {
   onClick: () => void;
@@ -49,23 +52,29 @@ export function Start({ onClick }: Props) {
 
         {/* Features section */}
         <section id='features' className={style['features-section']}>
-          <h2 className={style['section-title']}>Features</h2>
+          <h2 className={style['section-title']}>Powerful Features</h2>
           <div className={style['features-grid']}>
-            <div className={style['feature-card']}>
-              <Icon icon='mdi:brain' className={style['feature-icon']} />
-              <h3>Advanced AI Models</h3>
-              <p>Access to the latest OpenAI models for intelligent conversations.</p>
-            </div>
-            <div className={style['feature-card']}>
-              <Icon icon='mdi:currency-usd' className={style['feature-icon']} />
-              <h3>Pay-per-use</h3>
-              <p>Only pay for the OpenAI credits you use, no subscriptions.</p>
-            </div>
-            <div className={style['feature-card']}>
-              <Icon icon='mdi:open-source' className={style['feature-icon']} />
-              <h3>Open Source</h3>
-              <p>Fully transparent and customizable to fit your needs.</p>
-            </div>
+            {features.map((feature, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+              >
+                <Card
+                  className={style['feature-card']}
+                  hoverable
+                  cover={<div className={style['feature-icon']}>{feature.icon}</div>}
+                >
+                  <Meta
+                    title={<h3 className={style['feature-title']}>{feature.title}</h3>}
+                    description={
+                      <p className={style['feature-description']}>{feature.description}</p>
+                    }
+                  />
+                </Card>
+              </motion.div>
+            ))}
           </div>
         </section>
 
@@ -104,7 +113,7 @@ export function Start({ onClick }: Props) {
               <Card className={style.card} bordered={false}>
                 <Meta title='Basic Plan' className={style.planTitle} />
                 <div className={style.price}>
-                  <span className={style.amount}>FREE</span>
+                  <span className={style.amount}>A lot $$$</span>
                 </div>
                 <ul className={style.features}>
                   <li>
@@ -121,7 +130,7 @@ export function Start({ onClick }: Props) {
               <Card className={style.card} bordered={false}>
                 <Meta title='Plan Pro' className={style.planTitle} />
                 <div className={style.price}>
-                  <span className={style.amount}>FREE</span> as well
+                  <span className={style.amount}>A lot $$$</span> as well
                 </div>
                 <ul className={style.features}>
                   <li>
@@ -140,10 +149,11 @@ export function Start({ onClick }: Props) {
             </div>
           </div>
           <p className='kidding'>
-            Just kidding, all is free, you can use it as you want.
+            Just kidding, all is <span>FREE</span>, you can use it as much as you want.
             <br />
             <br />
-            Just pay for the OpenAI credits you need, no subscriptions.
+            Just pay for the OpenAI credits you need (usually $10 USD are enough for 3 to 6 months),
+            no subscriptions.
           </p>
         </section>
         <div className={'secondStart'}>
@@ -187,8 +197,10 @@ export function Start({ onClick }: Props) {
             <div className={style['faq-item']}>
               <h3>Is my data private?</h3>
               <p>
-                Yes, your conversations are processed locally and are not stored on any external
-                servers. Your privacy is ensured as long as you keep your OpenAI API key secure.
+                Yes, your conversations are stored in your own database (see the setup). <br />{' '}
+                <br />
+                Your API keys are stored locally, not sended to any external server.Your privacy is
+                ensured.
               </p>
             </div>
           </div>

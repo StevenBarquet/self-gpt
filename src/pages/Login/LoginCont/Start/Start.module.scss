@@ -256,6 +256,46 @@
     }
   }
 }
+
+.features-grid {
+  display: grid;
+  gap: 2rem;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+}
+
+.feature-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 1rem;
+  background-color: #fff;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+  .ant-card-body {
+    padding: 0; // Para que no haya padding adicional en el cuerpo del card
+  }
+}
+
+.feature-icon {
+  padding: 1rem;
+  background-color: rgba(30, 73, 143, 0.1);
+  border-radius: 50%;
+  margin-bottom: 1rem;
+}
+
+.feature-title {
+  color: #1e498f;
+  font-size: 1.25rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.feature-description {
+  color: #606060;
+}
+
 // // desk mob xs sm md lg xl xxl
 // @include onlyIn(lg) {
 //   background-color: #f28181;

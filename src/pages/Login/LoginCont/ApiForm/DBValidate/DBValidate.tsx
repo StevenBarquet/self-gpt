@@ -46,7 +46,7 @@ export function DBValidate({ isValid, onValidate }: Props) {
         />
         {isUrlError ? <div className='customHelper'>Campo requerido</div> : null}
       </LabelGridInput>
-      <LabelGridInput label='SUPABASE_KEY'>
+      <LabelGridInput label='SUPABASE_ANON_KEY' inputGrid={{ span: 55 }} labelGrid={{ span: 40 }}>
         <Input
           value={key}
           onChange={onKeyChange}
