@@ -197,7 +197,7 @@ export function useOpenAiCtlr({ reloadChatMsgs }: Props) {
       const enhancedPrompt = enhancedImages
         ? await openai.chat.completions.create({
             messages: [{ role: 'user', content: IMAGE_PROMPT_ENHANCER(prompt) }],
-            model: 'gpt-4o-mini',
+            model: 'gpt-4o',
           })
         : { choices: [{ message: { content: prompt } }] };
 
