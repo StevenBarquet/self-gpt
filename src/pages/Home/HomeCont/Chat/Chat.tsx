@@ -16,15 +16,15 @@ export function Chat() {
   // -----------------------CONSTS, HOOKS, STATES
   const { chatCtlr, openAiCtlr } = useContext(OpenAiContext); // Se movio al provider porque OpenAi necesitaba instanciarse singleton
   const { isLoading, reloadChatMsgs, messages, bottomRef } = chatCtlr;
-  const { inputCtlr, ondAsk, skdLoading, aiAnswer, ctxCtlr } = openAiCtlr;
+  const { inputCtlr, ondAsk, skdLoading, imageLoading, aiAnswer, ctxCtlr } = openAiCtlr;
 
   // -----------------------MAIN METHODS
   // -----------------------AUX METHODS
   // -----------------------RENDER
   return (
     <div className={style['Chat']}>
-      {isLoading ? (
-        <Spinner />
+      {isLoading || !!imageLoading.length ? (
+        <Spinner displayMessage={imageLoading} />
       ) : (
         <>
           {/* <ChatStart /> */}

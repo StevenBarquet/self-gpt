@@ -2,6 +2,11 @@ import throttle from 'lodash.throttle';
 import OpenAI from 'openai';
 import { ChatCompletionMessageParam } from 'openai/resources';
 import { useState } from 'react';
+import {
+  IMAGE_GENERATED_DISPLAY_SIZE,
+  IMAGE_KEYWORDS,
+  IMAGE_PROMPT_ENHANCER,
+} from 'src/appConfig/constants';
 import { Message } from 'src/database/Messages/definitions';
 import { usePanelActions } from 'src/layout/Panel/usePanelActions';
 import { useAppLogicStore } from 'src/store/appLogic';
@@ -20,7 +25,7 @@ interface Props {
 export function useOpenAiCtlr({ reloadChatMsgs }: Props) {
   // -----------------------CONSTS, HOOKS, STATES
   const { onClickConversation } = usePanelActions();
-
+  const [imageLoading, setImageLoading] = useState('');
   const [skdLoading, setSdkLoading] = useState(false);
   const {
     allMessages,
@@ -31,6 +36,7 @@ export function useOpenAiCtlr({ reloadChatMsgs }: Props) {
     Conversations,
     setAiAnswer,
     update,
+    enhancedImages,
   } = useAppLogicStore();
 
   const { OPEN_AI_API_KEY } = useKeysStore();
@@ -48,40 +54,51 @@ export function useOpenAiCtlr({ reloadChatMsgs }: Props) {
     try {
       const { isNewChat } = validateMessages();
       const questionDate = preAskCleanAndDate();
-      const context = allMessages
-        ?.filter((e) => e.context)
-        .map((e) => ({
-          role: e.role,
-          content: e.content,
-        })) as unknown as ChatCompletionMessageParam[];
 
-      const stream = await openai.chat.completions.create({
-        messages: [...context, { role: 'user', content: inputCtlr.value }],
-        model: selectedModel,
-        stream: true,
-      });
+      const isImage = isImagePrompt(inputCtlr.value);
 
       let aiAnswerInMemory: string = '';
+      let enhancedQuestion: string | null = null;
 
-      const updateAnswer = throttle((newText) => {
-        update({ aiAnswer: newText });
-      }, 100);
+      if (isImage) {
+        const imageUrl = await generateImage(inputCtlr.value);
+        if (!imageUrl?.url) throw new Error('No se pudo generar la imagen');
+        aiAnswerInMemory = imageUrl.url;
+        enhancedQuestion = imageUrl.enhanced ? `${inputCtlr.value} -> "${imageUrl.prompt}"` : null;
+      } else {
+        const context = allMessages
+          ?.filter((e) => e.context)
+          .map((e) => ({
+            role: e.role,
+            content: e.content,
+          })) as unknown as ChatCompletionMessageParam[];
 
-      for await (const chunk of stream) {
-        const message = chunk.choices[0]?.delta?.content || '';
-        const cleanMsg = message === 'undefined' ? '' : message;
-        aiAnswerInMemory += cleanMsg;
-        updateAnswer(aiAnswerInMemory);
+        const stream = await openai.chat.completions.create({
+          messages: [...context, { role: 'user', content: inputCtlr.value }],
+          model: selectedModel,
+          stream: true,
+        });
+
+        const updateAnswer = throttle((newText) => {
+          update({ aiAnswer: newText });
+        }, 100);
+
+        for await (const chunk of stream) {
+          const message = chunk.choices[0]?.delta?.content || '';
+          const cleanMsg = message === 'undefined' ? '' : message;
+          aiAnswerInMemory += cleanMsg;
+          updateAnswer(aiAnswerInMemory);
+        }
+
+        // Si llegamos aquí ya terminó y respondió
+        updateAnswer.cancel();
       }
-
-      // Si llegamos aquí ya terminó y respondió
-      updateAnswer.cancel();
       const { id, gpt_base } = await getConversationInfo(isNewChat);
 
       const answerDate = new Date().toISOString();
 
       const question: Message = {
-        content: inputCtlr.value!,
+        content: enhancedQuestion || inputCtlr.value!,
         gpt: gpt_base!,
         context: ctxCheck,
         model: selectedModel,
@@ -98,6 +115,7 @@ export function useOpenAiCtlr({ reloadChatMsgs }: Props) {
         role: 'assistant',
         conversation: id, // Hay que cambiar este por la conversación actual o la que se crea
         original_context: false,
+        is_image_prompt: isImage,
         timestamp: answerDate,
       };
 
@@ -172,13 +190,53 @@ export function useOpenAiCtlr({ reloadChatMsgs }: Props) {
     reloadChatMsgs();
   }
 
+  async function generateImage(prompt: string) {
+    try {
+      setImageLoading(enhancedImages ? 'Enhancing prompt...' : '');
+      // Flag para mejorar el prompt original de imagen
+      const enhancedPrompt = enhancedImages
+        ? await openai.chat.completions.create({
+            messages: [{ role: 'user', content: IMAGE_PROMPT_ENHANCER(prompt) }],
+            model: 'gpt-4o-mini',
+          })
+        : { choices: [{ message: { content: prompt } }] };
+
+      setImageLoading('Generating image...');
+      const response = await openai.images.generate({
+        prompt: enhancedPrompt.choices[0].message.content || prompt,
+        n: 1,
+        size: IMAGE_GENERATED_DISPLAY_SIZE,
+      });
+      setImageLoading('');
+
+      return {
+        url: response.data[0].url,
+        prompt: enhancedPrompt.choices[0].message.content,
+        enhanced: enhancedImages,
+      };
+    } catch (error) {
+      setImageLoading('');
+      console.error('Error generating image:', error);
+    }
+  }
+
+  function isImagePrompt(prompt: string) {
+    // Convertimos el prompt a minúsculas
+    const lowerCasePrompt = prompt.toLowerCase();
+
+    // Lista de keywords para detección de imagen
+
+    // Verificamos si alguno de los keywords aparece en el prompt
+    return IMAGE_KEYWORDS.some((keyword) => lowerCasePrompt.includes(keyword));
+  }
+
   // -----------------------HOOK DATA
   return {
     skdLoading,
     ondAsk,
     inputCtlr,
     aiAnswer,
-
+    imageLoading,
     ctxCtlr: {
       value: ctxCheck,
       lastCtxCheck,

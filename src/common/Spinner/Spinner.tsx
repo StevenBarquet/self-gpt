@@ -6,13 +6,14 @@ import { Icon } from '@iconify/react';
 
 interface Props {
   isLoading?: boolean;
+  displayMessage?: string;
 }
 
 /**
  * Spinner Component:  Descripción del comportamiento...
  * @param {Props} props - Parámetros del componente como: ...
  */
-export function Spinner({ isLoading = true }: Props) {
+export function Spinner({ isLoading = true, displayMessage }: Props) {
   // -----------------------CONSTS, HOOKS, STATES
   // -----------------------MAIN METHODS
   // -----------------------AUX METHODS
@@ -21,6 +22,7 @@ export function Spinner({ isLoading = true }: Props) {
   return (
     <div className={style['Spinner']}>
       <Icon icon='ant-design:loading-outlined' />
+      <div className='Message'>{displayMessage}</div>
     </div>
   );
 }

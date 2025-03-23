@@ -26,6 +26,11 @@
     font-size: 14px; // Tamaño de fuente
     line-height: 1.5; // Espacio entre lineas
 
+    img {
+      display: block;
+      margin: 10px auto;
+    }
+
     pre,
     code {
       white-space: pre-wrap !important;

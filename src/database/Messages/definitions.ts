@@ -10,6 +10,7 @@ export type Message = {
   timestamp: string; // Date.toIsoString()
   context: boolean;
   original_context: boolean;
+  is_image_prompt?: boolean;
   gpt: string; // foreign key to GPTs
   conversation: string; // foreign key to GPTs
 };

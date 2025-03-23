@@ -24,28 +24,42 @@ export function Answer({ message, aiAnswer, reloadChatMsgs }: Props) {
   // -----------------------CONSTS, HOOKS, STATES
   if (!message && !aiAnswer) return null;
   const text = aiAnswer || message!.content; // Necesita recibir aiAnswer o Message
-  const formated = !!text.length ? formatText(text) : null;
+  const formated = !!text.length && !message?.is_image_prompt ? formatText(text) : null;
+  const isImage = message?.is_image_prompt && !!text.length;
   // -----------------------MAIN METHODS
   // -----------------------AUX METHODS
   // -----------------------RENDER
-  if (!formated) return null;
-  return (
-    <div className={style['Answer']}>
-      <section>
-        {formated.map((e, i) => (
-          <React.Fragment key={`${i}-Answer-Fragment`}>
-            <SyntaxHighlighter key={`${i}-SyntaxHighlighter`} language={e.language} style={e.theme}>
-              {e.text}
-            </SyntaxHighlighter>
-            {e.language !== 'markdown' ? (
-              <CopyButton key={`${i}-CopyButton`} toCopy={e.text.trim()} />
-            ) : null}
-          </React.Fragment>
-        ))}
-      </section>
-      {message ? <UpdatePanel reloadChatMsgs={reloadChatMsgs} message={message} /> : null}
-    </div>
-  );
+  if (formated)
+    return (
+      <div className={style['Answer']}>
+        <section>
+          {formated.map((e, i) => (
+            <React.Fragment key={`${i}-Answer-Fragment`}>
+              <SyntaxHighlighter
+                key={`${i}-SyntaxHighlighter`}
+                language={e.language}
+                style={e.theme}
+              >
+                {e.text}
+              </SyntaxHighlighter>
+              {e.language !== 'markdown' ? (
+                <CopyButton key={`${i}-CopyButton`} toCopy={e.text.trim()} />
+              ) : null}
+            </React.Fragment>
+          ))}
+        </section>
+        {message ? <UpdatePanel reloadChatMsgs={reloadChatMsgs} message={message} /> : null}
+      </div>
+    );
+  if (isImage)
+    return (
+      <div className={style['Answer']}>
+        <section>
+          <img src={text} alt='image' />
+        </section>
+      </div>
+    );
+  return null;
 }
 
 type Fragment = {

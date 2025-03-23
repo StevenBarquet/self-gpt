@@ -2,6 +2,7 @@
 import { Button, Checkbox, Input } from 'antd';
 import React, { KeyboardEvent } from 'react';
 import { Fcol, Frow } from 'react-forge-grid';
+import { useAppLogicStore } from 'src/store/appLogic';
 import { basicResponsive } from 'src/utils/functions/responsiveUtils';
 import { type useInput } from 'src/utils/hooks/useInput';
 
@@ -21,11 +22,15 @@ interface Props extends ReturnType<typeof useInput> {
  */
 export function ChatInput({ onChange, value, disable, ondAsk, ctxCtlr }: Props) {
   // -----------------------CONSTS, HOOKS, STATES
+  const { update, enhancedImages } = useAppLogicStore();
   // -----------------------MAIN METHODS
   async function onKeyPress(event: KeyboardEvent<unknown>) {
     if (event.key === 'Enter' && !event.shiftKey) {
       ondAsk();
     }
+  }
+  function toggleEnhancedImages() {
+    update({ enhancedImages: !enhancedImages });
   }
   // -----------------------AUX METHODS
   // -----------------------RENDER
@@ -49,6 +54,14 @@ export function ChatInput({ onChange, value, disable, ondAsk, ctxCtlr }: Props) 
             defaultChecked={ctxCtlr.lastCtxCheck}
             checked={ctxCtlr.value}
             onClick={ctxCtlr.toggle}
+          />
+        </div>
+        <div style={{ textAlign: 'center' }}>
+          <span>Enhanced images: </span>{' '}
+          <Checkbox
+            defaultChecked={ctxCtlr.lastCtxCheck}
+            checked={enhancedImages}
+            onClick={toggleEnhancedImages}
           />
         </div>
       </Fcol>
