@@ -210,7 +210,7 @@ export function useOpenAiCtlr({ reloadChatMsgs }: Props) {
       setImageLoading('');
 
       return {
-        url: response.data[0].url,
+        url: response.data?.[0].url,
         prompt: enhancedPrompt.choices[0].message.content,
         enhanced: enhancedImages,
       };

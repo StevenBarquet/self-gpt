@@ -30,8 +30,8 @@ export const modelOptions: {
       'o3-mini is our most recent small reasoning model, providing high intelligence at the same cost and latency targets of o1-mini. o3-mini also supports key developer features.',
   },
   {
-    value: 'o1',
-    label: 'O1',
+    value: 'o3',
+    label: 'O3',
     title:
       'The o1 reasoning model is designed to solve hard problems across domains. o1-mini is a faster and more affordable reasoning model',
   },
