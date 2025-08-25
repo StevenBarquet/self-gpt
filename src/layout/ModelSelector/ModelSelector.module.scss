@@ -5,6 +5,26 @@
 .ModelSelector {
   font-family: "Inter";
   padding-inline: 15px;
+  min-width: 160px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+
+  /* Ancho del input del Select */
+  .ant-select,
+  .ant-select-selector {
+    min-width: 120px !important; /* o width:120px si quieres forzarlo */
+  }
+
+  /* Ancho del menú desplegable */
+  /* v4 */
+  .ant-select-dropdown {
+    min-width: 120px !important;
+  }
+  /* v5 (ahora rc-select-dropdown) */
+  .rc-select-dropdown {
+    min-width: 120px !important;
+  }
 }
 
 // // desk mob xs sm md lg xl xxl

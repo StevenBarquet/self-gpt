@@ -5,37 +5,9 @@ import style from './ModelSelector.module.scss';
 import { Select } from 'antd';
 import { Message } from 'src/database/Messages/definitions';
 import { useAppLogicStore } from 'src/store/appLogic';
+import { SUPPORTED_MODELS } from 'src/SUPPORTED_MODELS';
 
-export const modelOptions: {
-  value: Message['model'];
-  label: string;
-  title: string;
-}[] = [
-  {
-    value: 'gpt-4o-mini',
-    label: 'GPT-4o mini',
-    title:
-      'Cheapest and fast model. It is multimodal (accepting text or image inputs and outputting text), has higher intelligence than gpt-3.5-turbo but is just as fast.',
-  },
-  {
-    value: 'gpt-4o',
-    label: 'GPT-4o',
-    title:
-      'Our versatile, high-intelligence flagship model for complex, multi-step tasks. GPT-4o is cheaper and faster than GPT-4 Turbo. Currently points to gpt-4o-2024-05-13.',
-  },
-  {
-    value: 'o3-mini',
-    label: 'O3 mini',
-    title:
-      'o3-mini is our most recent small reasoning model, providing high intelligence at the same cost and latency targets of o1-mini. o3-mini also supports key developer features.',
-  },
-  {
-    value: 'o3',
-    label: 'O3',
-    title:
-      'The o1 reasoning model is designed to solve hard problems across domains. o1-mini is a faster and more affordable reasoning model',
-  },
-];
+export const modelOptions = SUPPORTED_MODELS;
 
 /**
  * ModelSelector Component:  Descripción del comportamiento...
@@ -62,7 +34,7 @@ export function ModelSelector() {
   return (
     <div className={style['ModelSelector']}>
       <Select
-        placeholder='Select a person'
+        placeholder='Select a model'
         optionFilterProp='label'
         value={selectedModel}
         onChange={onChange}

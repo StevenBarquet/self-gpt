@@ -89,6 +89,8 @@ Congratulations! You should now be able to use Self-GPT.
   - Add stop button in ask section
   - Fix selected chats bug after batch delete
   - Support for image generation and image upload
+  - Implement prompt-kit.com
+  - Check ai-sdk.dev
 
   # Contribute:
 
