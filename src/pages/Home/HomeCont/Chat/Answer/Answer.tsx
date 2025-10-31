@@ -10,57 +10,75 @@ import { WithId } from 'src/utils/functions/typesUtils';
 import { Message } from 'src/database/Messages/definitions';
 import { CopyButton } from 'src/common/CopyButton/CopyButton';
 
+// Componente para el mensaje en streaming: sin parseo ni highlight
+const StreamingAnswer = React.memo(function StreamingAnswer({ text }: { text: string }) {
+  return <pre className='StreamingAnswer'>{text}</pre>;
+});
+
+const CodeBlock = React.memo(
+  function CodeBlock({ language, text }: { language: string; text: string }) {
+    return (
+      <>
+        <SyntaxHighlighter
+          language={language || 'text'}
+          style={a11yDark}
+          showLineNumbers={false}
+          wrapLongLines
+          PreTag='pre'
+          CodeTag='code'
+        >
+          {text}
+        </SyntaxHighlighter>
+        <CopyButton toCopy={text} />
+      </>
+    );
+  },
+  (prev, next) => prev.language === next.language && prev.text === next.text,
+);
+
 interface Props {
   message?: WithId<Message>;
   aiAnswer?: string;
   reloadChatMsgs: () => void;
 }
 
-/**
- * Answer Component:
- * @param {Props} props - Parámetros del componente como: ...
- */
-export function Answer({ message, aiAnswer, reloadChatMsgs }: Props) {
-  // -----------------------CONSTS, HOOKS, STATES
-  if (!message && !aiAnswer) return null;
-  const text = aiAnswer || message!.content; // Necesita recibir aiAnswer o Message
-  const formated = !!text.length && !message?.is_image_prompt ? formatText(text) : null;
-  const isImage = message?.is_image_prompt && !!text.length;
-  // -----------------------MAIN METHODS
-  // -----------------------AUX METHODS
-  // -----------------------RENDER
-  if (formated)
+export const Answer = React.memo(function Answer({ message, aiAnswer, reloadChatMsgs }: Props) {
+  const isStreaming = !!aiAnswer && !message;
+
+  // Streaming: no formatear
+  if (isStreaming) {
     return (
       <div className={style['Answer']}>
         <section>
-          {formated.map((e, i) => (
-            <React.Fragment key={`${i}-Answer-Fragment`}>
-              <SyntaxHighlighter
-                key={`${i}-SyntaxHighlighter`}
-                language={e.language}
-                style={e.theme}
-              >
-                {e.text}
-              </SyntaxHighlighter>
-              {e.language !== 'markdown' ? (
-                <CopyButton key={`${i}-CopyButton`} toCopy={e.text.trim()} />
-              ) : null}
-            </React.Fragment>
-          ))}
-        </section>
-        {message ? <UpdatePanel reloadChatMsgs={reloadChatMsgs} message={message} /> : null}
-      </div>
-    );
-  if (isImage)
-    return (
-      <div className={style['Answer']}>
-        <section>
-          <img src={text} alt='image' />
+          <StreamingAnswer text={aiAnswer!} />
         </section>
       </div>
     );
-  return null;
-}
+  }
+
+  // Estático (ya terminado): parsear una sola vez
+  if (!message) return null;
+  const text = message.content;
+
+  const fragments = React.useMemo(() => formatTextOnce(text), [text]); // ver versión optimizada abajo
+
+  return (
+    <div className={style['Answer']}>
+      <section>
+        {fragments.map((e, i) => (
+          <React.Fragment key={`frag-${i}`}>
+            {e.language === 'markdown' ? (
+              <div style={{ whiteSpace: 'pre-wrap' }}>{e.text}</div>
+            ) : (
+              <CodeBlock language={e.language} text={e.text} />
+            )}
+          </React.Fragment>
+        ))}
+      </section>
+      <UpdatePanel reloadChatMsgs={reloadChatMsgs} message={message} />
+    </div>
+  );
+});
 
 type Fragment = {
   language: string;
@@ -70,45 +88,39 @@ type Fragment = {
   };
 };
 
-function formatText(input: string): Fragment[] {
-  const fragments: Fragment[] = [];
+function formatTextOnce(input: string): Fragment[] {
+  const out: Fragment[] = [];
+  // Acepta ```lang\n ... ``` o ```\n ... ```
+  const re = /```([^\n`]*)\n([\s\S]*?)```/g;
 
-  // Regex para capturar bloques de código con el lenguaje y texto
-  const codeBlockRegex = /```(\w+)\s([\s\S]*?)```/g;
+  let last = 0;
+  let m: RegExpExecArray | null;
 
-  let lastIndex = 0;
-  let match;
-
-  // Traversing the string
-  while ((match = codeBlockRegex.exec(input)) !== null) {
-    // Porción de texto antes del bloque de código
-    if (match.index > lastIndex) {
-      fragments.push({
+  while ((m = re.exec(input)) !== null) {
+    if (m.index > last) {
+      out.push({
         language: 'markdown',
-        text: input.slice(lastIndex, match.index).trim(),
+        text: input.slice(last, m.index), // sin trim
         theme: docco,
       });
     }
-
-    // Bloque de código formateado
-    fragments.push({
-      language: match[1],
-      text: match[2].trim(),
+    const lang = (m[1] || '').trim() || 'text';
+    out.push({
+      language: lang,
+      text: m[2], // sin trim
       theme: a11yDark,
     });
-
-    // Actualizar el índice para continuar después del bloque de código
-    lastIndex = match.index + match[0].length;
+    last = m.index + m[0].length;
   }
 
-  // Fragmento de texto después del último bloque de código
-  if (lastIndex < input.length) {
-    fragments.push({
+  if (last < input.length) {
+    out.push({
       language: 'markdown',
-      text: input.slice(lastIndex).trim(),
+      text: input.slice(last), // sin trim
       theme: docco,
     });
   }
 
-  return fragments.filter((fragment) => fragment.text.length > 0);
+  // Solo filtra vacíos reales
+  return out.filter((f) => f.text.length > 0);
 }
