@@ -10,6 +10,7 @@ import { Message } from 'src/database/Messages/definitions';
 import { usePanelActions } from 'src/layout/Panel/usePanelActions';
 import { useAppLogicStore } from 'src/store/appLogic';
 import { useKeysStore } from 'src/store/keys';
+import { CODE_FORMAT_CONTEXT } from 'src/SUPPORTED_MODELS';
 import { useSupabase } from 'src/utils/app/useSupabase';
 import { swalApiError } from 'src/utils/functions/alertUtils';
 import { useInput } from 'src/utils/hooks/useInput';
@@ -70,7 +71,7 @@ export function useOpenAiCtlr({ reloadChatMsgs }: Props) {
         })) as unknown as ChatCompletionMessageParam[];
 
       const stream = await openai.chat.completions.create({
-        messages: [...context, { role: 'user', content: inputCtlr.value }],
+        messages: [...CODE_FORMAT_CONTEXT, ...context, { role: 'user', content: inputCtlr.value }],
         model: selectedModel,
         stream: true,
       });

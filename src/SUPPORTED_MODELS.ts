@@ -1,3 +1,4 @@
+import { ChatCompletionMessageParam } from 'openai/resources';
 import { type Message } from 'src/database/Messages/definitions';
 
 export const SUPPORTED_MODELS: {
@@ -38,5 +39,24 @@ export const SUPPORTED_MODELS: {
     value: 'gpt-5-mini',
     label: 'GPT-5 mini',
     title: 'Dummy version of GPT-5',
+  },
+];
+export const CODE_FORMAT_CONTEXT: ChatCompletionMessageParam[] = [
+  {
+    role: 'system',
+    content: [
+      'Instrucciones para formatear código:',
+      '- Para cualquier fragmento de código MULTILÍNEA, usa SIEMPRE bloques con triple backtick (fences).',
+      '- La apertura debe ser: ```<lenguaje> en minúsculas, seguida de un salto de línea.',
+      '- Cierra SIEMPRE el bloque con ``` en una línea separada.',
+      '- No uses bloques indentados (4 espacios) para código multilínea.',
+      '- No incluyas comillas invertidas dentro del bloque, ni inicies otro bloque dentro de uno.',
+      'Ejemplo de formato correcto:',
+      '```ts',
+      'function helloWorld() {',
+      '  console.log("Hello, World!");',
+      '}',
+      '```',
+    ].join('\n'),
   },
 ];
