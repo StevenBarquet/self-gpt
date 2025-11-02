@@ -36,6 +36,30 @@ export function useSupabase() {
     }
   }
 
+  async function getGpt(id: string) {
+    try {
+      setIsLoading(true);
+      const { data, error } = await supabase.from('gpts').select('*').eq('id', id).single();
+
+      if (error) throw error;
+      if (!data?.id) throw new Error('Error descargar GTP');
+
+      const original_context = await getOriginalContext(data.id);
+
+      if (!data || !original_context) throw new Error('Error descargar contexto');
+
+      return { ...data, original_context } as unknown as WithId<
+        GPT & { original_context: WithId<Message>[] }
+      >;
+    } catch (error: any) {
+      console.log(error);
+      await swalApiError(error?.message || 'Error al conectarse con SUPABASE');
+      return null;
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
   async function getConversations() {
     try {
       setIsLoading(true);
@@ -108,6 +132,29 @@ export function useSupabase() {
     }
   }
 
+  async function updateGpt(id: string, gpt: GPT) {
+    try {
+      setIsLoading(true);
+
+      const { data, error } = await supabase
+        .from('gpts')
+        .update(gpt)
+        .eq('id', id)
+        .select()
+        .single();
+
+      if (error) throw error;
+
+      return data as unknown as WithId<Conversation>;
+    } catch (error: any) {
+      console.log(error);
+      await swalApiError(error?.message || 'Error al conectarse con SUPABASE');
+      return null;
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
   async function createGptConversation(gptId: string) {
     try {
       setIsLoading(true);
@@ -128,6 +175,26 @@ export function useSupabase() {
       return null;
     } finally {
       setIsLoading(false);
+    }
+  }
+
+  async function getOriginalContextConversation(gptId: string) {
+    try {
+      setIsLoading(true);
+      const { data, error } = await supabase
+        .from('conversations')
+        .select()
+        .eq('gpt_base', gptId)
+        .eq('gpt_only', true)
+        .single();
+
+      if (error) throw error;
+
+      return data as unknown as WithId<Conversation>;
+    } catch (error: any) {
+      console.log(error);
+      await swalApiError(error?.message || 'Error al conectarse con SUPABASE');
+      return null;
     }
   }
 
@@ -298,26 +365,6 @@ export function useSupabase() {
     }
   }
 
-  async function getContextConversation(gpt: WithId<GPT>) {
-    setIsLoading(true);
-    try {
-      const { data } = await supabase
-        .from('conversations')
-        .select('*')
-        .filter('gpt_base', 'eq', gpt.id)
-        .filter('gpt_only', 'eq', true)
-        .single();
-
-      return data as unknown as WithId<Conversation>;
-    } catch (error: any) {
-      console.log(error);
-      await swalApiError(error?.message || 'Error al conectarse con SUPABASE');
-      return null;
-    } finally {
-      setIsLoading(false);
-    }
-  }
-
   async function toggleContext(message: WithId<Message>) {
     setIsLoading(true);
 
@@ -345,14 +392,37 @@ export function useSupabase() {
       setIsLoading(false);
     }
   }
+
+  async function getOriginalContext(gptId: string) {
+    try {
+      const { data, error } = await supabase
+        .from('messages')
+        .select('*')
+        .filter('gpt', 'eq', gptId)
+        .filter('original_context', 'eq', true)
+        .order('timestamp', { ascending: true });
+
+      if (error) throw error;
+
+      return data as unknown as WithId<Message>[] | null;
+    } catch (error: any) {
+      console.log(error);
+      await swalApiError(error?.message || 'Error al conectarse con SUPABASE');
+      return null;
+    } finally {
+      setIsLoading(false);
+    }
+  }
   // -----------------------AUX METHODS
   // -----------------------RENDER
   return {
     supabase,
     isLoading,
     populateGpts,
+    getGpt,
+    getOriginalContext,
+    getOriginalContextConversation,
     populateConversations,
-    getContextConversation,
     getChat,
     createUserChat,
     addContext,
@@ -364,5 +434,6 @@ export function useSupabase() {
     batchDeleteGpt,
     createGptConversation,
     createGpt,
+    updateGpt,
   };
 }

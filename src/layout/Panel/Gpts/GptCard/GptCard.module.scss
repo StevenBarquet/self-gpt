@@ -9,10 +9,17 @@
   justify-content: space-evenly;
 
   .options {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 15%;
+    display: grid;
+    margin-left: 2%;
+    grid-template-columns: repeat(2, 1fr);
+    width: 19%;
+    gap: 0;
+    .ant-btn {
+      // background-color: black;
+      width: 40px;
+      text-align: center;
+      padding: 4px 0;
+    }
     svg {
       font-size: 22px;
     }
@@ -21,7 +28,7 @@
   .gptBtn {
     font-family: "Inter";
     box-shadow: 1px 2px 1px black;
-    width: 82%;
+    width: 72%;
     height: 76px;
     margin: 5px auto;
     display: flex;

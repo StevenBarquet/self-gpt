@@ -24,8 +24,7 @@ interface Props {
  */
 export function useOpenAiCtlr({ reloadChatMsgs }: Props) {
   // -----------------------CONSTS, HOOKS, STATES
-  const { onClickConversation } = usePanelActions();
-  // const [imageLoading, setImageLoading] = useState('');
+  const { onClickConversation } = usePanelActions([]);
   const [skdLoading, setSdkLoading] = useState(false);
   const {
     allMessages,
@@ -240,7 +239,6 @@ export function useOpenAiCtlr({ reloadChatMsgs }: Props) {
     ondAsk,
     inputCtlr,
     aiAnswer,
-    imageLoading: '',
     ctxCtlr: {
       value: ctxCheck,
       lastCtxCheck,

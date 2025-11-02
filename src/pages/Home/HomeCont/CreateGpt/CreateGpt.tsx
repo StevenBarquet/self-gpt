@@ -26,6 +26,7 @@ export function CreateGpt() {
   const { formik } = useCreateGptForm();
   const hasIcon = formik.values.icon.length > 0;
   const hasJSON = formik.values.context.length > 0;
+  const isEdit = !!formik.values.gptId;
   // -----------------------MAIN METHODS
   function onValidateContext() {
     const validation = validateContext(formik.values.context);
@@ -51,7 +52,7 @@ export function CreateGpt() {
         />
       </LabelGridInput>
       <LabelGridInput
-        colProps={basicResponsive(15)}
+        colProps={basicResponsive(25)}
         label='Model'
         labelGrid={{ span: 40 }}
         inputGrid={{ span: 60 }}
@@ -66,7 +67,7 @@ export function CreateGpt() {
       <LabelGridInput label='Icon' colProps={basicResponsive(35)}>
         <FBasicInput formik={formik} valueName='icon' placeholder='Valid SVG icon' />
       </LabelGridInput>
-      <Fcol {...basicResponsive(50)}>
+      <Fcol {...basicResponsive(40)}>
         <div className='hint'>
           <span>Hint:</span> You can use{' '}
           <a href='https://icon-sets.iconify.design/' target='_blank' rel='noopener noreferrer'>
@@ -132,7 +133,7 @@ export function CreateGpt() {
           icon={<Icon icon='uil:create-dashboard' />}
           onClick={formik.submitForm}
         >
-          Create
+          {isEdit ? 'Update GPT' : 'Create'}
         </Button>
       </Fcol>
     </Frow>

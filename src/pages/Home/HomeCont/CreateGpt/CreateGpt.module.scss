@@ -39,6 +39,11 @@
     border-radius: 15px;
     white-space: pre-wrap !important;
   }
+
+  .ant-select,
+  .ant-select-selector {
+    min-width: 120px !important; /* o width:120px si quieres forzarlo */
+  }
 }
 
 // // desk mob xs sm md lg xl xxl

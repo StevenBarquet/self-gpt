@@ -4,6 +4,7 @@ import { WithId } from 'src/utils/functions/typesUtils';
 import { create, type StateCreator } from 'zustand';
 import { devtools } from 'zustand/middleware';
 import { Message } from 'src/database/Messages/definitions';
+import { ICreateGptValues } from 'src/pages/Home/HomeCont/CreateGpt/useCreateGptForm';
 
 export const MAIN_SCREENS = {
   empty: 'empty',
@@ -25,6 +26,7 @@ interface State {
   panelTab: 'gpts' | 'chats'; // Sidebar tabs panel
   aiAnswer: string; // Real time streaming answer
   enhancedImages: boolean;
+  createGptInit?: ICreateGptValues;
 }
 
 const initialState: State = {

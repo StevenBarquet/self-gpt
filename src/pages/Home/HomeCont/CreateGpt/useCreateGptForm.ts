@@ -4,8 +4,11 @@ import { swalApiError, swalApiSuccessAuto } from 'src/utils/functions/alertUtils
 import { Message } from 'src/database/Messages/definitions';
 import { useSupabase } from 'src/utils/app/useSupabase';
 import { GPT } from 'src/database/GPTs/definitions';
+import { useAppLogicStore } from 'src/store/appLogic';
+import { useEffect } from 'react';
 
-type ICreateGptValues = {
+export type ICreateGptValues = {
+  gptId?: string;
   name: string;
   icon: string;
   default_model?: string;
@@ -21,7 +24,15 @@ const INITAL_STATE: ICreateGptValues = {
 
 export function useCreateGptForm() {
   // -----------------------CONSTS, HOOKS, STATES
-  const { createGptConversation, createGpt, addContext, populateGpts } = useSupabase();
+  const {
+    createGptConversation,
+    createGpt,
+    updateGpt,
+    getOriginalContextConversation,
+    addContext,
+    populateGpts,
+  } = useSupabase();
+  const { createGptInit } = useAppLogicStore();
 
   const formik = useFormik<ICreateGptValues>({
     initialValues: INITAL_STATE,
@@ -33,13 +44,25 @@ export function useCreateGptForm() {
       return;
     },
   });
+  useEffect(() => {
+    if (!createGptInit) formik.resetForm();
+    else {
+      formik.setValues(createGptInit);
+    }
+  }, [createGptInit]);
   // -----------------------MAIN METHODS
   async function onSubmit(values: ICreateGptValues) {
+    const isCreateNew = !values.gptId;
+    if (isCreateNew) await onCreateGpt(values);
+    else await onUpdateGpt(values);
+  }
+
+  async function onCreateGpt(values: ICreateGptValues) {
     try {
       const ctx = onValidateContext(values.context);
       if (ctx.isError) throw new Error(ctx.errMessage);
 
-      const newGpt = buildGpt(values);
+      const newGpt = buildCreateGpt(values);
       const gpt = await createGpt(newGpt);
       if (!gpt) throw new Error('Error creating GPT');
 
@@ -60,6 +83,32 @@ export function useCreateGptForm() {
       swalApiError((error as Error)?.message);
     }
   }
+
+  async function onUpdateGpt(values: ICreateGptValues) {
+    try {
+      const ctx = onValidateContext(values.context);
+      if (ctx.isError) throw new Error(ctx.errMessage);
+
+      const gpt = await updateGpt(...buildUpdateGpt(values));
+      if (!gpt) throw new Error('Error updating GPT');
+
+      const conversation = await getOriginalContextConversation(gpt.id);
+      if (!conversation) throw new Error('Error updating conversation');
+
+      const ctxMessages = buildCtxMessages({
+        values,
+        conversation: conversation.id,
+        gpt: gpt.id,
+        ctx: ctx.parsedContext,
+      });
+      await addContext(ctxMessages);
+      populateGpts();
+      formik.resetForm();
+      swalApiSuccessAuto(`GPT ${values.name} updated ✅✅✅`);
+    } catch (error) {
+      swalApiError((error as Error)?.message);
+    }
+  }
   // -----------------------AUX METHODS
   function onValidateContext(ctx: string) {
     const validation = validateContext(ctx);
@@ -69,14 +118,22 @@ export function useCreateGptForm() {
     return validation;
   }
 
-  function buildGpt(values: ICreateGptValues): GPT {
+  function buildGptBase(values: ICreateGptValues) {
     return {
       name: values.name,
       icon: values.icon,
       default_model: values.default_model as GPT['default_model'], // The options in the dropdown are valid options and validated with yup
-      timestamp: new Date().toISOString(),
       description: values.description,
     };
+  }
+  function buildCreateGpt(values: ICreateGptValues): GPT {
+    return {
+      ...buildGptBase(values),
+      timestamp: new Date().toISOString(),
+    };
+  }
+  function buildUpdateGpt(values: ICreateGptValues): [string, GPT] {
+    return [values.gptId!, buildGptBase(values) as GPT];
   }
   function buildCtxMessages({
     values,

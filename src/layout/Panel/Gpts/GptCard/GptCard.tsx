@@ -14,6 +14,7 @@ interface Props extends WithId<GPT> {
   isCheckSelected: boolean;
   toggleSelectOne: (id: string) => void;
   onDelete: (id: string) => void;
+  onEditGpt: (id: string) => void;
 }
 
 /**
@@ -30,6 +31,7 @@ export function GptCard({
   isCheckSelected,
   toggleSelectOne,
   onDelete,
+  onEditGpt,
 }: Props) {
   // -----------------------CONSTS, HOOKS, STATES
   const [visible, setVisible] = useState(false);
@@ -65,11 +67,17 @@ export function GptCard({
         <Button onClick={() => onDelete(id)} danger type='text'>
           <Icon icon='bi:trash-fill' />
         </Button>
+        <Button onClick={() => onEditGpt(id)} type='text'>
+          <Icon icon='mingcute:edit-line' />
+        </Button>
         <Tooltip title={description} open={visible}>
           <Button onClick={showTooltip} type='text'>
             <Icon icon='memory:tooltip-above-help' />
           </Button>
         </Tooltip>
+        <Button onClick={() => onDelete(id)} type='text'>
+          <Icon icon='mdi:arrow-up-bold' />
+        </Button>
       </div>
     </div>
   );

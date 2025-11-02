@@ -2,13 +2,12 @@
 import React from 'react';
 // ---Styles
 import style from './GptFooter.module.scss';
-import { swalApiConfirm } from 'src/utils/functions/alertUtils';
 import { Button } from 'antd';
 import { Icon } from '@iconify/react';
-import { usePanelActions } from '../../usePanelActions';
-import { useSupabase } from 'src/utils/app/useSupabase';
 
 interface Props {
+  onCreateGpt: () => void;
+  onBatchDeleteGpt: () => void;
   selectedIds: string[];
 }
 
@@ -16,19 +15,11 @@ interface Props {
  * GptFooter Component:  Descripción del comportamiento...
  * @param {Props} props - Parámetros del componente como: ...
  */
-export function GptFooter({ selectedIds }: Props) {
+export function GptFooter({ selectedIds, onCreateGpt, onBatchDeleteGpt }: Props) {
   // -----------------------CONSTS, HOOKS, STATES
-  const { onCreateGpt } = usePanelActions();
-  const { batchDeleteGpt } = useSupabase();
+
   // -----------------------MAIN METHODS
-  const onDelete = () => {
-    swalApiConfirm({
-      callback: async () => {
-        await batchDeleteGpt(selectedIds);
-      },
-      successMsg: 'Selection deleted successfully',
-    });
-  };
+
   // -----------------------AUX METHODS
   // -----------------------RENDER
   return (
@@ -42,7 +33,7 @@ export function GptFooter({ selectedIds }: Props) {
         disabled={!selectedIds.length}
         type='text'
         icon={<Icon icon='ic:baseline-delete-sweep' />}
-        onClick={onDelete}
+        onClick={onBatchDeleteGpt}
       >
         Delete: {selectedIds.length}
       </Button>

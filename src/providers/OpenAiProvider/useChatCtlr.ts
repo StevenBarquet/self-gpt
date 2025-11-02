@@ -52,7 +52,7 @@ export function useChatCtlr() {
   const currentGpt = GPTs.find((e) => e.id === selectedGpt);
   const currentConversation = Conversations.find((e) => e.id === selectedConversation);
 
-  const { getChat, getContextConversation, isLoading } = useSupabase();
+  const { getChat, getOriginalContext, isLoading } = useSupabase();
 
   const chatType: IChatTypes = getChatType(); // No sirve ni es util
   // -----------------------MAIN METHODS
@@ -82,23 +82,20 @@ export function useChatCtlr() {
         }
 
         // Set messages
-        const gpt = GPTs.find((e) => e.id === msgs[0].gpt)!;
-        const ctxConversation = await getContextConversation(gpt);
+        const orignalContext = await getOriginalContext(msgs[0].gpt);
 
-        const ctx = await getGptContext(ctxConversation?.id);
-        if (!ctx) {
+        if (!orignalContext) {
           swalApiError('GPT with empty context');
           return;
         }
-        setAllMessages([...ctx, ...msgs]);
+        setAllMessages([...orignalContext, ...msgs]);
 
         // setAllMessages(msgs || []);
       });
 
-      // Si existe GPT seleccionado
+      // Se selecciona un GPT (No una conversation)
     } else if (currentGpt) {
-      getContextConversation(currentGpt).then(async (ctxConversation) => {
-        const ctx = await getGptContext(ctxConversation?.id);
+      getOriginalContext(currentGpt?.id).then((ctx) => {
         if (!ctx) {
           swalApiError('GPT with empty context');
           return;
@@ -118,15 +115,7 @@ export function useChatCtlr() {
   useEffect(() => scrollToBottom(), [allMessages, currentPage, pageSize]);
 
   // -----------------------AUX METHODS
-  async function getGptContext(conversationId?: string) {
-    if (!conversationId) return;
-    const msgs = await getChat(conversationId!);
-    if (!msgs) {
-      swalApiError('GPT with empty context');
-      return;
-    }
-    return msgs;
-  }
+
   // -----------------------HOOK DATA
   return {
     /** Supabase está cargando */
