@@ -4,29 +4,19 @@ import React from 'react';
 import style from './ChatFooter.module.scss';
 import { Button } from 'antd';
 import { Icon } from '@iconify/react';
-import { useSupabase } from 'src/utils/app/useSupabase';
-import { swalApiConfirm } from 'src/utils/functions/alertUtils';
 
 interface Props {
   selectedIds: string[];
+  onBatchDelete: () => void;
 }
 
 /**
  * ChatFooter Component:  Descripción del comportamiento...
  * @param {Props} props - Parámetros del componente como: ...
  */
-export function ChatFooter({ selectedIds }: Props) {
+export function ChatFooter({ selectedIds, onBatchDelete }: Props) {
   // -----------------------CONSTS, HOOKS, STATES
-  const { batchDeleteConversations } = useSupabase();
   // -----------------------MAIN METHODS
-  const onDelete = () => {
-    swalApiConfirm({
-      callback: async () => {
-        await batchDeleteConversations(selectedIds);
-      },
-      successMsg: 'Selection deleted successfully',
-    });
-  };
   // -----------------------AUX METHODS
   // -----------------------RENDER
   return (
@@ -36,7 +26,7 @@ export function ChatFooter({ selectedIds }: Props) {
         disabled={!selectedIds.length}
         type='text'
         icon={<Icon icon='ic:baseline-delete-sweep' />}
-        onClick={onDelete}
+        onClick={onBatchDelete}
       >
         Delete: {selectedIds.length}
       </Button>

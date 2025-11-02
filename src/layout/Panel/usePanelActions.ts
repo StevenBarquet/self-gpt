@@ -4,10 +4,11 @@ import { useAppLogicStore } from 'src/store/appLogic';
 import { useSupabase } from 'src/utils/app/useSupabase';
 import { swalApiConfirm } from 'src/utils/functions/alertUtils';
 
-export function usePanelActions(selectedIds: string[]) {
+export function usePanelActions(selectedIds: string[], selectNone?: () => void) {
   // -----------------------CONSTS, HOOKS, STATES
   const { update, GPTs, Conversations } = useAppLogicStore();
-  const { deleteGpt, batchDeleteGpt, getGpt, updateGpt, populateGpts } = useSupabase();
+  const { deleteGpt, batchDeleteGpt, batchDeleteConversations, getGpt, updateGpt, populateGpts } =
+    useSupabase();
   const { toggleCollapsed, isMobile } = useAppInfoStore();
 
   // -----------------------MAIN METHODS
@@ -93,10 +94,22 @@ export function usePanelActions(selectedIds: string[]) {
     swalApiConfirm({
       callback: async () => {
         await batchDeleteGpt(selectedIds);
+        selectNone?.();
       },
       successMsg: 'Selection deleted successfully',
     });
   };
+
+  const onBatchDeleteConversations = () => {
+    swalApiConfirm({
+      callback: async () => {
+        await batchDeleteConversations(selectedIds);
+        selectNone?.();
+      },
+      successMsg: 'Selection deleted successfully',
+    });
+  };
+
   // -----------------------HOOK DATA
   return {
     onClickGpt,
@@ -106,5 +119,6 @@ export function usePanelActions(selectedIds: string[]) {
     onBatchDeleteGpt,
     onEditGpt,
     onIncreaseGptOrder,
+    onBatchDeleteConversations,
   };
 }

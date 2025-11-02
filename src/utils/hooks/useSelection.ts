@@ -41,6 +41,10 @@ export const useSelection = <T extends { id: string }>(initialArray: T[]) => {
     });
   };
 
+  const selectNone = () => {
+    setSelectedIds(new Set());
+  };
+
   const isSelected = (id: string) => selectedIds.has(id);
 
   return {
@@ -48,5 +52,6 @@ export const useSelection = <T extends { id: string }>(initialArray: T[]) => {
     toggleSelectAll,
     toggleSelectOne,
     isSelected,
+    selectNone,
   };
 };

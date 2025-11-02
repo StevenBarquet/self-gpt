@@ -18,10 +18,13 @@ export function Chats() {
   // -----------------------CONSTS, HOOKS, STATES
   const { Conversations, selectedConversation, GPTs, update } = useAppLogicStore();
   const userConversations = Conversations.filter((e) => !e.gpt_only); // Filtramos por conversaciones de usuario (No las de GPT)
-  const { isSelected, toggleSelectAll, toggleSelectOne, selectedIds } =
+  const { isSelected, selectNone, toggleSelectAll, toggleSelectOne, selectedIds } =
     useSelection(userConversations);
 
-  const { onClickConversation } = usePanelActions([]);
+  const { onClickConversation, onBatchDeleteConversations } = usePanelActions(
+    selectedIds,
+    selectNone,
+  );
   const { deleteConversation } = useSupabase();
 
   const onGetGpt = (id: string) => {
@@ -57,7 +60,7 @@ export function Chats() {
           toggleSelectOne={toggleSelectOne}
         />
       ))}
-      <ChatFooter selectedIds={selectedIds} />
+      <ChatFooter selectedIds={selectedIds} onBatchDelete={onBatchDeleteConversations} />
     </div>
   );
 }
