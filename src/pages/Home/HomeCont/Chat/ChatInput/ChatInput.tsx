@@ -45,7 +45,7 @@ export function ChatInput({ onChange, value, disable, ondAsk, ctxCtlr }: Props) 
         />
       </Fcol>
       <Fcol {...basicResponsive(20)}>
-        <Button onClick={ondAsk} type='primary' disabled={disable || !value.length} block>
+        <Button onClick={ondAsk} type='primary' disabled={disable || !value?.length} block>
           Send
         </Button>
         <div style={{ textAlign: 'center' }}>

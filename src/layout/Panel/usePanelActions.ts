@@ -1,4 +1,5 @@
 import { ICreateGptValues } from 'src/pages/Home/HomeCont/CreateGpt/useCreateGptForm';
+import { useAppInfoStore } from 'src/store/appInfo';
 import { useAppLogicStore } from 'src/store/appLogic';
 import { useSupabase } from 'src/utils/app/useSupabase';
 import { swalApiConfirm } from 'src/utils/functions/alertUtils';
@@ -7,6 +8,7 @@ export function usePanelActions(selectedIds: string[]) {
   // -----------------------CONSTS, HOOKS, STATES
   const { update, GPTs, Conversations } = useAppLogicStore();
   const { deleteGpt, batchDeleteGpt, getGpt, updateGpt, populateGpts } = useSupabase();
+  const { toggleCollapsed, isMobile } = useAppInfoStore();
 
   // -----------------------MAIN METHODS
   // -----------------------AUX METHODS
@@ -20,6 +22,7 @@ export function usePanelActions(selectedIds: string[]) {
       panelTab: 'gpts', // Swichea a la tab del panel "gpts"
       aiAnswer: '', // Limpia la última respuesta del chat
     });
+    if (isMobile) toggleCollapsed();
   }
 
   async function onEditGpt(id: string) {
@@ -64,6 +67,7 @@ export function usePanelActions(selectedIds: string[]) {
       panelTab: 'chats', // Swichea a la tab del panel "chats"
       aiAnswer: '', // Limpia la última respuesta del chat
     });
+    if (isMobile) toggleCollapsed();
   }
   function onCreateGpt(_clickEvent: any, createGptInit?: ICreateGptValues) {
     update({
@@ -73,6 +77,7 @@ export function usePanelActions(selectedIds: string[]) {
       aiAnswer: '',
       createGptInit,
     });
+    if (isMobile) toggleCollapsed();
   }
   const onDeleteGpt = (id: string) => {
     swalApiConfirm({

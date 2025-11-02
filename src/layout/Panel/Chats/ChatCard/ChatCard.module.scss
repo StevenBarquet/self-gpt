@@ -7,12 +7,19 @@
   flex-direction: row;
   align-items: center;
   justify-content: space-evenly;
+  width: 470px;
+  @include onlyIn(mob) {
+    width: 85vw;
+  }
 
   .options {
     display: flex;
     flex-direction: column;
     align-items: center;
     width: 15%;
+    @include onlyIn(mob) {
+      width: 11vw;
+    }
     svg {
       font-size: 22px;
     }
@@ -22,13 +29,16 @@
     font-family: "Inter";
     box-shadow: 1px 2px 1px black;
     width: 82%;
+    @include onlyIn(mob) {
+      width: 63vw;
+    }
     height: 76px;
     margin: 5px auto;
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: space-around;
-
+    text-align: justify;
     &-active {
       background-color: $primaryColor8;
     }

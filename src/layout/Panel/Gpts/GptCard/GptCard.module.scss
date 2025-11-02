@@ -7,12 +7,19 @@
   flex-direction: row;
   align-items: center;
   justify-content: space-evenly;
+  width: 470px;
+  @include onlyIn(mob) {
+    width: 85vw;
+  }
 
   .options {
     display: grid;
     margin-left: 2%;
     grid-template-columns: repeat(2, 1fr);
     width: 19%;
+    @include onlyIn(mob) {
+      width: 22vw;
+    }
     gap: 0;
     .ant-btn {
       // background-color: black;
@@ -29,6 +36,9 @@
     font-family: "Inter";
     box-shadow: 1px 2px 1px black;
     width: 72%;
+    @include onlyIn(mob) {
+      width: 53vw;
+    }
     height: 76px;
     margin: 5px auto;
     display: flex;

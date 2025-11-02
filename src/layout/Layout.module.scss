@@ -4,7 +4,7 @@
 
 .Layout {
   font-family: "Inter";
-  // height: 100vh;
+  min-height: 100vh;
   display: flex;
 
   .ant-layout-sider-children {
@@ -14,7 +14,7 @@
     position: fixed;
     width: 470px;
     @include onlyIn(mob) {
-      width: 82vw;
+      width: 85vw;
     }
   }
   .ant-layout-sider-collapsed .ant-layout-sider-children {
@@ -23,7 +23,7 @@
 
   .GptFooter {
     @include onlyIn(mob) {
-      width: 82vw !important;
+      width: 85vw !important;
     }
   }
 
