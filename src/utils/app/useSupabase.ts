@@ -21,12 +21,14 @@ export function useSupabase() {
   async function getGPts() {
     try {
       setIsLoading(true);
-      const { data } = await supabase.from('gpts').select('*');
-      // .order('timestamp', { ascending: false });
+      const { data } = await supabase
+        .from('gpts')
+        .select('*')
+        .order('timestamp', { ascending: false });
 
-      const orderedData = data?.sort((a, b) => b.timestamp.localeCompare(a.timestamp));
+      // const orderedData = data?.sort((a, b) => b.timestamp.localeCompare(a.timestamp));
 
-      return orderedData as unknown as null | WithId<GPT>[];
+      return data as unknown as null | WithId<GPT>[];
     } catch (error: any) {
       console.log(error);
       await swalApiError(error?.message || 'Error al conectarse con SUPABASE');
@@ -132,7 +134,7 @@ export function useSupabase() {
     }
   }
 
-  async function updateGpt(id: string, gpt: GPT) {
+  async function updateGpt(id: string, gpt: Partial<GPT>) {
     try {
       setIsLoading(true);
 

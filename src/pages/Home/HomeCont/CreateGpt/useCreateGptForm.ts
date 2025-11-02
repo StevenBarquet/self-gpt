@@ -132,8 +132,8 @@ export function useCreateGptForm() {
       timestamp: new Date().toISOString(),
     };
   }
-  function buildUpdateGpt(values: ICreateGptValues): [string, GPT] {
-    return [values.gptId!, buildGptBase(values) as GPT];
+  function buildUpdateGpt(values: ICreateGptValues): [string, Partial<GPT>] {
+    return [values.gptId!, buildGptBase(values)];
   }
   function buildCtxMessages({
     values,

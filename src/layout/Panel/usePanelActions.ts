@@ -6,7 +6,7 @@ import { swalApiConfirm } from 'src/utils/functions/alertUtils';
 export function usePanelActions(selectedIds: string[]) {
   // -----------------------CONSTS, HOOKS, STATES
   const { update, GPTs, Conversations } = useAppLogicStore();
-  const { deleteGpt, batchDeleteGpt, getGpt } = useSupabase();
+  const { deleteGpt, batchDeleteGpt, getGpt, updateGpt, populateGpts } = useSupabase();
 
   // -----------------------MAIN METHODS
   // -----------------------AUX METHODS
@@ -37,6 +37,19 @@ export function usePanelActions(selectedIds: string[]) {
         2,
       ),
     });
+  }
+
+  async function onIncreaseGptOrder(id: string) {
+    const currentIndex = GPTs.findIndex((e) => e.id === id);
+    const gpt = GPTs[currentIndex];
+    const higherGpt = GPTs[currentIndex - 1];
+
+    const promiseList = [
+      updateGpt(gpt.id, { timestamp: higherGpt.timestamp }),
+      updateGpt(higherGpt.id, { timestamp: gpt.timestamp }),
+    ];
+    await Promise.all(promiseList);
+    await populateGpts();
   }
 
   function onClickConversation(id: string) {
@@ -87,5 +100,6 @@ export function usePanelActions(selectedIds: string[]) {
     onDeleteGpt,
     onBatchDeleteGpt,
     onEditGpt,
+    onIncreaseGptOrder,
   };
 }

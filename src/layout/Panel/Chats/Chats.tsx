@@ -21,7 +21,7 @@ export function Chats() {
   const { isSelected, toggleSelectAll, toggleSelectOne, selectedIds } =
     useSelection(userConversations);
 
-  const { onClickConversation } = usePanelActions();
+  const { onClickConversation } = usePanelActions([]);
   const { deleteConversation } = useSupabase();
 
   const onGetGpt = (id: string) => {

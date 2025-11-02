@@ -11,10 +11,12 @@ import { Icon } from '@iconify/react';
 interface Props extends WithId<GPT> {
   onClickGpt: (id: string) => void;
   isActive: boolean;
+  isFirst?: boolean;
   isCheckSelected: boolean;
   toggleSelectOne: (id: string) => void;
   onDelete: (id: string) => void;
   onEditGpt: (id: string) => void;
+  onIncreaseGptOrder: (id: string) => void;
 }
 
 /**
@@ -27,11 +29,13 @@ export function GptCard({
   description,
   id,
   isActive,
-  onClickGpt,
   isCheckSelected,
+  isFirst,
+  onClickGpt,
   toggleSelectOne,
   onDelete,
   onEditGpt,
+  onIncreaseGptOrder,
 }: Props) {
   // -----------------------CONSTS, HOOKS, STATES
   const [visible, setVisible] = useState(false);
@@ -75,7 +79,7 @@ export function GptCard({
             <Icon icon='memory:tooltip-above-help' />
           </Button>
         </Tooltip>
-        <Button onClick={() => onDelete(id)} type='text'>
+        <Button onClick={() => onIncreaseGptOrder(id)} type='text' disabled={isFirst}>
           <Icon icon='mdi:arrow-up-bold' />
         </Button>
       </div>
