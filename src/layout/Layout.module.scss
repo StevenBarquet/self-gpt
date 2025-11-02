@@ -4,13 +4,27 @@
 
 .Layout {
   font-family: "Inter";
-  height: 100vh;
+  // height: 100vh;
   display: flex;
 
   .ant-layout-sider-children {
     background-color: $primaryColor16;
     height: 100%;
     overflow: auto;
+    position: fixed;
+    width: 470px;
+    @include onlyIn(mob) {
+      width: 82vw;
+    }
+  }
+  .ant-layout-sider-collapsed .ant-layout-sider-children {
+    width: 0px;
+  }
+
+  .GptFooter {
+    @include onlyIn(mob) {
+      width: 82vw !important;
+    }
   }
 
   .ant-layout-header {
@@ -31,7 +45,7 @@
   .ant-layout-content {
     margin: 24px 16px;
     padding: 24px;
-    min-height: 280px;
+    min-height: 240px;
     background: $light;
     border-radius: 12px;
 

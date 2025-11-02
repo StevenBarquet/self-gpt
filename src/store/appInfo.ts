@@ -5,16 +5,19 @@ interface State {
   isMobile: boolean;
   winSize?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl';
   width?: number;
+  menuCollapsed: boolean;
   clientLoaded: boolean;
 }
 
 const initialState: State = {
   isMobile: false,
   clientLoaded: false,
+  menuCollapsed: true,
 };
 
 export interface AppInfoStore extends State {
   update: (data: Partial<State>) => void;
+  toggleCollapsed: () => void;
   updateNested: (key: keyof State, data: Partial<State>[keyof State]) => void;
   set: (data: State) => void;
   reset: () => void;
@@ -23,6 +26,7 @@ export interface AppInfoStore extends State {
 const actions: StateCreator<AppInfoStore> = (set) => ({
   ...initialState,
   update: (data) => set((state) => ({ ...state, ...data })),
+  toggleCollapsed: () => set((state) => ({ ...state, menuCollapsed: !state.menuCollapsed })),
   updateNested: (key, data) => set((state) => ({ ...state, [key]: data })),
   set: (data) => set(() => data),
   reset: () => set(() => initialState),

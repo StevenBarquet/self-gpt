@@ -1,7 +1,6 @@
 // ---Dependencies
 import React, { ReactNode } from 'react';
 import { Layout as AntLayout, Button } from 'antd';
-import { useBoolean } from 'src/utils/hooks/useBoolean';
 import { Icon } from '@iconify/react';
 import { useAppInfoStore } from 'src/store/appInfo';
 import style from './Layout.module.scss';
@@ -22,8 +21,8 @@ interface Props {
  */
 export function Layout({ children }: Props) {
   // -----------------------CONSTS, HOOKS, STATES
-  const { value, toggle } = useBoolean(true);
-  const { isMobile } = useAppInfoStore();
+  const { isMobile, menuCollapsed, toggleCollapsed } = useAppInfoStore();
+  const isExpandedMobile = isMobile && !menuCollapsed;
   // -----------------------MAIN METHODS
   // -----------------------AUX METHODS
   // -----------------------RENDER
@@ -35,9 +34,9 @@ export function Layout({ children }: Props) {
           collapsedWidth={isMobile ? 20 : undefined}
           trigger={null}
           collapsible
-          collapsed={value}
+          collapsed={menuCollapsed}
         >
-          {value ? null : <Panel />}
+          {menuCollapsed ? null : <Panel />}
         </Sider>
       </AntdProvDark>
       <AntLayout>
@@ -45,13 +44,23 @@ export function Layout({ children }: Props) {
           <Button
             className='collapseBtn'
             type='text'
-            icon={value ? <Icon icon='ri:menu-unfold-fill' /> : <Icon icon='ri:menu-fold-fill' />}
-            onClick={toggle}
+            icon={
+              menuCollapsed ? (
+                <Icon icon='ri:menu-unfold-fill' />
+              ) : (
+                <Icon icon='ri:menu-fold-fill' />
+              )
+            }
+            onClick={toggleCollapsed}
           />
-          <MessagesPagination />
-          <ModelSelector />
+          {isExpandedMobile ? null : (
+            <>
+              <MessagesPagination />
+              <ModelSelector />
+            </>
+          )}
         </Header>
-        <Content>{children}</Content>
+        <Content>{isExpandedMobile ? null : children}</Content>
       </AntLayout>
     </AntLayout>
   );

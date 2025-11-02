@@ -45,6 +45,23 @@
   section {
     padding: 10px;
   }
+
+  .LatexBlock {
+    background-color: #282c34;
+    color: white;
+    font-size: 16px;
+    padding: 4px;
+    border-radius: 5px;
+    margin: 10px 0;
+    width: 100%;
+    .katex-display > .katex {
+      line-height: 42px;
+
+      white-space: nowrap;
+      overflow-x: scroll;
+      // white-space: pre-wrap;
+    }
+  }
 }
 
 // // desk mob xs sm md lg xl xxl

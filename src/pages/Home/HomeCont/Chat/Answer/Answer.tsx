@@ -1,8 +1,8 @@
 // ---Dependencies
 import React from 'react';
 import SyntaxHighlighter from 'react-syntax-highlighter';
-import { a11yDark, docco } from 'react-syntax-highlighter/dist/esm/styles/hljs';
-
+import { docco, atomOneDark } from 'react-syntax-highlighter/dist/esm/styles/hljs';
+import katex from 'katex';
 // ---Styles
 import style from './Answer.module.scss';
 import { UpdatePanel } from '../common/UpdatePanel/UpdatePanel';
@@ -21,7 +21,7 @@ const CodeBlock = React.memo(
       <>
         <SyntaxHighlighter
           language={language || 'text'}
-          style={a11yDark}
+          style={atomOneDark}
           showLineNumbers={false}
           wrapLongLines
           PreTag='pre'
@@ -35,6 +35,19 @@ const CodeBlock = React.memo(
   },
   (prev, next) => prev.language === next.language && prev.text === next.text,
 );
+
+const LatexBlock = React.memo(function LatexBlock({ text }: { text: string }) {
+  const html = katex.renderToString(text, {
+    throwOnError: false,
+    displayMode: true,
+  });
+  return (
+    <>
+      <div className={'LatexBlock'} dangerouslySetInnerHTML={{ __html: html }} />
+      <CopyButton toCopy={text} />
+    </>
+  );
+});
 
 interface Props {
   message?: WithId<Message>;
@@ -70,7 +83,13 @@ export const Answer = React.memo(function Answer({ message, aiAnswer, reloadChat
             {e.language === 'markdown' ? (
               <div style={{ whiteSpace: 'pre-wrap' }}>{e.text}</div>
             ) : (
-              <CodeBlock language={e.language} text={e.text} />
+              <>
+                {e.language === 'latex' ? (
+                  <LatexBlock text={e.text} />
+                ) : (
+                  <CodeBlock language={e.language} text={e.text} />
+                )}
+              </>
             )}
           </React.Fragment>
         ))}
@@ -108,7 +127,7 @@ function formatTextOnce(input: string): Fragment[] {
     out.push({
       language: lang,
       text: m[2], // sin trim
-      theme: a11yDark,
+      theme: atomOneDark,
     });
     last = m.index + m[0].length;
   }
