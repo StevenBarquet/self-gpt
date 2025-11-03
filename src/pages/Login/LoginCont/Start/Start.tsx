@@ -31,7 +31,7 @@ export function Start({ onClick }: Props) {
           <div className={style['hero-container']}>
             <h1 className={style['hero-title']}>Self GPT</h1>
             <p className={style['hero-description']}>
-              Your personal AI assistant, open source and <span>FREE</span> to use.
+              Your personal AI assistant, open source and <span>FREE (Kinda)</span> to use.
             </p>
             <div className={style['hero-buttons']}>
               <Button type='primary' onClick={onClick}>
@@ -80,17 +80,23 @@ export function Start({ onClick }: Props) {
 
         {/* About section */}
         <section id='about' className={style['about-section']}>
-          <h2 className={style['section-title']}>About Self GPT</h2>
+          <h2 className={style['section-title']}>Who need this?</h2>
           <p className={style['about-description']}>
-            Self GPT is an open-source AI chatbot that leverages OpenAI's powerful language models.
+            <b>Only</b> users that currently pay for <span>Chatgpt premium</span> or similar{' '}
+            <span>paid</span> ai chatbot.
             <br />
             <br />
-            It's designed to be your personal AI assistant, helping you with various tasks while
-            giving you <span>full control</span> over <span>your data</span> and interactions.
+            <b>Why?</b> Because maybe you want to save around <span>90%</span> of your money by
+            switching to a <span>pay as you go</span> simple AI chatbot.
             <br />
             <br />
-            As an open-source project, it's free to use and can be customized to fit your specific
-            needs.
+            Self GPT is an <span>open-source</span> AI chatbot that uses OpenAI services directly,
+            without intermediaries, crypto mining, <span>stealing your data</span>, or other hidden
+            costs that other chatbots may do.
+            <br />
+            <br />
+            Since is a community tool, it depends on contributions to keep it modern and updated, so
+            it is not as good as a paid services yet.
           </p>
           <div className={style['about-links']}>
             <Button>
