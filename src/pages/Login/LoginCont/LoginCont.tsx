@@ -4,7 +4,6 @@ import React, { useState } from 'react';
 import style from './LoginCont.module.scss';
 import { ApiForm } from './ApiForm/ApiForm';
 import { Start } from './Start/Start';
-import { RoutingRules } from 'src/providers/RoutingRules/RoutingRules';
 
 /**
  * LoginCont Component:  Descripción del comportamiento...
@@ -16,12 +15,12 @@ export function LoginCont() {
   // -----------------------AUX METHODS
   // -----------------------RENDER
   return (
-    <RoutingRules className={style['LoginCont']}>
+    <div className={style['LoginCont']}>
       {start ? (
         <ApiForm goBack={() => setStart(false)} />
       ) : (
         <Start onClick={() => setStart(true)} />
       )}
-    </RoutingRules>
+    </div>
   );
 }

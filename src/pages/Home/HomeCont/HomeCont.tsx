@@ -1,7 +1,6 @@
 // ---Dependencys
 import { ReactElement, useEffect } from 'react';
 import style from './HomeCont.module.scss';
-import { RoutingRules } from 'src/providers/RoutingRules/RoutingRules';
 import { Layout } from 'src/layout/Layout';
 import { useAppLogicStore } from 'src/store/appLogic';
 import { Chat } from './Chat/Chat';
@@ -38,6 +37,8 @@ export function HomeCont(): ReactElement {
 
   // -----------------------MAIN METHODS
   async function loadLastConversation() {
+    console.log('LLega aquí');
+
     if (mainScreen === 'empty' && !!lastConversation?.length) {
       const messages = await getChat(lastConversation);
       if (!messages?.length) return;
@@ -59,7 +60,7 @@ export function HomeCont(): ReactElement {
   // -----------------------RENDER
   return (
     <Layout>
-      <RoutingRules className={style['HomeCont']}>{screens[mainScreen]}</RoutingRules>
+      <div className={style['HomeCont']}>{screens[mainScreen]}</div>
     </Layout>
   );
 }

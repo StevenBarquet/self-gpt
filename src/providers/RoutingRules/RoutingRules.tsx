@@ -5,14 +5,13 @@ import { useKeysStore } from 'src/store/keys';
 
 interface Props {
   children: React.ReactNode;
-  className: string;
 }
 
 /**
  * RoutingRules Component:  Descripción del comportamiento...
  * @param {Props} props - Parámetros del componente como: ...
  */
-export function RoutingRules({ children, className }: Props) {
+export function RoutingRules({ children }: Props) {
   // -----------------------CONSTS, HOOKS, STATES
   const { ANTHROPIC_API_KEY, OPEN_AI_API_KEY, SUPABASE_KEY, SUPABASE_URL } = useKeysStore();
   const navigate = useNavigate();
@@ -44,5 +43,5 @@ export function RoutingRules({ children, className }: Props) {
   }
   // -----------------------AUX MET'ANTHROPIC_API_KEY', 'OPEN_AI_API_KEY', 'SUPABASE_KEY', 'SUPABASE_URL']HODS
   // -----------------------RENDER
-  return <div className={className}>{children}</div>;
+  return <div>{children}</div>;
 }

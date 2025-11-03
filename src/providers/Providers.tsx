@@ -4,6 +4,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { AntdProv } from './AntdProv/AntdProv';
 import { useScreenBreakpoints } from './useScreenBreakpoints';
 import { OpenAiProvider } from './OpenAiProvider/OpenAiProvider';
+import { RoutingRules } from './RoutingRules/RoutingRules';
 
 interface Props {
   children: ReactNode;
@@ -22,7 +23,9 @@ export function Providers({ children }: Props) {
   return (
     <BrowserRouter>
       <AntdProv>
-        <OpenAiProvider>{children}</OpenAiProvider>
+        <OpenAiProvider>
+          <RoutingRules>{children}</RoutingRules>
+        </OpenAiProvider>
       </AntdProv>
     </BrowserRouter>
   );

@@ -2,7 +2,6 @@
 import React from 'react';
 // ---Styles
 import style from './Page404Cont.module.scss';
-import { RoutingRules } from 'src/providers/RoutingRules/RoutingRules';
 
 /**
  * Page404Cont Component:  Descripción del comportamiento...
@@ -13,9 +12,9 @@ export function Page404Cont() {
   // -----------------------AUX METHODS
   // -----------------------RENDER
   return (
-    <RoutingRules className={style['Page404Cont']}>
+    <div className={style['Page404Cont']}>
       <h1>Ups!</h1>
       <h2>Pagina no Encontrada</h2>
-    </RoutingRules>
+    </div>
   );
 }
