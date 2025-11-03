@@ -25,6 +25,7 @@ export function usePanelActions(selectedIds: string[], selectNone?: () => void) 
       panelTab: 'gpts', // Swichea a la tab del panel "gpts"
       aiAnswer: '', // Limpia la última respuesta del chat
     });
+    updatePreferences({ lastConversation: undefined });
     if (isMobile) toggleCollapsed();
   }
 
@@ -81,6 +82,7 @@ export function usePanelActions(selectedIds: string[], selectNone?: () => void) 
       aiAnswer: '',
       createGptInit,
     });
+    updatePreferences({ lastConversation: undefined });
     if (isMobile) toggleCollapsed();
   }
   const onDeleteGpt = (id: string) => {
