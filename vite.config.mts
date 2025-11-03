@@ -47,8 +47,7 @@ export default defineConfig({
     preprocessorOptions: {
       scss: {
         // Configuración para incluir rutas. Esto es equivalente al `includePaths` en tu configuración de Next.js.
-        includePaths: [path.resolve(__dirname, 'src/styles')],
-        api: 'legacy',
+        loadPaths: [path.resolve(__dirname, 'src/styles')],
       },
     },
   },

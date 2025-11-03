@@ -1,5 +1,3 @@
-/* eslint-disable react/jsx-no-useless-fragment */
-/* eslint-disable react/jsx-fragments */
 // ---Dependencys
 import { ReactElement, Fragment, lazy, Suspense } from 'react';
 import { Route, Routes as RouteProv } from 'react-router-dom';

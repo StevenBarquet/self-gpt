@@ -1,4 +1,3 @@
-/* eslint-disable no-restricted-syntax */
 // ---Dependencys
 import { ReactElement } from 'react';
 import { Helmet } from 'react-helmet';

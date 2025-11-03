@@ -1,7 +1,4 @@
-/* eslint-disable consistent-return */
-/* eslint-disable no-undef */
-/* eslint-disable no-redeclare */
-import { ReactElement, RefObject, useEffect, useRef } from 'react';
+import { RefObject, useEffect, useRef } from 'react';
 
 // See: https://usehooks-ts.com/react-hook/use-isomorphic-layout-effect
 
@@ -56,36 +53,36 @@ function useEventListener<
 
 export default useEventListener;
 
-/**
- * Ejemplo de componente React del uso de useEventListener.
- * @returns {ReactElement}
- */
-export function Example(): ReactElement {
-  //  Definir referencia de botón
+// /**
+//  * Ejemplo de componente React del uso de useEventListener.
+//  * @returns {ReactElement}
+//  */
+// export function Example(): ReactElement {
+//   //  Definir referencia de botón
 
-  const buttonRef = useRef<HTMLButtonElement>(null);
+//   const buttonRef = useRef<HTMLButtonElement>(null);
 
-  const onScroll = (event: Event) => {
-    console.log('window scrolled!', event);
-  };
+//   const onScroll = (event: Event) => {
+//     console.log('window scrolled!', event);
+//   };
 
-  const onClick = (event: Event) => {
-    console.log('button clicked!', event);
-  };
+//   const onClick = (event: Event) => {
+//     console.log('button clicked!', event);
+//   };
 
-  // ejemplo con evento basado en ventana
+//   // ejemplo con evento basado en ventana
 
-  useEventListener('scroll', onScroll);
+//   useEventListener('scroll', onScroll);
 
-  // ejemplo con evento basado en elementos
+//   // ejemplo con evento basado en elementos
 
-  useEventListener('click', onClick, buttonRef);
+//   useEventListener('click', onClick, buttonRef);
 
-  return (
-    <div style={{ minHeight: '200vh' }}>
-      <button type='button' ref={buttonRef}>
-        Click me
-      </button>
-    </div>
-  );
-}
+//   return (
+//     <div style={{ minHeight: '200vh' }}>
+//       <button type='button' ref={buttonRef}>
+//         Click me
+//       </button>
+//     </div>
+//   );
+// }
