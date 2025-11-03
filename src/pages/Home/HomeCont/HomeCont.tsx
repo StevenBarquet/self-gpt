@@ -1,11 +1,14 @@
 // ---Dependencys
-import { ReactElement } from 'react';
+import { ReactElement, useEffect } from 'react';
 import style from './HomeCont.module.scss';
 import { RoutingRules } from 'src/providers/RoutingRules/RoutingRules';
 import { Layout } from 'src/layout/Layout';
 import { useAppLogicStore } from 'src/store/appLogic';
 import { Chat } from './Chat/Chat';
 import { CreateGpt } from './CreateGpt/CreateGpt';
+import { usePreferencesStore } from 'src/store/preferences';
+import { useSupabase } from 'src/utils/app/useSupabase';
+import { useAppInfoStore } from 'src/store/appInfo';
 
 const screens = {
   empty: <p>Select a GPT or Chat from menu</p>,
@@ -22,8 +25,36 @@ export function HomeCont(): ReactElement {
   // -----------------------CONSTS, HOOKS, STATES
 
   const { mainScreen } = useAppLogicStore();
-  // -----------------------MAIN METHODS
+  const { lastConversation } = usePreferencesStore();
+  const { getChat, populateGpts, populateConversations } = useSupabase();
+  const { update } = useAppLogicStore();
+  const { toggleCollapsed, isMobile } = useAppInfoStore();
 
+  useEffect(() => {
+    (async () => {
+      await loadLastConversation();
+    })();
+  }, []);
+
+  // -----------------------MAIN METHODS
+  async function loadLastConversation() {
+    if (mainScreen === 'empty' && !!lastConversation?.length) {
+      const messages = await getChat(lastConversation);
+      if (!messages?.length) return;
+      // Si llegamos aquí, si existe la conversación y hay mensajes
+      const lastMsg = messages[messages.length - 1];
+      await Promise.all([populateGpts(), populateConversations()]);
+      update({
+        mainScreen: 'chat',
+        selectedModel: lastMsg.model,
+        selectedGpt: undefined,
+        selectedConversation: lastConversation, // Limpia previa conversación seleccionada
+        panelTab: 'chats', // Swichea a la tab del panel "chats"
+        aiAnswer: '', // Limpia la última respuesta del chat
+      });
+      if (isMobile) toggleCollapsed();
+    }
+  }
   // -----------------------AUX METHODS
   // -----------------------RENDER
   return (

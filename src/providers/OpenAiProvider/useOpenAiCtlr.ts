@@ -35,7 +35,6 @@ export function useOpenAiCtlr({ reloadChatMsgs }: Props) {
     Conversations,
     setAiAnswer,
     update,
-    // enhancedImages,
   } = useAppLogicStore();
 
   const { OPEN_AI_API_KEY } = useKeysStore();

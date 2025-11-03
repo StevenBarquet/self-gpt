@@ -1,6 +1,7 @@
 import { ICreateGptValues } from 'src/pages/Home/HomeCont/CreateGpt/useCreateGptForm';
 import { useAppInfoStore } from 'src/store/appInfo';
 import { useAppLogicStore } from 'src/store/appLogic';
+import { usePreferencesStore } from 'src/store/preferences';
 import { useSupabase } from 'src/utils/app/useSupabase';
 import { swalApiConfirm } from 'src/utils/functions/alertUtils';
 
@@ -10,6 +11,7 @@ export function usePanelActions(selectedIds: string[], selectNone?: () => void) 
   const { deleteGpt, batchDeleteGpt, batchDeleteConversations, getGpt, updateGpt, populateGpts } =
     useSupabase();
   const { toggleCollapsed, isMobile } = useAppInfoStore();
+  const { update: updatePreferences } = usePreferencesStore();
 
   // -----------------------MAIN METHODS
   // -----------------------AUX METHODS
@@ -68,6 +70,7 @@ export function usePanelActions(selectedIds: string[], selectNone?: () => void) 
       panelTab: 'chats', // Swichea a la tab del panel "chats"
       aiAnswer: '', // Limpia la última respuesta del chat
     });
+    updatePreferences({ lastConversation: id });
     if (isMobile) toggleCollapsed();
   }
   function onCreateGpt(_clickEvent: any, createGptInit?: ICreateGptValues) {

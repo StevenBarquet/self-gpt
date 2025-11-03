@@ -25,7 +25,6 @@ interface State {
   selectedGpt?: string; // id del gpt
   panelTab: 'gpts' | 'chats'; // Sidebar tabs panel
   aiAnswer: string; // Real time streaming answer
-  enhancedImages: boolean;
   createGptInit?: ICreateGptValues;
 }
 
@@ -38,7 +37,6 @@ const initialState: State = {
   aiAnswer: '',
   currentPage: 1,
   pageSize: 2,
-  enhancedImages: true,
 };
 
 export interface AppLogicStore extends State {
