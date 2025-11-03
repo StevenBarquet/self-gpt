@@ -21,13 +21,13 @@ type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
  * console.log(result);
  */
 export function omitProps<T, K extends keyof T>(obj: T, keys: K[]): Omit<T, K> {
-  // Crear una copia del objeto original
-  const newObj = { ...obj };
+	// Crear una copia del objeto original
+	const newObj = { ...obj };
 
-  // Remover las claves especificadas
-  for (const key of keys) {
-    delete newObj[key];
-  }
+	// Remover las claves especificadas
+	for (const key of keys) {
+		delete newObj[key];
+	}
 
-  return newObj as Omit<T, K>;
+	return newObj as Omit<T, K>;
 }

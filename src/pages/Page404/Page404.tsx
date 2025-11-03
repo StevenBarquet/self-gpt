@@ -1,8 +1,8 @@
 // ---Dependencys
-import { ReactElement } from 'react';
-import { Helmet } from 'react-helmet';
+import type { ReactElement } from "react";
+import { Helmet } from "react-helmet";
 // ---Components
-import { Page404Cont } from './Page404Cont/Page404Cont';
+import { Page404Cont } from "./Page404Cont/Page404Cont";
 
 /**
  * Componente HomePage: este componente es para dar datos al Helmet de
@@ -10,12 +10,12 @@ import { Page404Cont } from './Page404Cont/Page404Cont';
  * @returns { ReactElement } ReactElement
  */
 export default function Page404(): ReactElement {
-  return (
-    <>
-      <Helmet>
-        <title>Error 404</title>
-      </Helmet>
-      <Page404Cont />
-    </>
-  );
+	return (
+		<>
+			<Helmet>
+				<title>Error 404</title>
+			</Helmet>
+			<Page404Cont />
+		</>
+	);
 }

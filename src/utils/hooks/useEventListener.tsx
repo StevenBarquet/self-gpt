@@ -1,15 +1,19 @@
-import { RefObject, useEffect, useRef } from 'react';
+import { type RefObject, useEffect, useRef } from "react";
 
 // See: https://usehooks-ts.com/react-hook/use-isomorphic-layout-effect
 
 function useEventListener<K extends keyof WindowEventMap>(
-  eventName: K,
-  handler: (event: WindowEventMap[K]) => void,
+	eventName: K,
+	handler: (event: WindowEventMap[K]) => void,
 ): void;
 function useEventListener<
-  K extends keyof HTMLElementEventMap,
-  T extends HTMLElement = HTMLDivElement,
->(eventName: K, handler: (event: HTMLElementEventMap[K]) => void, element: RefObject<T>): void;
+	K extends keyof HTMLElementEventMap,
+	T extends HTMLElement = HTMLDivElement,
+>(
+	eventName: K,
+	handler: (event: HTMLElementEventMap[K]) => void,
+	element: RefObject<T>,
+): void;
 
 /**
  *
@@ -18,37 +22,40 @@ function useEventListener<
  * @param element
  */
 function useEventListener<
-  KW extends keyof WindowEventMap,
-  KH extends keyof HTMLElementEventMap,
-  T extends HTMLElement | void = void,
+	KW extends keyof WindowEventMap,
+	KH extends keyof HTMLElementEventMap,
+	T extends HTMLElement | void = void,
 >(
-  eventName: KW | KH,
-  handler: (event: WindowEventMap[KW] | HTMLElementEventMap[KH] | Event) => void,
-  element?: RefObject<T>,
+	eventName: KW | KH,
+	handler: (
+		event: WindowEventMap[KW] | HTMLElementEventMap[KH] | Event,
+	) => void,
+	element?: RefObject<T>,
 ) {
-  // Crear una referencia que almacene el controlador
-  const savedHandler = useRef(handler);
-  useEffect(() => {
-    savedHandler.current = handler;
-  }, [handler]);
+	// Crear una referencia que almacene el controlador
+	const savedHandler = useRef(handler);
+	useEffect(() => {
+		savedHandler.current = handler;
+	}, [handler]);
 
-  useEffect(() => {
-    // Definir el objetivo de escucha
-    const targetElement: T | Window = element?.current || window;
-    if (!(targetElement && targetElement.addEventListener)) {
-      return;
-    }
+	useEffect(() => {
+		// Definir el objetivo de escucha
+		const targetElement: T | Window = element?.current || window;
+		if (!(targetElement && targetElement.addEventListener)) {
+			return;
+		}
 
-    // Cree un detector de eventos que llame a la función del controlador almacenada en ref
-    const eventListener: typeof handler = (event) => savedHandler.current(event);
+		// Cree un detector de eventos que llame a la función del controlador almacenada en ref
+		const eventListener: typeof handler = (event) =>
+			savedHandler.current(event);
 
-    targetElement.addEventListener(eventName, eventListener);
+		targetElement.addEventListener(eventName, eventListener);
 
-    // Eliminar el event listener en la limpieza
-    return () => {
-      targetElement.removeEventListener(eventName, eventListener);
-    };
-  }, [eventName, element]);
+		// Eliminar el event listener en la limpieza
+		return () => {
+			targetElement.removeEventListener(eventName, eventListener);
+		};
+	}, [eventName, element]);
 }
 
 export default useEventListener;

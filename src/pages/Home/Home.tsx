@@ -1,8 +1,8 @@
 // ---Dependencys
-import { ReactElement } from 'react';
-import { Helmet } from 'react-helmet';
+import type { ReactElement } from "react";
+import { Helmet } from "react-helmet";
 // ---Components
-import { HomeCont } from 'src/pages/Home/HomeCont/HomeCont';
+import { HomeCont } from "src/pages/Home/HomeCont/HomeCont";
 
 /**
  * Componente HomePage: este componente es para dar datos al Helmet de
@@ -10,12 +10,12 @@ import { HomeCont } from 'src/pages/Home/HomeCont/HomeCont';
  * @returns { ReactElement } ReactElement
  */
 export default function Home(): ReactElement {
-  return (
-    <>
-      <Helmet>
-        <title>Self GPT - Same but private and pay as you go</title>
-      </Helmet>
-      <HomeCont />
-    </>
-  );
+	return (
+		<>
+			<Helmet>
+				<title>Self GPT - Same but private and pay as you go</title>
+			</Helmet>
+			<HomeCont />
+		</>
+	);
 }

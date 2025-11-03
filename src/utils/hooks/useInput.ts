@@ -1,4 +1,4 @@
-import { useState, ChangeEvent } from 'react';
+import { type ChangeEvent, useState } from "react";
 
 /**
  * Una simple abstracción para jugar con un input, tener operaciones comunes y
@@ -11,16 +11,16 @@ import { useState, ChangeEvent } from 'react';
  * - setFalse: - Una función para establecer el valor input en falso.
  * - toggle: - Una función para alternar el input.
  */
-export function useInput(defaultValue = '') {
-  const [value, setValue] = useState(defaultValue);
+export function useInput(defaultValue = "") {
+	const [value, setValue] = useState(defaultValue);
 
-  const onChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setValue(e.target.value || '');
-  };
+	const onChange = (e: ChangeEvent<HTMLInputElement>) => {
+		setValue(e.target.value || "");
+	};
 
-  return {
-    value,
-    onChange,
-    setValue,
-  };
+	return {
+		value,
+		onChange,
+		setValue,
+	};
 }

@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react';
-import useEventListener from './useEventListener';
+import { useEffect, useState } from "react";
+import useEventListener from "./useEventListener";
+
 interface WindowSize {
-  width: number;
-  height: number;
+	width: number;
+	height: number;
 }
 
 /**
@@ -10,22 +11,22 @@ interface WindowSize {
  * @returns {WindowSize}
  */
 export function useWindowSize(): WindowSize {
-  const [windowSize, setWindowSize] = useState<WindowSize>({
-    width: 0,
-    height: 0,
-  });
+	const [windowSize, setWindowSize] = useState<WindowSize>({
+		width: 0,
+		height: 0,
+	});
 
-  const handleSize = () => {
-    setWindowSize({
-      width: window.innerWidth,
-      height: window.innerHeight,
-    });
-  };
+	const handleSize = () => {
+		setWindowSize({
+			width: window.innerWidth,
+			height: window.innerHeight,
+		});
+	};
 
-  useEventListener('resize', handleSize);
+	useEventListener("resize", handleSize);
 
-  // Set size at the first client-side load
-  useEffect(() => handleSize(), []);
+	// Set size at the first client-side load
+	useEffect(() => handleSize(), []);
 
-  return windowSize;
+	return windowSize;
 }

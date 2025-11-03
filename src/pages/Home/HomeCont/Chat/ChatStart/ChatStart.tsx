@@ -1,22 +1,18 @@
 // ---Dependencies
 import React from "react";
 // ---Styles
-import style from './ChatStart.module.scss';
+import style from "./ChatStart.module.scss";
 
-interface Props {}
+type Props = {};
 
 /**
  * ChatStart Component:  Descripción del comportamiento...
  * @param {Props} props - Parámetros del componente como: ...
  */
-export function ChatStart({}:Props) {
-  // -----------------------CONSTS, HOOKS, STATES
-  // -----------------------MAIN METHODS
-  // -----------------------AUX METHODS
-  // -----------------------RENDER
-  return (
-    <div className={style['ChatStart']}>
-      ChatStart
-    </div>
-  );
+export function ChatStart({}: Props) {
+	// -----------------------CONSTS, HOOKS, STATES
+	// -----------------------MAIN METHODS
+	// -----------------------AUX METHODS
+	// -----------------------RENDER
+	return <div className={style["ChatStart"]}>ChatStart</div>;
 }

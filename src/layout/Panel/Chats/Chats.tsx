@@ -1,66 +1,75 @@
 // ---Dependencies
-import React from 'react';
+import React from "react";
+import { useAppLogicStore } from "src/store/appLogic";
+import { useSupabase } from "src/utils/app/useSupabase";
+import { swalApiConfirm } from "src/utils/functions/alertUtils";
+import { useSelection } from "src/utils/hooks/useSelection";
+import { PanelTitle } from "../common/PanelTitle/PanelTitle";
+import { usePanelActions } from "../usePanelActions";
+import { ChatCard } from "./ChatCard/ChatCard";
+import { ChatFooter } from "./ChatFooter/ChatFooter";
 // ---Styles
-import style from './Chats.module.scss';
-import { ChatCard } from './ChatCard/ChatCard';
-import { useAppLogicStore } from 'src/store/appLogic';
-import { usePanelActions } from '../usePanelActions';
-import { useSupabase } from 'src/utils/app/useSupabase';
-import { swalApiConfirm } from 'src/utils/functions/alertUtils';
-import { useSelection } from 'src/utils/hooks/useSelection';
-import { PanelTitle } from '../common/PanelTitle/PanelTitle';
-import { ChatFooter } from './ChatFooter/ChatFooter';
+import style from "./Chats.module.scss";
 
 /**
  * Chats Component:  Descripción del comportamiento...
  */
 export function Chats() {
-  // -----------------------CONSTS, HOOKS, STATES
-  const { Conversations, selectedConversation, GPTs, update } = useAppLogicStore();
-  const userConversations = Conversations.filter((e) => !e.gpt_only); // Filtramos por conversaciones de usuario (No las de GPT)
-  const { isSelected, selectNone, toggleSelectAll, toggleSelectOne, selectedIds } =
-    useSelection(userConversations);
+	// -----------------------CONSTS, HOOKS, STATES
+	const { Conversations, selectedConversation, GPTs, update } =
+		useAppLogicStore();
+	const userConversations = Conversations.filter((e) => !e.gpt_only); // Filtramos por conversaciones de usuario (No las de GPT)
+	const {
+		isSelected,
+		selectNone,
+		toggleSelectAll,
+		toggleSelectOne,
+		selectedIds,
+	} = useSelection(userConversations);
 
-  const { onClickConversation, onBatchDeleteConversations } = usePanelActions(
-    selectedIds,
-    selectNone,
-  );
-  const { deleteConversation } = useSupabase();
+	const { onClickConversation, onBatchDeleteConversations } = usePanelActions(
+		selectedIds,
+		selectNone,
+	);
+	const { deleteConversation } = useSupabase();
 
-  const onGetGpt = (id: string) => {
-    const result = GPTs.find((e) => e.id === id);
+	const onGetGpt = (id: string) => {
+		const result = GPTs.find((e) => e.id === id);
 
-    return result;
-  };
+		return result;
+	};
 
-  const onDelete = (id: string) => {
-    swalApiConfirm({
-      callback: async () => {
-        update({ mainScreen: 'empty' });
-        await deleteConversation(id);
-      },
-      successMsg: 'Chat deleted successfully',
-    });
-  };
-  // -----------------------MAIN METHODS
-  // -----------------------AUX METHODS
-  // -----------------------RENDER
-  return (
-    <div className={style['Chats']}>
-      <PanelTitle title='History' toggleSelectAll={toggleSelectAll} />
-      {userConversations.map((e, i) => (
-        <ChatCard
-          key={`GptCard-${i}`}
-          {...e}
-          onClickConversation={onClickConversation}
-          onDelete={onDelete}
-          isActive={selectedConversation === e.id}
-          onGetGpt={onGetGpt}
-          isCheckSelected={isSelected(e.id)}
-          toggleSelectOne={toggleSelectOne}
-        />
-      ))}
-      <ChatFooter selectedIds={selectedIds} onBatchDelete={onBatchDeleteConversations} />
-    </div>
-  );
+	const onDelete = (id: string) => {
+		swalApiConfirm({
+			callback: async () => {
+				update({ mainScreen: "empty" });
+				await deleteConversation(id);
+			},
+			successMsg: "Chat deleted successfully",
+		});
+	};
+	// -----------------------MAIN METHODS
+	// -----------------------AUX METHODS
+	// -----------------------RENDER
+	return (
+		<div className={style["Chats"]}>
+			<PanelTitle title="History" toggleSelectAll={toggleSelectAll} />
+			{userConversations.map((e, i) => (
+				<ChatCard
+					key={`GptCard-${i}`}
+					{...e}
+					onClickConversation={onClickConversation}
+					onDelete={onDelete}
+					isActive={selectedConversation === e.id}
+					onGetGpt={onGetGpt}
+					isCheckSelected={isSelected(e.id)}
+					toggleSelectOne={toggleSelectOne}
+				/>
+			))}
+			<ChatFooter
+				selectedIds={selectedIds}
+				onBatchDelete={onBatchDeleteConversations}
+			/>
+		</div>
+	);
 }

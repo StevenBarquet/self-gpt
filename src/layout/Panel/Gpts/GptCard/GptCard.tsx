@@ -1,22 +1,23 @@
 // ---Dependencies
-import React, { useState } from 'react';
+
+import { Icon } from "@iconify/react";
+import { Button, Checkbox, Tooltip } from "antd";
+import React, { useState } from "react";
+import { DynamicIcon } from "src/common/DynamicIcon/DynamicIcon";
+import type { GPT } from "src/database/GPTs/definitions";
+import type { WithId } from "src/utils/functions/typesUtils";
 // ---Styles
-import style from './GptCard.module.scss';
-import { WithId } from 'src/utils/functions/typesUtils';
-import { GPT } from 'src/database/GPTs/definitions';
-import { DynamicIcon } from 'src/common/DynamicIcon/DynamicIcon';
-import { Button, Checkbox, Tooltip } from 'antd';
-import { Icon } from '@iconify/react';
+import style from "./GptCard.module.scss";
 
 interface Props extends WithId<GPT> {
-  onClickGpt: (id: string) => void;
-  isActive: boolean;
-  isFirst?: boolean;
-  isCheckSelected: boolean;
-  toggleSelectOne: (id: string) => void;
-  onDelete: (id: string) => void;
-  onEditGpt: (id: string) => void;
-  onIncreaseGptOrder: (id: string) => void;
+	onClickGpt: (id: string) => void;
+	isActive: boolean;
+	isFirst?: boolean;
+	isCheckSelected: boolean;
+	toggleSelectOne: (id: string) => void;
+	onDelete: (id: string) => void;
+	onEditGpt: (id: string) => void;
+	onIncreaseGptOrder: (id: string) => void;
 }
 
 /**
@@ -24,65 +25,69 @@ interface Props extends WithId<GPT> {
  * @param {Props} props - Parámetros del componente como: ...
  */
 export function GptCard({
-  icon,
-  name,
-  description,
-  id,
-  isActive,
-  isCheckSelected,
-  isFirst,
-  onClickGpt,
-  toggleSelectOne,
-  onDelete,
-  onEditGpt,
-  onIncreaseGptOrder,
+	icon,
+	name,
+	description,
+	id,
+	isActive,
+	isCheckSelected,
+	isFirst,
+	onClickGpt,
+	toggleSelectOne,
+	onDelete,
+	onEditGpt,
+	onIncreaseGptOrder,
 }: Props) {
-  // -----------------------CONSTS, HOOKS, STATES
-  const [visible, setVisible] = useState(false);
-  // -----------------------MAIN METHODS
-  const showTooltip = () => {
-    setVisible(true);
-    setTimeout(() => {
-      setVisible(false);
-    }, 5000); // Oculta el tooltip después de 8 segundos
-  };
-  function onClick() {
-    onClickGpt(id);
-  }
-  // -----------------------AUX METHODS
-  // -----------------------RENDER
-  return (
-    <div className={style['GptCard']}>
-      <Checkbox checked={isCheckSelected} onClick={() => toggleSelectOne(id)} />
-      <Tooltip title={description}>
-        <Button
-          onClick={onClick}
-          type='text'
-          className={`gptBtn ${isActive ? 'gptBtn-active' : ''}`}
-        >
-          <DynamicIcon icon={icon} />
-          <section>
-            <h5>{name}</h5>
-            <p>{description}</p>
-          </section>
-        </Button>
-      </Tooltip>
-      <div className='options'>
-        <Button onClick={() => onDelete(id)} danger type='text'>
-          <Icon icon='bi:trash-fill' />
-        </Button>
-        <Button onClick={() => onEditGpt(id)} type='text'>
-          <Icon icon='mingcute:edit-line' />
-        </Button>
-        <Tooltip title={description} open={visible}>
-          <Button onClick={showTooltip} type='text'>
-            <Icon icon='memory:tooltip-above-help' />
-          </Button>
-        </Tooltip>
-        <Button onClick={() => onIncreaseGptOrder(id)} type='text' disabled={isFirst}>
-          <Icon icon='mdi:arrow-up-bold' />
-        </Button>
-      </div>
-    </div>
-  );
+	// -----------------------CONSTS, HOOKS, STATES
+	const [visible, setVisible] = useState(false);
+	// -----------------------MAIN METHODS
+	const showTooltip = () => {
+		setVisible(true);
+		setTimeout(() => {
+			setVisible(false);
+		}, 5000); // Oculta el tooltip después de 8 segundos
+	};
+	function onClick() {
+		onClickGpt(id);
+	}
+	// -----------------------AUX METHODS
+	// -----------------------RENDER
+	return (
+		<div className={style["GptCard"]}>
+			<Checkbox checked={isCheckSelected} onClick={() => toggleSelectOne(id)} />
+			<Tooltip title={description}>
+				<Button
+					onClick={onClick}
+					type="text"
+					className={`gptBtn ${isActive ? "gptBtn-active" : ""}`}
+				>
+					<DynamicIcon icon={icon} />
+					<section>
+						<h5>{name}</h5>
+						<p>{description}</p>
+					</section>
+				</Button>
+			</Tooltip>
+			<div className="options">
+				<Button onClick={() => onDelete(id)} danger type="text">
+					<Icon icon="bi:trash-fill" />
+				</Button>
+				<Button onClick={() => onEditGpt(id)} type="text">
+					<Icon icon="mingcute:edit-line" />
+				</Button>
+				<Tooltip title={description} open={visible}>
+					<Button onClick={showTooltip} type="text">
+						<Icon icon="memory:tooltip-above-help" />
+					</Button>
+				</Tooltip>
+				<Button
+					onClick={() => onIncreaseGptOrder(id)}
+					type="text"
+					disabled={isFirst}
+				>
+					<Icon icon="mdi:arrow-up-bold" />
+				</Button>
+			</div>
+		</div>
+	);
 }

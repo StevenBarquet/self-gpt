@@ -1,8 +1,8 @@
 // ---Dependencys
-import { ReactElement } from 'react';
-import { Helmet } from 'react-helmet';
+import type { ReactElement } from "react";
+import { Helmet } from "react-helmet";
 // ---Components
-import { LoginCont } from 'src/pages/Login/LoginCont/LoginCont';
+import { LoginCont } from "src/pages/Login/LoginCont/LoginCont";
 
 /**
  * Componente HomePage: este componente es para dar datos al Helmet de
@@ -10,12 +10,12 @@ import { LoginCont } from 'src/pages/Login/LoginCont/LoginCont';
  * @returns { ReactElement } ReactElement
  */
 export default function Login(): ReactElement {
-  return (
-    <>
-      <Helmet>
-        <title>Self GPT - Same but private and pay as you go</title>
-      </Helmet>
-      <LoginCont />
-    </>
-  );
+	return (
+		<>
+			<Helmet>
+				<title>Self GPT - Same but private and pay as you go</title>
+			</Helmet>
+			<LoginCont />
+		</>
+	);
 }

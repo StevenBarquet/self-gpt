@@ -18,21 +18,19 @@
 //   },
 // };
 module.exports = {
-  plugins: [
-    require('postcss-import'),
-    require('cssnano')({
-      preset: 'default',
-    }),
-    require('postcss-preset-env')({
-              stage: 3,
-              features: {
-                'nesting-rules': true,
-              },
-            },
-        ),
-    require('postcss-sort-media-queries')({
-      sort: 'mobile-first',
-    },
-    ),
-  ],
+	plugins: [
+		require("postcss-import"),
+		require("cssnano")({
+			preset: "default",
+		}),
+		require("postcss-preset-env")({
+			stage: 3,
+			features: {
+				"nesting-rules": true,
+			},
+		}),
+		require("postcss-sort-media-queries")({
+			sort: "mobile-first",
+		}),
+	],
 };

@@ -1,11 +1,12 @@
 // ---Dependencys
-import { ReactElement, Fragment, lazy, Suspense } from 'react';
-import { Route, Routes as RouteProv } from 'react-router-dom';
+import { Fragment, lazy, type ReactElement, Suspense } from "react";
+import { Route, Routes as RouteProv } from "react-router-dom";
+
 // ---Components
 // ---Pages
-const HomePage = lazy(() => import('src/pages/Home/Home'));
-const Login = lazy(() => import('src/pages/Login/Login'));
-const Page404 = lazy(() => import('src/pages/Page404/Page404'));
+const HomePage = lazy(() => import("src/pages/Home/Home"));
+const Login = lazy(() => import("src/pages/Login/Login"));
+const Page404 = lazy(() => import("src/pages/Page404/Page404"));
 
 /**
  * Routes Component: Representar componentes como rutas de la aplicación, también es la raíz de toda la aplicación,
@@ -13,15 +14,15 @@ const Page404 = lazy(() => import('src/pages/Page404/Page404'));
  * @returns {ReactElement} ReactElement
  */
 export function Routes(): ReactElement {
-  return (
-    <Fragment>
-      <Suspense fallback={<h3>Loading...</h3>}>
-        <RouteProv>
-          <Route path='/' element={<HomePage />} />
-          <Route path='/login' element={<Login />} />
-          <Route path='*' element={<Page404 />} />
-        </RouteProv>
-      </Suspense>
-    </Fragment>
-  );
+	return (
+		<Fragment>
+			<Suspense fallback={<h3>Loading...</h3>}>
+				<RouteProv>
+					<Route path="/" element={<HomePage />} />
+					<Route path="/login" element={<Login />} />
+					<Route path="*" element={<Page404 />} />
+				</RouteProv>
+			</Suspense>
+		</Fragment>
+	);
 }
