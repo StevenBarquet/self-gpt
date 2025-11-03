@@ -33,8 +33,8 @@ export default defineConfig({
   ],
   resolve: {
     alias: {
-      '@node_modules': './node_modules',
-      '@src': './src',
+      '@node_modules': path.resolve(__dirname, 'node_modules'),
+      '@src': path.resolve(__dirname, 'src'),
     },
   },
   css: {
@@ -48,6 +48,7 @@ export default defineConfig({
       scss: {
         // Configuración para incluir rutas. Esto es equivalente al `includePaths` en tu configuración de Next.js.
         includePaths: [path.resolve(__dirname, 'src/styles')],
+        api: 'legacy',
       },
     },
   },
