@@ -24,6 +24,12 @@
   .ant-select,
   .ant-select-selector {
     min-width: 120px !important; /* o width:120px si quieres forzarlo */
+    border-radius: 0.625rem;
+    border: transparent !important;
+    &:hover {
+      border: 1px solid $primaryColor5;
+      background-color: $dark1;
+    }
   }
 
   /* Ancho del menú desplegable */

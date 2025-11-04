@@ -1,0 +1,77 @@
+@import "/src/styles/variables";
+@import "/src/styles/animations";
+@import "/src/styles/utils";
+
+$fontFamily:
+  ui-sans-serif,
+  -apple-system,
+  system-ui,
+  Segoe UI,
+  Helvetica,
+  Apple Color Emoji,
+  Arial,
+  sans-serif,
+  Segoe UI Emoji,
+  Segoe UI Symbol;
+.ChatInput {
+  position: fixed;
+  bottom: 20px;
+  // desk mob xs sm md lg xl xxl
+  @include onlyIn(mob) {
+    left: 30px;
+  }
+  border: 1px solid #ccc;
+  background-color: white;
+  border-radius: 1.5rem;
+  font-family: $fontFamily;
+
+  .textarea {
+    font-family: $fontFamily;
+    border-radius: 1.5rem;
+    padding: 15px;
+    width: calc(100% - 112px);
+    overflow: hidden;
+    resize: none;
+    box-sizing: border-box;
+    min-height: 96px;
+    border: none;
+    &:focus-visible,
+    &:focus {
+      border: none; // quita borde si existe
+      outline: none; // quita el highlight de enfoque
+      box-shadow: none; // opcional: algunos frameworks usan sombra como “focus”
+    }
+    &::placeholder {
+      font-family: $fontFamily;
+      font-size: 16px; /* Cambia el tamaño de la fuente */
+      opacity: 0.7; /* Cambia la opacidad del texto del placeholder */
+    }
+  }
+
+  .spinnerContainer {
+    height: 96px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .keepInContext {
+    position: absolute;
+    right: 15px;
+    bottom: 10px;
+    label {
+      margin-right: 10px;
+    }
+  }
+
+  .sendBtn {
+    position: absolute;
+    right: 15px;
+    top: 10px;
+    border-radius: 50%;
+    padding: 4px 10px;
+    svg {
+      font-size: 20px;
+    }
+  }
+}

@@ -1,24 +1,22 @@
 // ---Dependencies
 
 // ---UI Dependencies
-import { Input } from "antd";
+import { Input } from 'antd';
 // ---Custom Hooks
-import type { FormikProps } from "formik";
-import type { KeyboardEvent, ReactElement } from "react";
-import { Fcol, Frow, type FrowProps, type GridSystem } from "react-forge-grid";
-import { useAppInfoStore } from "src/store/appInfo";
+import type { FormikProps } from 'formik';
+import type { KeyboardEvent, ReactElement } from 'react';
+import { Frow, type FrowProps } from 'react-forge-grid';
+import style from './FBasicInput.module.scss';
 
 interface Props<T> {
-	label?: string;
-	placeholder?: string;
-	formik: FormikProps<T>;
-	valueName: keyof T;
-	labelGrid?: GridSystem;
-	inputGrid?: GridSystem;
-	required?: boolean;
-	submitOnEnter?: boolean;
-	disabled?: boolean;
-	containerProps?: Omit<FrowProps, "children">;
+  label?: string;
+  placeholder?: string;
+  formik: FormikProps<T>;
+  valueName: keyof T;
+  required?: boolean;
+  submitOnEnter?: boolean;
+  disabled?: boolean;
+  containerProps?: Omit<FrowProps, 'children'>;
 }
 
 /**
@@ -27,76 +25,58 @@ interface Props<T> {
  * @returns {ReactElement}
  */
 export function FBasicInput<T>(props: Props<T>): ReactElement {
-	// -----------------------CONSTS, HOOKS, STATES
-	const {
-		disabled,
-		label,
-		formik,
-		valueName,
-		labelGrid,
-		inputGrid,
-		required,
-		submitOnEnter,
-		placeholder,
-		containerProps,
-	} = props;
+  // -----------------------CONSTS, HOOKS, STATES
+  const {
+    disabled,
+    label,
+    formik,
+    valueName,
+    required,
+    submitOnEnter,
+    placeholder,
+    containerProps,
+  } = props;
 
-	const { isMobile } = useAppInfoStore();
+  const safeValueName = String(valueName || '');
+  const safeValue = String(formik.values[valueName] || '');
 
-	const errMessage = formik.errors[valueName];
-	const isError = !!errMessage && !!formik.touched[valueName];
+  const errMessage = formik.errors[valueName];
+  const isError = !!errMessage && !!formik.touched[valueName];
 
-	const newRowProps: FrowProps = {
-		vAlign: "top",
-		hAlign: "start",
-		...containerProps,
-	};
-	const newLabelGrid: GridSystem = {
-		span: 25,
-		...labelGrid,
-	};
-	const newInputGrid: GridSystem = {
-		span: label ? 70 : 100,
-		...inputGrid,
-	};
-	const newLabel = required && label ? `*${label}` : label;
+  const newRowProps: FrowProps = {
+    vAlign: 'top',
+    hAlign: 'start',
+    ...containerProps,
+  };
 
-	const currentStyle =
-		newLabelGrid.span === 100 ||
-		(isMobile && (newLabelGrid.xs === 100 || newLabelGrid.sm === 100))
-			? { textAlign: "start", padding: "5px 0px" }
-			: { textAlign: "end", padding: "5px 10px" };
+  const newLabel = required && label ? `*${label}` : label;
 
-	// -----------------------MAIN METHODS
-	/** Función para hacer submit al presionar enter */
-	async function onKeyPress(event: KeyboardEvent<unknown>) {
-		if (submitOnEnter && event.key === "Enter") {
-			await formik.submitForm();
-		}
-	}
-	// -----------------------RENDER
-	return (
-		<Frow {...newRowProps} style={{ marginTop: "10px" }}>
-			{label?.length ? (
-				<Fcol {...newLabelGrid} style={currentStyle}>
-					<span>{newLabel}:</span>
-				</Fcol>
-			) : null}
-
-			<Fcol {...newInputGrid}>
-				<Input
-					disabled={disabled}
-					value={String(formik.values[valueName] || "")}
-					onChange={formik.handleChange(valueName)}
-					onKeyPress={onKeyPress}
-					status={isError ? "error" : undefined}
-					placeholder={placeholder}
-				/>
-
-				{isError ? (
-					<div className="customHelper">{String(errMessage)}</div>
-				) : null}
-			</Fcol>
-		</Frow>
-	);
+  // -----------------------MAIN METHODS
+  /** Función para hacer submit al presionar enter */
+  async function onKeyPress(event: KeyboardEvent<unknown>) {
+    if (submitOnEnter && event.key === 'Enter') {
+      await formik.submitForm();
+    }
+  }
+  // -----------------------RENDER
+  return (
+    <Frow
+      {...newRowProps}
+      className={newRowProps?.className || ` ${style['FBasicInput']}`}
+      style={{ marginTop: '10px' }}
+    >
+      {label?.length ? <label htmlFor={`form-input${safeValueName}`}>{newLabel}</label> : null}
+      <Input
+        name={`form-input${safeValueName}`}
+        id={`form-input${safeValueName}`}
+        disabled={disabled}
+        value={safeValue}
+        onChange={formik.handleChange(valueName)}
+        onKeyPress={onKeyPress}
+        status={isError ? 'error' : undefined}
+        placeholder={placeholder}
+      />
+      {isError ? <div className='customHelper'>{String(errMessage)}</div> : null}
+    </Frow>
+  );
 }
