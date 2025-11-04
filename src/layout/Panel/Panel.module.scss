@@ -27,6 +27,10 @@
       margin-left: 5px;
     }
   }
+
+  .ant-tabs-tab-active .ant-tabs-tab-btn {
+    color: $primaryColor6 !important;
+  }
 }
 
 // // desk mob xs sm md lg xl xxl

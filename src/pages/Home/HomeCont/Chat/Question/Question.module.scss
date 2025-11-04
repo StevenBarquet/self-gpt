@@ -28,11 +28,11 @@
   }
 
   section {
-    border: 1px solid $primaryColor2;
+    border: 1px solid $primaryColor11;
     border-bottom: none;
     border-radius: 10px 10px 0 0px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); // Sombra ligera para profundidad
-    background-color: #f8f8ff; // Color de fondo suave para los mensajes entrantes
+    box-shadow: 0 2px 5px $primaryColor; // Sombra ligera para profundidad
+    background-color: $primaryColor12; // Color de fondo suave para los mensajes entrantes
     font-size: 14px; // Tamaño de fuente
     line-height: 1.5;
     padding: 10px;

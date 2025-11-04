@@ -14,11 +14,11 @@
     sans-serif,
     Segoe UI Emoji,
     Segoe UI Symbol;
-  border: 1px solid $primaryColor2;
+  border: 1px solid $primaryColor11;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); // Sombra ligera para profundidad
   border-top: none;
   border-radius: 0 0 10px 10px;
-  background-color: #f8f8ff; // Color de fondo suave para los mensajes entrantes
+  background-color: transparent; // Color de fondo suave para los mensajes entrantes
   padding: 6px;
 
   position: relative;

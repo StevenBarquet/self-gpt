@@ -5,17 +5,7 @@
 .Landing {
   // Base styles
   font-family: "Inter", sans-serif;
-  font-family:
-    ui-sans-serif,
-    -apple-system,
-    system-ui,
-    Segoe UI,
-    Helvetica,
-    Apple Color Emoji,
-    Arial,
-    sans-serif,
-    Segoe UI Emoji,
-    Segoe UI Symbol;
+  font-family: "Inter";
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -59,7 +49,7 @@
 
     .hero-section {
       padding: 4rem 1rem;
-      background-color: #e0e7ff;
+      background-color: $primaryColor17;
       text-align: center;
 
       .hero-container {
@@ -68,11 +58,11 @@
 
         .hero-title {
           font-size: 3rem;
-          color: #1e498f;
+          color: $primaryColor4;
         }
 
         .hero-description {
-          color: #555;
+          color: white;
           margin: 1rem 0;
         }
 
@@ -89,11 +79,11 @@
     .about-section,
     .faq-section {
       padding: 2rem 1rem;
-      background-color: #f9fafb;
+      background-color: $primaryColor14;
 
       .section-title {
         text-align: center;
-        color: #1e498f;
+        color: mix(#8f1e49, white, 95%);
         margin-bottom: 2rem;
       }
 
@@ -113,25 +103,25 @@
           max-width: 300px;
 
           h3 {
-            color: #1e498f;
+            color: white;
             margin: 0.5rem 0;
           }
 
           p {
-            color: #555;
+            color: $primaryColor6;
           }
         }
 
         .feature-icon {
           font-size: 2rem;
-          color: #1e498f;
+          color: #8f1e49;
         }
       }
 
       .about-description {
         max-width: 600px;
         margin: 0 auto;
-        color: #555;
+        color: white;
         text-align: start;
       }
 
@@ -144,7 +134,7 @@
 
   .footer {
     text-align: center;
-    background-color: #1e498f;
+    background-color: $primaryColor17;
     color: white;
     padding: 1rem;
 
@@ -165,7 +155,6 @@
   .pricing {
     width: 100%;
     padding: 3rem 0;
-    background-color: #f5f5f5;
 
     .container {
       max-width: 1200px;
@@ -178,6 +167,7 @@
       font-weight: bold;
       text-align: center;
       margin-bottom: 2rem;
+      color: #8f1e49;
     }
 
     .grid {
@@ -188,7 +178,7 @@
     }
 
     .card {
-      background-color: #fff;
+      background-color: $primaryColor16;
       border-radius: 1rem;
       padding: 2rem;
       text-align: center;
@@ -210,7 +200,7 @@
     .amount {
       font-size: 2.5rem;
       font-weight: bold;
-      color: #000;
+      color: $primaryColor7;
     }
 
     .features {
@@ -279,7 +269,7 @@
   align-items: center;
   text-align: center;
   padding: 1rem;
-  background-color: #fff;
+  // background-color: #fff;
   border-radius: 0.5rem;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 
@@ -290,7 +280,6 @@
 
 .feature-icon {
   padding: 1rem;
-  background-color: rgba(30, 73, 143, 0.1);
   border-radius: 50%;
   margin-bottom: 1rem;
 }

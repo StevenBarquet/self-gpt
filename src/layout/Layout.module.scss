@@ -17,18 +17,29 @@
   min-height: 100vh;
   display: flex;
 
+  .ant-layout {
+    background-color: $primaryColor14;
+  }
+
   .ant-layout-sider-children {
-    background-color: $primaryColor16;
+    background-color: $primaryColor18;
     height: 100%;
     overflow: auto;
     position: fixed;
     width: 470px;
+    border-right: 1px solid $primaryColor;
+    overflow-x: hidden;
     @include onlyIn(mob) {
       width: 85vw;
     }
   }
   .ant-layout-sider-collapsed .ant-layout-sider-children {
     width: 0px;
+  }
+
+  .ant-layout-sider-collapsed {
+    background-color: $primaryColor18;
+    border-right: 1px solid $primaryColor;
   }
 
   .GptFooter {
@@ -41,6 +52,7 @@
     height: 64px;
     width: 100%;
     position: relative;
+    background-color: $primaryColor15;
   }
   .headerContainer {
     position: fixed;
@@ -48,7 +60,9 @@
     z-index: 10;
 
     padding: 0;
-    background: $light;
+    background-color: $primaryColor18;
+    border-bottom: 1px solid $primaryColor;
+
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -65,7 +79,7 @@
     margin: 24px 16px;
     padding: 24px 24px 96px 24px;
     min-height: 240px;
-    background: $light;
+    background-color: $primaryColor14;
     border-radius: 12px;
 
     flex: 1; // Permite que el contenido ocupe todo el espacio disponible

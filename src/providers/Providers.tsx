@@ -1,10 +1,10 @@
 // ---Dependencies
 import type { ReactNode } from 'react';
 import { BrowserRouter } from 'react-router-dom';
-import { AntdProv } from './AntdProv/AntdProv';
 import { OpenAiProvider } from './OpenAiProvider/OpenAiProvider';
 import { RoutingRules } from './RoutingRules/RoutingRules';
 import { useScreenBreakpoints } from './useScreenBreakpoints';
+import { AntdProvDark } from './AntdProvDark/AntdProv';
 
 interface Props {
   children: ReactNode;
@@ -22,11 +22,11 @@ export function Providers({ children }: Props) {
   // -----------------------RENDER
   return (
     <BrowserRouter>
-      <AntdProv>
+      <AntdProvDark>
         <OpenAiProvider>
           <RoutingRules>{children}</RoutingRules>
         </OpenAiProvider>
-      </AntdProv>
+      </AntdProvDark>
     </BrowserRouter>
   );
 }

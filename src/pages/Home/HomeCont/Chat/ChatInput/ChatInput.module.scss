@@ -20,13 +20,14 @@ $fontFamily:
   @include onlyIn(mob) {
     left: 30px;
   }
-  border: 1px solid #ccc;
-  background-color: white;
+  border: 1px solid $primaryColor;
+  background-color: $primaryColor14;
   border-radius: 1.5rem;
   font-family: $fontFamily;
 
   .textarea {
     font-family: $fontFamily;
+    background-color: $primaryColor14;
     border-radius: 1.5rem;
     padding: 15px;
     width: calc(100% - 112px);
@@ -34,6 +35,7 @@ $fontFamily:
     resize: none;
     box-sizing: border-box;
     min-height: 96px;
+    color: white;
     border: none;
     &:focus-visible,
     &:focus {
@@ -43,6 +45,7 @@ $fontFamily:
     }
     &::placeholder {
       font-family: $fontFamily;
+      color: white;
       font-size: 16px; /* Cambia el tamaño de la fuente */
       opacity: 0.7; /* Cambia la opacidad del texto del placeholder */
     }

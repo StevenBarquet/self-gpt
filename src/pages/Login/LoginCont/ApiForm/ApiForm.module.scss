@@ -19,7 +19,7 @@
   min-height: 100vh;
   align-items: center;
   justify-content: center;
-  background-color: #f7fafc;
+  background-color: $primaryColor16;
 
   h1 {
     color: $primaryColor12;
@@ -36,6 +36,7 @@
     width: 90%;
     margin: 25px auto;
     display: block;
+    color: black;
   }
 }
 
