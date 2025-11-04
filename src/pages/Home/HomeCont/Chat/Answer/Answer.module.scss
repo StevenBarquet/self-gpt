@@ -3,7 +3,17 @@
 @import "/src/styles/utils";
 
 .Answer {
-  font-family: "Inter";
+  font-family:
+    ui-sans-serif,
+    -apple-system,
+    system-ui,
+    Segoe UI,
+    Helvetica,
+    Apple Color Emoji,
+    Arial,
+    sans-serif,
+    Segoe UI Emoji,
+    Segoe UI Symbol;
   // display: flex; // Utiliza flexbox para mejor alineación
   // justify-content: flex-start; // Alineación a la izquierda
   margin: 10px 0; // Espaciado vertical entre mensajes

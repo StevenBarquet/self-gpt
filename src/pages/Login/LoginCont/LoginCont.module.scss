@@ -3,7 +3,17 @@
 @import "/src/styles/utils";
 
 .LoginCont {
-  font-family: "Inter";
+  font-family:
+    ui-sans-serif,
+    -apple-system,
+    system-ui,
+    Segoe UI,
+    Helvetica,
+    Apple Color Emoji,
+    Arial,
+    sans-serif,
+    Segoe UI Emoji,
+    Segoe UI Symbol;
 }
 
 // // desk mob xs sm md lg xl xxl

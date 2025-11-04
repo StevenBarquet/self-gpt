@@ -3,7 +3,17 @@
 @import "/src/styles/utils";
 
 .Gpts {
-  font-family: "Inter";
+  font-family:
+    ui-sans-serif,
+    -apple-system,
+    system-ui,
+    Segoe UI,
+    Helvetica,
+    Apple Color Emoji,
+    Arial,
+    sans-serif,
+    Segoe UI Emoji,
+    Segoe UI Symbol;
   padding-bottom: 84px;
 
   .GptFooter {

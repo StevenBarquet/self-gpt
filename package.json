@@ -16,7 +16,6 @@
 		"generate-store": "npx plop --plopfile generators/plopfile-store.js"
 	},
 	"dependencies": {
-		"@fontsource/inter": "5.2.8",
 		"@supabase/supabase-js": "2.78.0",
 		"antd": "5.28.0",
 		"formik": "2.4.6",

@@ -3,7 +3,17 @@
 @import "/src/styles/utils";
 
 .SingleValidate {
-  font-family: "Inter";
+  font-family:
+    ui-sans-serif,
+    -apple-system,
+    system-ui,
+    Segoe UI,
+    Helvetica,
+    Apple Color Emoji,
+    Arial,
+    sans-serif,
+    Segoe UI Emoji,
+    Segoe UI Symbol;
   border: 1px solid grey;
   padding: 15px;
   width: 90%;
