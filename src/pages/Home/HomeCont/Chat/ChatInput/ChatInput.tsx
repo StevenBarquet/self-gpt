@@ -1,12 +1,14 @@
 // ---Dependencies
 import { Button, Switch } from 'antd';
-import { useEffect, useRef, type KeyboardEvent } from 'react';
+import type { KeyboardEvent, ReactElement } from 'react';
 import type { useInput } from 'src/utils/hooks/useInput';
-import style from './ChatInput.module.scss';
+// ---Components
 import { Icon } from '@iconify/react';
-
-import { useAppInfoStore } from 'src/store/appInfo';
 import { Spinner } from 'src/common/Spinner/Spinner';
+// ---Config
+import { useAppInfoStore } from 'src/store/appInfo';
+// ---Styles
+import style from './ChatInput.module.scss';
 
 interface Props extends ReturnType<typeof useInput> {
   chatLoading?: boolean;
@@ -20,10 +22,6 @@ interface Props extends ReturnType<typeof useInput> {
   };
 }
 
-/**
- * ChatInput Component:  Descripción del comportamiento...
- * @param {Props} props - Parámetros del componente como: ...
- */
 export function ChatInput({
   onChange,
   value,
@@ -32,68 +30,53 @@ export function ChatInput({
   stopGeneration,
   ondAsk,
   ctxCtlr,
-}: Props) {
+}: Props): ReactElement {
   // -----------------------CONSTS, HOOKS, STATES
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
   const { isMobile, menuCollapsed } = useAppInfoStore();
-  const leftPanelWidth = menuCollapsed ? (isMobile ? 20 : 80) : isMobile ? 0 : 470;
-  const rightMargin = isMobile ? '- 20px' : '- 70px';
-  const containerWidth = `calc(100vw - ${leftPanelWidth}px ${rightMargin})`;
   const fullIsLoading = chatLoading || sdkLoading;
+  const panelWidth = menuCollapsed ? (isMobile ? 20 : 80) : isMobile ? 0 : 470;
 
   // -----------------------MAIN METHODS
-  async function onKeyPress(event: KeyboardEvent<unknown>) {
+  function onKeyPress(event: KeyboardEvent<unknown>) {
     if (event.key === 'Enter' && !event.shiftKey) {
+      event.preventDefault();
       ondAsk();
     }
   }
-  useEffect(() => {
-    const textarea = textareaRef.current;
-    if (textarea) {
-      textarea.style.height = 'auto'; // Redefine la altura antes de ajustar
-      textarea.style.height = `${textarea.scrollHeight}px`;
-    }
-  }, [value]);
 
   // -----------------------AUX METHODS
   // -----------------------RENDER
   return (
-    <div className={style['ChatInput']} style={{ width: containerWidth }}>
+    <div className={style.ChatInput} style={{ left: panelWidth + 35 }}>
       {!!value?.length && (
         <Button
-          className='sendBtn'
+          className="sendBtn"
           onClick={sdkLoading ? stopGeneration : ondAsk}
-          type='primary'
-          size='large'
+          type="primary"
+          size="large"
         >
-          {sdkLoading ? <Icon icon='si:stop-fill' /> : <Icon icon='mingcute:arrow-up-fill' />}
+          {sdkLoading ? <Icon icon="si:stop-fill" /> : <Icon icon="mingcute:arrow-up-fill" />}
         </Button>
       )}
       {fullIsLoading ? (
-        <div className='spinnerContainer'>
+        <div className="spinnerContainer">
           <Spinner displayMessage={''} />
         </div>
       ) : (
         <textarea
-          className={`textarea`}
-          ref={textareaRef}
+          className="textarea"
           value={value}
           onChange={onChange as any}
-          placeholder='Ask me anything...'
+          placeholder="Ask me anything..."
           onKeyDown={onKeyPress}
           rows={1}
-          style={{
-            maxHeight: '45vh', // Limitar la altura máxima
-            overflow: 'auto', // Permitir el desplazamiento
-            // resize: 'none',    // Evitar que el usuario cambie el tamaño manualmente
-          }}
         />
       )}
 
-      <div className='keepInContext'>
-        <label htmlFor='keepInContext'>Context</label>
+      <div className="keepInContext">
+        <label htmlFor="keepInContext">Context</label>
         <Switch
-          id='keepInContext'
+          id="keepInContext"
           defaultChecked={ctxCtlr.lastCtxCheck}
           checked={ctxCtlr.value}
           onClick={ctxCtlr.toggle}

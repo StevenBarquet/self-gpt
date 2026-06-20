@@ -1,58 +1,53 @@
-@import "/src/styles/variables";
-@import "/src/styles/animations";
-@import "/src/styles/utils";
+@import '/src/styles/variables';
+@import '/src/styles/utils';
 
-$fontFamily:
-  ui-sans-serif,
-  -apple-system,
-  system-ui,
-  Segoe UI,
-  Helvetica,
-  Apple Color Emoji,
-  Arial,
-  sans-serif,
-  Segoe UI Emoji,
-  Segoe UI Symbol;
 .ChatInput {
   position: fixed;
   bottom: 20px;
-  // desk mob xs sm md lg xl xxl
-  @include onlyIn(mob) {
-    left: 30px;
-  }
+  right: 35px;
+  min-height: 96px;
   border: 1px solid $primaryColor;
   background-color: $primaryColor14;
   border-radius: 1.5rem;
-  font-family: $fontFamily;
+
+  @include onlyIn(mob) {
+    right: 10px;
+  }
 
   .textarea {
-    font-family: $fontFamily;
-    background-color: $primaryColor14;
-    border-radius: 1.5rem;
-    padding: 15px;
-    width: calc(100% - 112px);
-    overflow: hidden;
+    field-sizing: content;
+    display: block;
+    width: 100%;
+    min-height: 50px;
+    max-height: 45vh;
+    padding: 15px 60px 40px 15px;
+    overflow-y: auto;
     resize: none;
     box-sizing: border-box;
-    min-height: 96px;
-    color: white;
     border: none;
+    border-radius: 1.5rem;
+    background-color: transparent;
+    color: white;
+    font-size: 16px;
+    font-family: inherit;
+    line-height: 1.5;
+
     &:focus-visible,
     &:focus {
-      border: none; // quita borde si existe
-      outline: none; // quita el highlight de enfoque
-      box-shadow: none; // opcional: algunos frameworks usan sombra como “focus”
+      border: none;
+      outline: none;
+      box-shadow: none;
     }
+
     &::placeholder {
-      font-family: $fontFamily;
       color: white;
-      font-size: 16px; /* Cambia el tamaño de la fuente */
-      opacity: 0.7; /* Cambia la opacidad del texto del placeholder */
+      font-size: 16px;
+      opacity: 0.7;
     }
   }
 
   .spinnerContainer {
-    height: 96px;
+    height: 50px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -62,6 +57,7 @@ $fontFamily:
     position: absolute;
     right: 15px;
     bottom: 10px;
+
     label {
       margin-right: 10px;
     }
@@ -73,6 +69,7 @@ $fontFamily:
     top: 10px;
     border-radius: 50%;
     padding: 4px 10px;
+
     svg {
       font-size: 20px;
     }
