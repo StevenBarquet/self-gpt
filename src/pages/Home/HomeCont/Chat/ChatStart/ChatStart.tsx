@@ -1,18 +1,27 @@
 // ---Dependencies
-import React from "react";
+import type { ReactElement } from 'react';
+// ---Components
+import { DynamicIcon } from 'src/common/DynamicIcon/DynamicIcon';
+// ---Config
+import type { WithId } from 'src/utils/functions/typesUtils';
+import type { GPT } from 'src/database/GPTs/definitions';
 // ---Styles
-import style from "./ChatStart.module.scss";
+import style from './ChatStart.module.scss';
 
-type Props = {};
+interface Props {
+  gpt: WithId<GPT>;
+}
 
-/**
- * ChatStart Component:  Descripción del comportamiento...
- * @param {Props} props - Parámetros del componente como: ...
- */
-export function ChatStart({}: Props) {
-	// -----------------------CONSTS, HOOKS, STATES
-	// -----------------------MAIN METHODS
-	// -----------------------AUX METHODS
-	// -----------------------RENDER
-	return <div className={style["ChatStart"]}>ChatStart</div>;
+export function ChatStart({ gpt }: Props): ReactElement {
+  // -----------------------CONSTS, HOOKS, STATES
+  // -----------------------MAIN METHODS
+  // -----------------------AUX METHODS
+  // -----------------------RENDER
+  return (
+    <div className={style['ChatStart']}>
+      <DynamicIcon icon={gpt.icon} />
+      <h1>{gpt.name}</h1>
+      <p>{gpt.description}</p>
+    </div>
+  );
 }
