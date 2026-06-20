@@ -464,6 +464,25 @@ export function useSupabase() {
 			throw error;
 		}
 	}
+
+	async function deleteMessagesFrom(conversationId: string, timestamp: string) {
+		try {
+			const { error } = await supabase
+				.from("messages")
+				.delete()
+				.eq("conversation", conversationId)
+				.eq("original_context", false)
+				.gte("timestamp", timestamp);
+
+			if (error) throw error;
+		} catch (error: any) {
+			console.log(error);
+			await swalApiError(
+				error?.message || "Error al eliminar mensajes",
+			);
+			throw error;
+		}
+	}
 	// -----------------------AUX METHODS
 	// -----------------------RENDER
 	return {
@@ -474,6 +493,7 @@ export function useSupabase() {
 		getOriginalContext,
 		getOriginalContextConversation,
 		deleteOriginalContext,
+		deleteMessagesFrom,
 		populateConversations,
 		getChat,
 		createUserChat,

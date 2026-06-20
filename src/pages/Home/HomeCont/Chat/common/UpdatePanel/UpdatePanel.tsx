@@ -1,7 +1,7 @@
 // ---Dependencies
 import { Icon } from '@iconify/react';
 import { Button, Switch } from 'antd';
-import type { ReactElement } from 'react';
+import type { ReactElement, ReactNode } from 'react';
 import { CopyButton } from 'src/common/CopyButton/CopyButton';
 import type { Message } from 'src/database/Messages/definitions';
 import { useSupabase } from 'src/utils/app/useSupabase';
@@ -16,6 +16,7 @@ interface Props {
   reloadChatMsgs: () => void;
   expanded?: boolean;
   onToggleExpand?: () => void;
+  children?: ReactNode;
 }
 
 export function UpdatePanel(props: Props): ReactElement {
@@ -36,6 +37,7 @@ export function UpdatePanel(props: Props): ReactElement {
         </Button>
       )}
       <CopyButton toCopy={props.message.content} />
+      {props.children}
       <Button onClick={onDelete} danger type="text">
         <Icon icon="bi:trash-fill" />
       </Button>

@@ -74,4 +74,17 @@
       font-size: 20px;
     }
   }
+
+  .editingIndicator {
+    position: absolute;
+    left: 15px;
+    bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: $primaryColor;
+    font-size: 13px;
+
+    svg { font-size: 14px; }
+  }
 }

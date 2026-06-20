@@ -16,7 +16,7 @@ export function Chat() {
   // -----------------------CONSTS, HOOKS, STATES
   const { chatCtlr, openAiCtlr } = useContext(OpenAiContext);
   const { isLoading, reloadChatMsgs, messages } = chatCtlr;
-  const { inputCtlr, ondAsk, sdkLoading, chatLoading, stopGeneration, aiAnswer, ctxCtlr } =
+  const { inputCtlr, ondAsk, sdkLoading, chatLoading, stopGeneration, aiAnswer, ctxCtlr, onEditQuestion, cancelEdit, editingMessageRef } =
     openAiCtlr;
 
   const { GPTs, selectedGpt, mainScreen } = useAppLogicStore();
@@ -40,7 +40,7 @@ export function Chat() {
                 e.role === 'assistant' ? (
                   <Answer reloadChatMsgs={reloadChatMsgs} message={e} key={`$answer-${i}`} />
                 ) : (
-                  <Question reloadChatMsgs={reloadChatMsgs} key={`$Question-${i}`} message={e} />
+                  <Question reloadChatMsgs={reloadChatMsgs} key={`$Question-${i}`} message={e} onEdit={onEditQuestion} />
                 ),
               )}
               <Answer reloadChatMsgs={reloadChatMsgs} aiAnswer={aiAnswer} key='answer-ai' />
@@ -55,6 +55,8 @@ export function Chat() {
         sdkLoading={sdkLoading}
         chatLoading={chatLoading}
         ondAsk={ondAsk}
+        cancelEdit={cancelEdit}
+        editingMessageRef={editingMessageRef}
       />
     </div>
   );

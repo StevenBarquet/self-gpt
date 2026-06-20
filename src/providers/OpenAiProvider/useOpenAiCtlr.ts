@@ -1,6 +1,6 @@
 import OpenAI from 'openai';
 import type { ChatCompletionMessageParam } from 'openai/resources';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 // import {
 //   IMAGE_GENERATED_DISPLAY_SIZE,
 // IMAGE_KEYWORDS,
@@ -13,6 +13,7 @@ import { useAppLogicStore } from 'src/store/appLogic';
 import { useKeysStore } from 'src/store/keys';
 import { useSupabase } from 'src/utils/app/useSupabase';
 import { swalApiError } from 'src/utils/functions/alertUtils';
+import type { WithId } from 'src/utils/functions/typesUtils';
 import { useInput } from 'src/utils/hooks/useInput';
 
 interface Props {
@@ -39,37 +40,45 @@ export function useOpenAiCtlr({ reloadChatMsgs }: Props) {
   } = useAppLogicStore();
 
   const { OPEN_AI_API_KEY } = useKeysStore();
-  const { createUserChat, addContext, populateConversations } = useSupabase();
+  const { createUserChat, addContext, deleteMessagesFrom, populateConversations } = useSupabase();
 
   const openai = new OpenAI({
     apiKey: OPEN_AI_API_KEY,
     dangerouslyAllowBrowser: true,
   });
   const inputCtlr = useInput();
+  const editingMessageRef = useRef<WithId<Message> | null>(null);
 
   const [ctxCheck, setCtxCheck] = useState(true);
   const lastCtxCheck = copyLastContext();
+
+  useEffect(() => {
+    if (editingMessageRef.current) {
+      editingMessageRef.current = null;
+      inputCtlr.setValue('');
+    }
+  }, [selectedConversation, selectedGpt]);
 
   // -----------------------MAIN METHODS
 
   async function ondAsk() {
     try {
+      const editingMsg = editingMessageRef.current;
+      if (editingMsg) {
+        await deleteMessagesFrom(editingMsg.conversation, editingMsg.timestamp);
+        editingMessageRef.current = null;
+      }
+
       const { isNewChat } = validateMessages();
       const questionDate = preAskCleanAndDate();
       const controller = new AbortController();
       const { signal } = controller;
       setCompletionCtrl(controller);
 
-      // const isImage = isImagePrompt(inputCtlr.value);
-
-      // if (isImage) {
-      //   const imageUrl = await generateImage(inputCtlr.value);
-      //   if (!imageUrl?.url) throw new Error('No se pudo generar la imagen');
-      //   aiAnswerInMemory = imageUrl.url;
-      //   enhancedQuestion = imageUrl.enhanced ? `${inputCtlr.value} -> "${imageUrl.prompt}"` : null;
-      // } else {
-      const context = allMessages
+      const currentMessages = useAppLogicStore.getState().allMessages;
+      const context = currentMessages
         ?.filter((e) => e.context)
+        .filter((e) => !editingMsg || e.timestamp < editingMsg.timestamp)
         .map((e) => ({
           role: e.role,
           content: e.content,
@@ -150,6 +159,16 @@ export function useOpenAiCtlr({ reloadChatMsgs }: Props) {
     if (completionCtrl) {
       completionCtrl.abort();
     }
+  }
+
+  function onEditQuestion(message: WithId<Message>) {
+    editingMessageRef.current = message;
+    inputCtlr.setValue(message.content);
+  }
+
+  function cancelEdit() {
+    editingMessageRef.current = null;
+    inputCtlr.setValue('');
   }
   // -----------------------UTILS
 
@@ -257,6 +276,9 @@ export function useOpenAiCtlr({ reloadChatMsgs }: Props) {
     sdkLoading: !!completionCtrl,
     ondAsk,
     stopGeneration,
+    onEditQuestion,
+    cancelEdit,
+    editingMessageRef,
     inputCtlr,
     aiAnswer,
     ctxCtlr: {

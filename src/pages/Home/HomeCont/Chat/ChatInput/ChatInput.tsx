@@ -1,7 +1,9 @@
 // ---Dependencies
 import { Button, Switch } from 'antd';
-import type { KeyboardEvent, ReactElement } from 'react';
+import type { KeyboardEvent, ReactElement, RefObject } from 'react';
+import type { Message } from 'src/database/Messages/definitions';
 import type { useInput } from 'src/utils/hooks/useInput';
+import type { WithId } from 'src/utils/functions/typesUtils';
 // ---Components
 import { Icon } from '@iconify/react';
 import { Spinner } from 'src/common/Spinner/Spinner';
@@ -15,6 +17,8 @@ interface Props extends ReturnType<typeof useInput> {
   sdkLoading?: boolean;
   stopGeneration: () => void;
   ondAsk: () => void;
+  cancelEdit: () => void;
+  editingMessageRef: RefObject<WithId<Message> | null>;
   ctxCtlr: {
     value: boolean;
     lastCtxCheck: boolean | undefined;
@@ -29,11 +33,14 @@ export function ChatInput({
   sdkLoading,
   stopGeneration,
   ondAsk,
+  cancelEdit,
+  editingMessageRef,
   ctxCtlr,
 }: Props): ReactElement {
   // -----------------------CONSTS, HOOKS, STATES
   const { isMobile, menuCollapsed } = useAppInfoStore();
   const fullIsLoading = chatLoading || sdkLoading;
+  const isEditing = !!editingMessageRef.current;
   const panelWidth = menuCollapsed ? (isMobile ? 20 : 80) : isMobile ? 0 : 470;
 
   // -----------------------MAIN METHODS
@@ -72,6 +79,16 @@ export function ChatInput({
           onKeyDown={onKeyPress}
           rows={1}
         />
+      )}
+
+      {isEditing && (
+        <div className="editingIndicator">
+          <Icon icon="mdi:pencil" />
+          <span>Editing</span>
+          <Button type="text" size="small" onClick={cancelEdit}>
+            <Icon icon="mdi:close" />
+          </Button>
+        </div>
       )}
 
       <div className="keepInContext">
