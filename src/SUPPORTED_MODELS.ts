@@ -7,42 +7,34 @@ export const SUPPORTED_MODELS: {
   title: string;
 }[] = [
   {
-    value: 'gpt-4.1-mini',
-    label: 'GPT-4.1 mini',
-    title: 'Cheapest and dummest version of GPT-4.1',
+    value: 'gpt-5.5-pro',
+    label: 'GPT-5.5 PRO',
+    title: 'Cost 5.4 x12 (use with caution) - $30/-/180.00',
   },
   {
-    value: 'gpt-4.1',
-    label: 'GPT-4.1',
-    title:
-      'Our versatile, high-intelligence flagship model for complex, multi-step tasks. GPT-4o is cheaper and faster than GPT-4 Turbo. Currently points to gpt-4o-2024-05-13.',
+    value: 'gpt-5.5',
+    label: 'GPT-5.5',
+    title: 'Smartest normal (costs double than 5.4) - $5/0.50/30.00',
   },
   {
-    value: 'o3-mini',
-    label: 'O3 mini',
-    title:
-      'o3-mini is our most recent small reasoning model, providing high intelligence at the same cost and latency targets of o1-mini. o3-mini also supports key developer features.',
+    value: 'gpt-5.4',
+    label: 'GPT-5.4',
+    title: 'Best cost/benefit model - $2.50/0.250/15.00',
   },
-  {
-    value: 'o3',
-    label: 'O3',
-    title:
-      'The o3 reasoning model is designed to solve hard problems across domains. o1-mini is a faster and more affordable reasoning model',
-  },
-  // {
-  //   value: "gpt-5.2-pro",
-  //   label: "GPT-5.2 pro",
-  //   title: "Most advanced model in 2025", // Too expensive
-  // },
   {
     value: 'gpt-5.2',
     label: 'GPT-5.2',
-    title: 'Most advanced model in 2025',
+    title: 'Decent model - $1.75/0.175/14.00',
+  },
+  {
+    value: 'gpt-5.4-mini',
+    label: 'GPT-5.4 mini',
+    title: 'Smartest cheap model - $0.75/0.075/4.50',
   },
   {
     value: 'gpt-5-mini',
     label: 'GPT-5 mini',
-    title: 'Dummy version of GPT-5',
+    title: 'Cheapest Model - 	$0.25/0.025/2.00',
   },
 ];
 export const FORMAT_CONTEXT: ChatCompletionMessageParam[] = [
