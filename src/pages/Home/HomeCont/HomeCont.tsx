@@ -7,10 +7,11 @@ import { usePreferencesStore } from 'src/store/preferences';
 import { useSupabase } from 'src/utils/app/useSupabase';
 import { Chat } from './Chat/Chat';
 import { CreateGpt } from './CreateGpt/CreateGpt';
+import { EmptyScreen } from './EmptyScreen/EmptyScreen';
 import style from './HomeCont.module.scss';
 
 const screens = {
-  empty: <p>Select a GPT or Chat from menu</p>,
+  empty: <EmptyScreen />,
   gptConversation: <Chat />,
   gptCreate: <CreateGpt />,
   chat: <Chat />,

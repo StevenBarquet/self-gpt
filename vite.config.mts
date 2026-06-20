@@ -16,16 +16,21 @@ export default defineConfig({
 				short_name: "SelfGpt",
 				description: "Your personal AI assistant, open source and FREE to use.",
 				theme_color: "#1e498f",
+				background_color: "#141414",
+				display: "standalone",
+				start_url: "/",
 				icons: [
 					{
-						src: "/src/assets/192-logo.png",
+						src: "/192-logo.png",
 						sizes: "192x192",
 						type: "image/png",
+						purpose: "any maskable",
 					},
 					{
-						src: "/src/assets/512-logo.png",
+						src: "/512-logo.png",
 						sizes: "512x512",
 						type: "image/png",
+						purpose: "any maskable",
 					},
 				],
 			},

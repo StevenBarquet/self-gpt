@@ -1,0 +1,32 @@
+@import '/src/styles/variables';
+@import '/src/styles/utils';
+
+.EmptyScreen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  gap: 12px;
+  padding: 40px 24px;
+  opacity: 0.7;
+
+  .logo svg {
+    width: 72px;
+    height: 72px;
+    color: $light3;
+  }
+
+  h1 {
+    font-size: 1.6rem;
+    font-weight: 600;
+    margin: 0;
+    color: $light1;
+  }
+
+  p {
+    font-size: 0.9rem;
+    color: $light5;
+    margin: 0;
+  }
+}
