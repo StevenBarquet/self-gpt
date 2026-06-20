@@ -1,8 +1,7 @@
 // ---Dependencies
-
 import { Icon } from '@iconify/react';
 import { Button, Switch } from 'antd';
-import React from 'react';
+import type { ReactElement } from 'react';
 import { CopyButton } from 'src/common/CopyButton/CopyButton';
 import type { Message } from 'src/database/Messages/definitions';
 import { useSupabase } from 'src/utils/app/useSupabase';
@@ -15,13 +14,11 @@ interface Props {
   message: WithId<Message>;
   borderles?: boolean;
   reloadChatMsgs: () => void;
+  expanded?: boolean;
+  onToggleExpand?: () => void;
 }
 
-/**
- * UpdatePanel Component:  Descripción del comportamiento...
- * @param {Props} props - Parámetros del componente como: ...
- */
-export function UpdatePanel(props: Props) {
+export function UpdatePanel(props: Props): ReactElement {
   // -----------------------CONSTS, HOOKS, STATES
   const { contextCtlr, onDelete } = usePanelCtlr(props);
   // -----------------------MAIN METHODS
@@ -29,13 +26,18 @@ export function UpdatePanel(props: Props) {
   // -----------------------AUX METHODS
   // -----------------------RENDER
   return (
-    <div className={style['UpdatePanel']} style={borderStyles}>
-      <div className='check'>
+    <div className={style.UpdatePanel} style={borderStyles}>
+      <div className="check">
         In Context: <Switch checked={contextCtlr.cheked} onClick={contextCtlr.toggle} />
       </div>
+      {props.onToggleExpand && (
+        <Button onClick={props.onToggleExpand} type="text">
+          <Icon icon={props.expanded ? 'mdi:chevron-up' : 'mdi:chevron-down'} />
+        </Button>
+      )}
       <CopyButton toCopy={props.message.content} />
-      <Button onClick={onDelete} danger type='text'>
-        <Icon icon='bi:trash-fill' />
+      <Button onClick={onDelete} danger type="text">
+        <Icon icon="bi:trash-fill" />
       </Button>
     </div>
   );

@@ -38,6 +38,7 @@ export function ChatInput({
 
   // -----------------------MAIN METHODS
   function onKeyPress(event: KeyboardEvent<unknown>) {
+    if (isMobile) return;
     if (event.key === 'Enter' && !event.shiftKey) {
       event.preventDefault();
       ondAsk();

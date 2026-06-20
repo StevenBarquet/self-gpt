@@ -446,6 +446,24 @@ export function useSupabase() {
 			setIsLoading(false);
 		}
 	}
+
+	async function deleteOriginalContext(gptId: string) {
+		try {
+			const { error } = await supabase
+				.from("messages")
+				.delete()
+				.eq("gpt", gptId)
+				.eq("original_context", true);
+
+			if (error) throw error;
+		} catch (error: any) {
+			console.log(error);
+			await swalApiError(
+				error?.message || "Error al eliminar contexto original",
+			);
+			throw error;
+		}
+	}
 	// -----------------------AUX METHODS
 	// -----------------------RENDER
 	return {
@@ -455,6 +473,7 @@ export function useSupabase() {
 		getGpt,
 		getOriginalContext,
 		getOriginalContextConversation,
+		deleteOriginalContext,
 		populateConversations,
 		getChat,
 		createUserChat,

@@ -31,18 +31,22 @@
     border: 1px solid $primaryColor11;
     border-bottom: none;
     border-radius: 10px 10px 0 0px;
-    box-shadow: 0 2px 5px $primaryColor; // Sombra ligera para profundidad
-    background-color: $primaryColor12; // Color de fondo suave para los mensajes entrantes
-    font-size: 14px; // Tamaño de fuente
+    box-shadow: 0 2px 5px $primaryColor;
+    background-color: $primaryColor12;
+    font-size: 14px;
     line-height: 1.5;
     padding: 10px;
     white-space: pre-wrap;
     @include limitTextLines(6);
 
     @include onlyIn(mob) {
-      width: 95%; // Limita el ancho del mensaje
+      width: 95%;
       margin: 10px 0 10px 5%;
     }
+  }
+
+  section.expanded {
+    -webkit-line-clamp: unset;
   }
 }
 

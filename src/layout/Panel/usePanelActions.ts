@@ -19,7 +19,7 @@ export function usePanelActions(
 		updateGpt,
 		populateGpts,
 	} = useSupabase();
-	const { toggleCollapsed, isMobile } = useAppInfoStore();
+	const { toggleCollapsed, isMobile, menuCollapsed } = useAppInfoStore();
 	const { update: updatePreferences } = usePreferencesStore();
 
 	// -----------------------MAIN METHODS
@@ -81,7 +81,7 @@ export function usePanelActions(
 			aiAnswer: "", // Limpia la última respuesta del chat
 		});
 		updatePreferences({ lastConversation: id });
-		if (isMobile) toggleCollapsed();
+		if (isMobile && !menuCollapsed) toggleCollapsed();
 	}
 	function onCreateGpt(_clickEvent: any, createGptInit?: ICreateGptValues) {
 		update({

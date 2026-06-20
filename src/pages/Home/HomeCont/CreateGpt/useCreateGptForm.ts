@@ -32,6 +32,7 @@ export function useCreateGptForm() {
 		createGpt,
 		updateGpt,
 		getOriginalContextConversation,
+		deleteOriginalContext,
 		addContext,
 		populateGpts,
 	} = useSupabase();
@@ -94,6 +95,8 @@ export function useCreateGptForm() {
 
 			const gpt = await updateGpt(...buildUpdateGpt(values));
 			if (!gpt) throw new Error("Error updating GPT");
+
+			await deleteOriginalContext(gpt.id);
 
 			const conversation = await getOriginalContextConversation(gpt.id);
 			if (!conversation) throw new Error("Error updating conversation");

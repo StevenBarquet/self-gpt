@@ -15,7 +15,7 @@ import style from './Chat.module.scss';
 export function Chat() {
   // -----------------------CONSTS, HOOKS, STATES
   const { chatCtlr, openAiCtlr } = useContext(OpenAiContext);
-  const { isLoading, reloadChatMsgs, messages, bottomRef } = chatCtlr;
+  const { isLoading, reloadChatMsgs, messages } = chatCtlr;
   const { inputCtlr, ondAsk, sdkLoading, chatLoading, stopGeneration, aiAnswer, ctxCtlr } =
     openAiCtlr;
 
@@ -56,7 +56,6 @@ export function Chat() {
         chatLoading={chatLoading}
         ondAsk={ondAsk}
       />
-      <div ref={bottomRef} />
     </div>
   );
 }
