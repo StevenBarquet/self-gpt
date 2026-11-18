@@ -7,34 +7,19 @@ export const SUPPORTED_MODELS: {
   title: string;
 }[] = [
   {
-    value: 'gpt-5.5-pro',
-    label: 'GPT-5.5 PRO',
-    title: 'Cost 5.4 x12 (use with caution) - $30/-/180.00',
+    value: 'gpt-6.2-astra',
+    label: 'GPT-6.2 ASTRA',
+    title: 'Cost 5.4 x12 (use with caution) - $8/0.40/40.00',
   },
   {
-    value: 'gpt-5.5',
-    label: 'GPT-5.5',
-    title: 'Smartest normal (costs double than 5.4) - $5/0.50/30.00',
+    value: 'gpt-6.2-sol',
+    label: 'GPT-6.2 Sol (Coding)',
+    title: 'Small, code and automation - $2/0.10/10.00',
   },
   {
-    value: 'gpt-5.4',
-    label: 'GPT-5.4',
-    title: 'Best cost/benefit model - $2.50/0.250/15.00',
-  },
-  {
-    value: 'gpt-5.2',
-    label: 'GPT-5.2',
-    title: 'Decent model - $1.75/0.175/14.00',
-  },
-  {
-    value: 'gpt-5.4-mini',
-    label: 'GPT-5.4 mini',
-    title: 'Smartest cheap model - $0.75/0.075/4.50',
-  },
-  {
-    value: 'gpt-5-mini',
-    label: 'GPT-5 mini',
-    title: 'Cheapest Model - 	$0.25/0.025/2.00',
+    value: 'gpt-6.1-terra',
+    label: 'GPT-6.2 Terra (Human)',
+    title: 'Visual and human - $1/0.05/5.00',
   },
 ];
 export const FORMAT_CONTEXT: ChatCompletionMessageParam[] = [
