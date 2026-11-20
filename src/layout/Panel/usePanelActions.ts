@@ -1,4 +1,4 @@
-import type { ICreateGptValues } from "src/pages/Home/HomeCont/CreateGpt/useCreateGptForm";
+import type { ICreateGptInit } from "src/pages/Home/HomeCont/CreateGpt/useCreateGptForm";
 import { useAppInfoStore } from "src/store/appInfo";
 import { useAppLogicStore } from "src/store/appLogic";
 import { usePreferencesStore } from "src/store/preferences";
@@ -83,7 +83,7 @@ export function usePanelActions(
 		updatePreferences({ lastConversation: id });
 		if (isMobile && !menuCollapsed) toggleCollapsed();
 	}
-	function onCreateGpt(_clickEvent: any, createGptInit?: ICreateGptValues) {
+	function onCreateGpt(_clickEvent: any, createGptInit?: ICreateGptInit) {
 		update({
 			mainScreen: "gptCreate",
 			selectedGpt: undefined,

@@ -2,10 +2,12 @@
 
 // ---UI Dependencies
 import { Input } from 'antd';
+import type { TextAreaProps } from 'antd/es/input';
 // ---Custom Hooks
-import type { FormikProps } from 'formik';
+import { type FormikProps, getIn } from 'formik';
 import type { CSSProperties, ReactElement } from 'react';
 import { Frow, type FrowProps } from 'react-forge-grid';
+import type { FormikFieldName } from '../formikTypes';
 import style from './FBasicTextArea.module.scss';
 
 const { TextArea } = Input;
@@ -14,10 +16,11 @@ interface Props<T> {
   label?: string;
   placeholder?: string;
   formik: FormikProps<T>;
-  valueName: keyof T;
+  valueName: FormikFieldName<T>;
   required?: boolean;
   disabled?: boolean;
   inputStyle?: CSSProperties;
+  autoSize?: TextAreaProps['autoSize'];
   containerProps?: Omit<FrowProps, 'children'>;
 }
 
@@ -28,14 +31,23 @@ interface Props<T> {
  */
 export function FBasicTextArea<T>(props: Props<T>): ReactElement {
   // -----------------------CONSTS, HOOKS, STATES
-  const { disabled, formik, valueName, label, placeholder, required, containerProps, inputStyle } =
-    props;
-
-  const errMessage = formik.errors[valueName];
-  const isError = !!errMessage && !!formik.touched[valueName];
+  const {
+    disabled,
+    formik,
+    valueName,
+    label,
+    placeholder,
+    required,
+    containerProps,
+    inputStyle,
+    autoSize,
+  } = props;
 
   const safeValueName = String(valueName || '');
-  const safeValue = String(formik.values[valueName] || '');
+  const safeValue = String(getIn(formik.values, safeValueName) || '');
+
+  const errMessage = getIn(formik.errors, safeValueName);
+  const isError = !!errMessage && !!getIn(formik.touched, safeValueName);
 
   const newRowProps: FrowProps = {
     vAlign: 'top',
@@ -59,10 +71,11 @@ export function FBasicTextArea<T>(props: Props<T>): ReactElement {
         id={`form-input${safeValueName}`}
         disabled={disabled}
         value={safeValue}
-        onChange={formik.handleChange(valueName)}
+        onChange={formik.handleChange(safeValueName)}
         status={isError ? 'error' : undefined}
         placeholder={placeholder}
         style={inputStyle}
+        autoSize={autoSize}
       />
       {isError ? (
         <div className='ant-form-item-explain-error customHelper'>{String(errMessage)}</div>

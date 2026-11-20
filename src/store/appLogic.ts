@@ -1,7 +1,7 @@
 import type { Conversation } from "src/database/Conversations/definitions";
 import type { GPT } from "src/database/GPTs/definitions";
 import type { Message } from "src/database/Messages/definitions";
-import type { ICreateGptValues } from "src/pages/Home/HomeCont/CreateGpt/useCreateGptForm";
+import type { ICreateGptInit } from "src/pages/Home/HomeCont/CreateGpt/useCreateGptForm";
 import type { WithId } from "src/utils/functions/typesUtils";
 import { create, type StateCreator } from "zustand";
 import { devtools } from "zustand/middleware";
@@ -25,7 +25,7 @@ interface State {
 	selectedGpt?: string; // id del gpt
 	panelTab: "gpts" | "chats"; // Sidebar tabs panel
 	aiAnswer: string; // Real time streaming answer
-	createGptInit?: ICreateGptValues;
+	createGptInit?: ICreateGptInit;
 }
 
 const initialState: State = {

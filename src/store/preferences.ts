@@ -1,11 +1,15 @@
+import type { ContextMode } from "src/pages/Home/HomeCont/CreateGpt/validations";
 import { create, type StateCreator } from "zustand";
 import { devtools, type PersistOptions, persist } from "zustand/middleware";
 
 interface State {
 	lastConversation?: string | null;
+	contextMode: ContextMode; // Preferred editor for the GPT context (CreateGpt)
 }
 
-const initialState: State = {};
+const initialState: State = {
+	contextMode: "json",
+};
 
 export interface PreferencesStore extends State {
 	update: (data: Partial<State>) => void;

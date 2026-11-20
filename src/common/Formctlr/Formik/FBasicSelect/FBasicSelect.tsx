@@ -1,13 +1,14 @@
 import { Select } from 'antd';
-import type { FormikProps } from 'formik';
+import { type FormikProps, getIn } from 'formik';
 import type { ReactElement } from 'react';
 import { Frow, type FrowProps } from 'react-forge-grid';
+import type { FormikFieldName } from '../formikTypes';
 import style from './FBasicSelect.module.scss';
 
 interface Props<T> {
   label?: string;
   formik: FormikProps<T>;
-  valueName: keyof T;
+  valueName: FormikFieldName<T>;
   required?: boolean;
   disabled?: boolean;
   placeholder?: string;
@@ -26,10 +27,11 @@ export function FBasicSelect<T>(props: Props<T>): ReactElement {
     props;
 
   const safeValueName = String(valueName || '');
-  const safeValue = formik.values[valueName] as string | undefined;
+  const safeValue = getIn(formik.values, safeValueName) as string | undefined;
 
-  const errMessage = formik.errors[valueName];
-  const isError = !!errMessage && (!!formik.touched[valueName] || formik.submitCount > 0);
+  const errMessage = getIn(formik.errors, safeValueName);
+  const isError =
+    !!errMessage && (!!getIn(formik.touched, safeValueName) || formik.submitCount > 0);
 
   const newRowProps: FrowProps = {
     vAlign: 'top',

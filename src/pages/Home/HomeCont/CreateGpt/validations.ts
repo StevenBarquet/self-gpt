@@ -3,7 +3,36 @@ import * as yup from "yup";
 
 const svgPattern = /^<svg[\s\S]*<\/svg>$/;
 
-export const createGptSchema = yup.object().shape({
+export const CONTEXT_MODES = ["json", "chat"] as const;
+export type ContextMode = (typeof CONTEXT_MODES)[number];
+
+// "function" and "tool" are left out on purpose: the API rejects them without tool-call metadata
+export const CONTEXT_CHAT_ROLES = ["system", "user", "assistant"] as const;
+
+export type IContextMessage = { role: string; content: string };
+
+export type ContextValidation =
+	| { isError: false; parsedContext: IContextMessage[] }
+	| { isError: true; errMessage: string };
+
+export const contextMessagesSchema = yup
+	.array()
+	.of(
+		yup.object({
+			role: yup
+				.string()
+				.oneOf(
+					[...CONTEXT_CHAT_ROLES],
+					`Role must be one of: ${CONTEXT_CHAT_ROLES.join(", ")}`,
+				)
+				.required("Role is required"),
+			content: yup.string().trim().required("Message content is required"),
+		}),
+	)
+	.min(1, "Add at least one message to your context")
+	.required("Add at least one message to your context");
+
+const gptBaseSchema = yup.object().shape({
 	name: yup
 		.string()
 		.max(20, "Title must be at most 20 characters long")
@@ -20,12 +49,31 @@ export const createGptSchema = yup.object().shape({
 		.string()
 		.min(2, "Description must be at least 2 characters long")
 		.required("Description is required"),
-
-	context: yup
-		.string()
-		.min(20, "Context must be at least 20 characters long")
-		.required("Context is required"),
 });
+
+/** Only the editor that is active (JSON or Chat) gets validated */
+export const getCreateGptSchema = (mode: ContextMode) =>
+	gptBaseSchema.shape({
+		context:
+			mode === "json"
+				? yup
+						.string()
+						.min(20, "Context must be at least 20 characters long")
+						.required("Context is required")
+				: yup.string(),
+		contextMessages: mode === "chat" ? contextMessagesSchema : yup.array(),
+	});
+
+/**
+ * Chat content is plain text, so it is serialized with JSON.stringify: quotes ("),
+ * backslashes and line breaks get escaped automatically and the result always parses back
+ */
+export const messagesToJson = (messages: IContextMessage[]): string => {
+	const filled = messages
+		.filter((msg) => msg.content.trim())
+		.map(({ role, content }) => ({ role, content }));
+	return filled.length ? JSON.stringify(filled, null, 2) : "";
+};
 
 // Define the validation for an array of messages
 export const contextSchema = yup
@@ -156,11 +204,19 @@ const removeTrailingCommas = (input: string): string => {
 	return out;
 };
 
-export const validateContext = (
-	context: string,
-):
-	| { isError: false; parsedContext: { role: string; content: string }[] }
-	| { isError: true; errMessage: string } => {
+export const validateContextMessages = (
+	messages: IContextMessage[],
+): ContextValidation => {
+	const result = yupSimpleValidator(messages, contextMessagesSchema);
+	if (result.isError) return result;
+
+	return {
+		isError: false,
+		parsedContext: messages.map(({ role, content }) => ({ role, content })),
+	};
+};
+
+export const validateContext = (context: string): ContextValidation => {
 	let parsed;
 
 	// Relax strict JSON so pasted natural text (line breaks, tabs, Windows
@@ -182,7 +238,7 @@ export const validateContext = (
 	if (!result.isError) {
 		return {
 			isError: result.isError,
-			parsedContext: parsed as unknown as { role: string; content: string }[],
+			parsedContext: parsed as unknown as IContextMessage[],
 		};
 	}
 

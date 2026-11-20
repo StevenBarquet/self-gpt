@@ -1,0 +1,43 @@
+@import '/src/styles/variables';
+@import '/src/styles/utils';
+
+.ContextChat {
+  width: 95%;
+  max-width: 900px;
+  margin: 10px auto 0;
+
+  .message {
+    padding-bottom: 15px;
+    margin-bottom: 15px;
+    border-bottom: 1px solid rgba($primaryColor5, 0.25);
+  }
+
+  .message header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+  }
+
+  // The select brings its own top margin; this keeps the delete button on the same axis
+  .message header button {
+    margin-top: 10px;
+  }
+
+  .role {
+    width: 200px;
+    max-width: 75%;
+  }
+
+  .list-error {
+    text-align: center;
+    margin-bottom: 10px;
+  }
+
+  footer {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 5px;
+  }
+}
