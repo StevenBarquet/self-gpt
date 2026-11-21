@@ -17,6 +17,8 @@ interface ModelOption<M extends AiModel = AiModel> {
   value: M;
   label: string;
   title: string;
+  /** Acepta nivel de razonamiento (`reasoning_effort` en OpenAI, `thinkingLevel` en Gemini) */
+  supportEffort: boolean;
 }
 
 export const OPEN_AI_MODELS: ModelOption<OpenAiModel>[] = [
@@ -24,16 +26,19 @@ export const OPEN_AI_MODELS: ModelOption<OpenAiModel>[] = [
     value: 'gpt-6.2-astra',
     label: 'GPT-6.2 ASTRA',
     title: 'Cost 5.4 x12 (use with caution) - $8/0.40/40.00',
+    supportEffort: true,
   },
   {
     value: 'gpt-6.2-sol',
     label: 'GPT-6.2 Sol (Coding)',
     title: 'Small, code and automation - $2/0.10/10.00',
+    supportEffort: true,
   },
   {
     value: 'gpt-6.1-terra',
     label: 'GPT-6.2 Terra (Human)',
     title: 'Visual and human - $1/0.05/5.00',
+    supportEffort: true,
   },
 ];
 
@@ -43,11 +48,19 @@ export const GEMINI_MODELS: ModelOption<GeminiModel>[] = [
     value: 'gemini-4-carbon',
     label: 'Gemini 4 Pro',
     title: 'Version premium - $2/0.10/10.00',
+    supportEffort: true,
   },
   {
     value: 'gemini-4-hydrogen',
     label: 'Gemini 4 lite',
     title: 'Cheapest, free tier pero igual es bueno',
+    supportEffort: true,
+  },
+  {
+    value: 'gemini-3.8-flash',
+    label: 'Gemini 3.8 Flash',
+    title: 'prev gemini model',
+    supportEffort: false,
   },
 ];
 
@@ -64,6 +77,15 @@ export function getModelProvider(model?: AiModel): AiProvider {
   const provider = SUPPORTED_MODELS.find((m) => m.value === model)?.provider;
   if (provider) return provider;
   return model?.startsWith('gemini') ? 'gemini' : 'openai';
+}
+
+/**
+ * Si al modelo se le manda effort. Los modelos que no están en la lista (viejos, guardados en
+ * mensajes antiguos o como default de un GPT) no lo reciben: si el modelo no soporta el parámetro,
+ * la API rechaza la petición.
+ */
+export function modelSupportsEffort(model?: AiModel): boolean {
+  return SUPPORTED_MODELS.find((m) => m.value === model)?.supportEffort ?? false;
 }
 
 // -----------------------EFFORT (de menor a mayor: así se pintan en el slider)

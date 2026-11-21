@@ -12,6 +12,7 @@ import {
   type EffortOption,
   GEMINI_EFFORTS,
   getModelProvider,
+  modelSupportsEffort,
   OPEN_AI_EFFORTS,
 } from 'src/SUPPORTED_MODELS';
 import { useAppInfoStore } from 'src/store/appInfo';
@@ -71,6 +72,7 @@ export function ChatInput({
   const selectedModel = useAppLogicStore((s) => s.selectedModel);
   const { openAiEffort, geminiEffort, update: updatePreferences } = usePreferencesStore();
   const isGemini = getModelProvider(selectedModel) === 'gemini';
+  const supportsEffort = modelSupportsEffort(selectedModel);
   const fullIsLoading = chatLoading || sdkLoading;
   const isEditing = !!editingMessageRef.current;
   const canSend = !!value?.length;
@@ -128,21 +130,22 @@ export function ChatInput({
               />
             </div>
 
-            {isGemini ? (
-              <EffortSlider
-                key="gemini"
-                options={GEMINI_EFFORTS}
-                value={geminiEffort}
-                onChange={(geminiEffort) => updatePreferences({ geminiEffort })}
-              />
-            ) : (
-              <EffortSlider
-                key="openai"
-                options={OPEN_AI_EFFORTS}
-                value={openAiEffort}
-                onChange={(openAiEffort) => updatePreferences({ openAiEffort })}
-              />
-            )}
+            {supportsEffort &&
+              (isGemini ? (
+                <EffortSlider
+                  key="gemini"
+                  options={GEMINI_EFFORTS}
+                  value={geminiEffort}
+                  onChange={(geminiEffort) => updatePreferences({ geminiEffort })}
+                />
+              ) : (
+                <EffortSlider
+                  key="openai"
+                  options={OPEN_AI_EFFORTS}
+                  value={openAiEffort}
+                  onChange={(openAiEffort) => updatePreferences({ openAiEffort })}
+                />
+              ))}
           </div>
 
           <Button

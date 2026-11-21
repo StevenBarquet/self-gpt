@@ -6,7 +6,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 // } from 'src/appConfig/constants';
 import type { Message } from 'src/database/Messages/definitions';
 import { usePanelActions } from 'src/layout/Panel/usePanelActions';
-import { getModelProvider } from 'src/SUPPORTED_MODELS';
+import { getModelProvider, modelSupportsEffort } from 'src/SUPPORTED_MODELS';
 import { useAppLogicStore } from 'src/store/appLogic';
 import { useKeysStore } from 'src/store/keys';
 import { usePreferencesStore } from 'src/store/preferences';
@@ -92,7 +92,9 @@ export function useAiCtlr({ reloadChatMsgs }: Props) {
         context,
         prompt: inputCtlr.value,
         signal,
-        effort: { openai: openAiEffort, gemini: geminiEffort },
+        effort: modelSupportsEffort(selectedModel)
+          ? { openai: openAiEffort, gemini: geminiEffort }
+          : undefined,
       });
 
       const chunks: string[] = [];

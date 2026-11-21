@@ -17,7 +17,8 @@ export interface StreamParams {
   context: Pick<Message, 'role' | 'content'>[];
   prompt: string;
   signal: AbortSignal;
-  effort: ProviderEffort;
+  /** `undefined` si el modelo no soporta effort: se omite el parámetro y el modelo usa su default */
+  effort?: ProviderEffort;
 }
 
 /** Ejecuta el prompt en el SDK del proveedor y entrega la respuesta como fragmentos de texto */
@@ -52,7 +53,7 @@ function createOpenAiStream(apiKey: string): StreamCompletion {
         messages: [...FORMAT_CONTEXT, ...history, { role: 'user', content: prompt }],
         model,
         stream: true,
-        reasoning_effort: effort.openai,
+        ...(effort && { reasoning_effort: effort.openai }),
       },
       { signal },
     );
@@ -80,7 +81,7 @@ function createGeminiStream(apiKey: string): StreamCompletion {
       config: {
         systemInstruction,
         abortSignal: signal,
-        thinkingConfig: { thinkingLevel: effort.gemini },
+        ...(effort && { thinkingConfig: { thinkingLevel: effort.gemini } }),
       },
     });
 
