@@ -136,7 +136,7 @@ $accentColor: #2c67c5;
     }
 
     .effortValue {
-      min-width: 48px;
+      min-width: 56px; // "Minimal" es la etiqueta más ancha: evita que el layout salte
       color: lighten($accentColor, 22%);
       font-weight: 600;
     }

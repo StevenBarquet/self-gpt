@@ -1,6 +1,6 @@
 // ---Dependencies
 import { Button, ConfigProvider, Slider, Switch, type ThemeConfig } from 'antd';
-import { type KeyboardEvent, type ReactElement, type RefObject, useState } from 'react';
+import type { KeyboardEvent, ReactElement, RefObject } from 'react';
 import type { Message } from 'src/database/Messages/definitions';
 import type { useInput } from 'src/utils/hooks/useInput';
 import type { WithId } from 'src/utils/functions/typesUtils';
@@ -8,7 +8,15 @@ import type { WithId } from 'src/utils/functions/typesUtils';
 import { Icon } from '@iconify/react';
 import { Spinner } from 'src/common/Spinner/Spinner';
 // ---Config
+import {
+  type EffortOption,
+  GEMINI_EFFORTS,
+  getModelProvider,
+  OPEN_AI_EFFORTS,
+} from 'src/SUPPORTED_MODELS';
 import { useAppInfoStore } from 'src/store/appInfo';
+import { useAppLogicStore } from 'src/store/appLogic';
+import { usePreferencesStore } from 'src/store/preferences';
 // ---Styles
 import style from './ChatInput.module.scss';
 
@@ -31,9 +39,6 @@ const INPUT_THEME: ThemeConfig = {
     },
   },
 };
-
-// Solo visual por ahora: todavía no se manda al modelo
-const EFFORT_LEVELS = ['Low', 'Medium', 'High', 'Max'] as const;
 
 interface Props extends ReturnType<typeof useInput> {
   chatLoading?: boolean;
@@ -62,7 +67,10 @@ export function ChatInput({
 }: Props): ReactElement {
   // -----------------------CONSTS, HOOKS, STATES
   const { isMobile, menuCollapsed } = useAppInfoStore();
-  const [effort, setEffort] = useState(1);
+  // Selector: no re-renderizar con cada flush de aiAnswer durante el streaming
+  const selectedModel = useAppLogicStore((s) => s.selectedModel);
+  const { openAiEffort, geminiEffort, update: updatePreferences } = usePreferencesStore();
+  const isGemini = getModelProvider(selectedModel) === 'gemini';
   const fullIsLoading = chatLoading || sdkLoading;
   const isEditing = !!editingMessageRef.current;
   const canSend = !!value?.length;
@@ -120,22 +128,21 @@ export function ChatInput({
               />
             </div>
 
-            <div className="effort">
-              <Icon icon="mdi:brain" className="effortIcon" />
-              <span className="effortLabel">Effort</span>
-              <Slider
-                className="effortSlider"
-                min={0}
-                max={EFFORT_LEVELS.length - 1}
-                step={1}
-                dots
-                value={effort}
-                onChange={setEffort}
-                tooltip={{ open: false }}
-                aria-label="Effort"
+            {isGemini ? (
+              <EffortSlider
+                key="gemini"
+                options={GEMINI_EFFORTS}
+                value={geminiEffort}
+                onChange={(geminiEffort) => updatePreferences({ geminiEffort })}
               />
-              <span className="effortValue">{EFFORT_LEVELS[effort]}</span>
-            </div>
+            ) : (
+              <EffortSlider
+                key="openai"
+                options={OPEN_AI_EFFORTS}
+                value={openAiEffort}
+                onChange={(openAiEffort) => updatePreferences({ openAiEffort })}
+              />
+            )}
           </div>
 
           <Button
@@ -151,5 +158,38 @@ export function ChatInput({
         </div>
       </div>
     </ConfigProvider>
+  );
+}
+
+interface EffortSliderProps<V extends string> {
+  options: readonly EffortOption<V>[];
+  value: V;
+  onChange: (value: V) => void;
+}
+
+/** Slider de effort genérico: el índice del slider se traduce al valor del proveedor */
+function EffortSlider<V extends string>({ options, value, onChange }: EffortSliderProps<V>) {
+  const index = Math.max(
+    0,
+    options.findIndex((o) => o.value === value),
+  );
+
+  return (
+    <div className="effort">
+      <Icon icon="mdi:brain" className="effortIcon" />
+      <span className="effortLabel">Effort</span>
+      <Slider
+        className="effortSlider"
+        min={0}
+        max={options.length - 1}
+        step={1}
+        dots
+        value={index}
+        onChange={(i) => onChange(options[i].value)}
+        tooltip={{ open: false }}
+        aria-label="Effort"
+      />
+      <span className="effortValue">{options[index].label}</span>
+    </div>
   );
 }

@@ -4,7 +4,12 @@ import OpenAI from 'openai';
 import type { ChatCompletionMessageParam } from 'openai/resources';
 // ---Config
 import type { Message } from 'src/database/Messages/definitions';
-import { type AiModel, type AiProvider, FORMAT_CONTEXT } from 'src/SUPPORTED_MODELS';
+import {
+  type AiModel,
+  type AiProvider,
+  FORMAT_CONTEXT,
+  type ProviderEffort,
+} from 'src/SUPPORTED_MODELS';
 
 export interface StreamParams {
   model: AiModel;
@@ -12,6 +17,7 @@ export interface StreamParams {
   context: Pick<Message, 'role' | 'content'>[];
   prompt: string;
   signal: AbortSignal;
+  effort: ProviderEffort;
 }
 
 /** Ejecuta el prompt en el SDK del proveedor y entrega la respuesta como fragmentos de texto */
@@ -35,7 +41,7 @@ export function createStreamAdapters(keys: {
 function createOpenAiStream(apiKey: string): StreamCompletion {
   const openai = new OpenAI({ apiKey, dangerouslyAllowBrowser: true });
 
-  return async function* ({ model, context, prompt, signal }) {
+  return async function* ({ model, context, prompt, signal, effort }) {
     const history = context.map(({ role, content }) => ({
       role,
       content,
@@ -46,6 +52,7 @@ function createOpenAiStream(apiKey: string): StreamCompletion {
         messages: [...FORMAT_CONTEXT, ...history, { role: 'user', content: prompt }],
         model,
         stream: true,
+        reasoning_effort: effort.openai,
       },
       { signal },
     );
@@ -64,13 +71,17 @@ const GEMINI_HISTORY_START = '(Inicio de la conversación)';
 function createGeminiStream(apiKey: string): StreamCompletion {
   const ai = new GoogleGenAI({ apiKey });
 
-  return async function* ({ model, context, prompt, signal }) {
+  return async function* ({ model, context, prompt, signal, effort }) {
     const { systemInstruction, contents } = toGeminiRequest(context, prompt);
 
     const stream = await ai.models.generateContentStream({
       model,
       contents,
-      config: { systemInstruction, abortSignal: signal },
+      config: {
+        systemInstruction,
+        abortSignal: signal,
+        thinkingConfig: { thinkingLevel: effort.gemini },
+      },
     });
 
     for await (const chunk of stream) {

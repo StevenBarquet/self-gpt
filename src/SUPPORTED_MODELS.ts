@@ -1,8 +1,9 @@
-import type { Interactions } from '@google/genai';
+import { type Interactions, ThinkingLevel } from '@google/genai';
 import type {
   ChatCompletionCreateParamsNonStreaming,
   ChatCompletionMessageParam,
 } from 'openai/resources';
+import type { ReasoningEffort } from 'openai/resources/shared';
 
 export type AiProvider = 'openai' | 'gemini';
 
@@ -64,6 +65,42 @@ export function getModelProvider(model?: AiModel): AiProvider {
   if (provider) return provider;
   return model?.startsWith('gemini') ? 'gemini' : 'openai';
 }
+
+// -----------------------EFFORT (de menor a mayor: así se pintan en el slider)
+
+export interface EffortOption<V extends string = string> {
+  value: V;
+  label: string;
+}
+
+/** `reasoning_effort` de OpenAI. Se omite 'none' porque apaga el razonamiento en vez de ser un nivel */
+export const OPEN_AI_EFFORTS = [
+  { value: 'minimal', label: 'Minimal' },
+  { value: 'low', label: 'Low' },
+  { value: 'medium', label: 'Medium' },
+  { value: 'high', label: 'High' },
+  { value: 'xhigh', label: 'X-High' },
+  { value: 'max', label: 'Max' },
+] as const satisfies readonly EffortOption<NonNullable<ReasoningEffort>>[];
+
+/** `thinkingConfig.thinkingLevel` de Gemini */
+export const GEMINI_EFFORTS = [
+  { value: ThinkingLevel.MINIMAL, label: 'Minimal' },
+  { value: ThinkingLevel.LOW, label: 'Low' },
+  { value: ThinkingLevel.MEDIUM, label: 'Medium' },
+  { value: ThinkingLevel.HIGH, label: 'High' },
+  { value: ThinkingLevel.XHIGH, label: 'X-High' },
+] as const satisfies readonly EffortOption<ThinkingLevel>[];
+
+export type OpenAiEffort = (typeof OPEN_AI_EFFORTS)[number]['value'];
+export type GeminiEffort = (typeof GEMINI_EFFORTS)[number]['value'];
+
+/** Effort guardado para cada proveedor; cada adapter usa solo el suyo */
+export interface ProviderEffort {
+  openai: OpenAiEffort;
+  gemini: GeminiEffort;
+}
+
 export const FORMAT_CONTEXT: ChatCompletionMessageParam[] = [
   {
     role: 'system',

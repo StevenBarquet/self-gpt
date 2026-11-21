@@ -9,6 +9,7 @@ import { usePanelActions } from 'src/layout/Panel/usePanelActions';
 import { getModelProvider } from 'src/SUPPORTED_MODELS';
 import { useAppLogicStore } from 'src/store/appLogic';
 import { useKeysStore } from 'src/store/keys';
+import { usePreferencesStore } from 'src/store/preferences';
 import { useSupabase } from 'src/utils/app/useSupabase';
 import { swalApiError } from 'src/utils/functions/alertUtils';
 import type { WithId } from 'src/utils/functions/typesUtils';
@@ -85,11 +86,13 @@ export function useAiCtlr({ reloadChatMsgs }: Props) {
         .filter((e) => e.context)
         .filter((e) => !editingMsg || e.timestamp < editingMsg.timestamp);
 
+      const { openAiEffort, geminiEffort } = usePreferencesStore.getState();
       const stream = streamCompletion({
         model: selectedModel,
         context,
         prompt: inputCtlr.value,
         signal,
+        effort: { openai: openAiEffort, gemini: geminiEffort },
       });
 
       const chunks: string[] = [];
