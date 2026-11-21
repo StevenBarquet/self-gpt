@@ -1,49 +1,69 @@
-import type { ChatCompletionMessageParam } from 'openai/resources';
-import type { Message } from 'src/database/Messages/definitions';
+import type { Interactions } from '@google/genai';
+import type {
+  ChatCompletionCreateParamsNonStreaming,
+  ChatCompletionMessageParam,
+} from 'openai/resources';
 
 export type AiProvider = 'openai' | 'gemini';
 
-export const SUPPORTED_MODELS: {
-  value: Message['model'];
+// Ids de modelo de cada SDK: autocompletan los modelos conocidos y, como ambos incluyen
+// `string & {}`, también aceptan ids nuevos que el SDK instalado todavía no conoce.
+export type OpenAiModel = ChatCompletionCreateParamsNonStreaming['model'];
+export type GeminiModel = Interactions.Model;
+export type AiModel = OpenAiModel | GeminiModel;
+
+interface ModelOption<M extends AiModel = AiModel> {
+  value: M;
   label: string;
   title: string;
-  /** SDK con el que se ejecuta el modelo (OpenAiProvider / GeminiProvider) */
-  provider: AiProvider;
-}[] = [
-  // ---------------- OpenAI
+}
+
+export const OPEN_AI_MODELS: ModelOption<OpenAiModel>[] = [
   {
     value: 'gpt-6.2-astra',
     label: 'GPT-6.2 ASTRA',
     title: 'Cost 5.4 x12 (use with caution) - $8/0.40/40.00',
-    provider: 'openai',
   },
   {
     value: 'gpt-6.2-sol',
     label: 'GPT-6.2 Sol (Coding)',
     title: 'Small, code and automation - $2/0.10/10.00',
-    provider: 'openai',
   },
   {
     value: 'gpt-6.1-terra',
     label: 'GPT-6.2 Terra (Human)',
     title: 'Visual and human - $1/0.05/5.00',
-    provider: 'openai',
-  },
-  // ---------------- Gemini
-  // TODO: reemplazar por los modelos elegidos de la doc de Gemini (value = id exacto del modelo)
-  {
-    value: 'gemini-2.5-pro',
-    label: 'Gemini 2.5 Pro',
-    title: 'TODO: descripción - $input/cached/output',
-    provider: 'gemini',
-  },
-  {
-    value: 'gemini-2.5-flash',
-    label: 'Gemini 2.5 Flash',
-    title: 'TODO: descripción - $input/cached/output',
-    provider: 'gemini',
   },
 ];
+
+// TODO: reemplazar por los modelos elegidos de la doc de Gemini (value = id exacto del modelo)
+export const GEMINI_MODELS: ModelOption<GeminiModel>[] = [
+  {
+    value: 'gemini-4-carbon',
+    label: 'Gemini 4 Pro',
+    title: 'Version premium - $2/0.10/10.00',
+  },
+  {
+    value: 'gemini-4-hydrogen',
+    label: 'Gemini 4 lite',
+    title: 'Cheapest, free tier pero igual es bueno',
+  },
+];
+
+export const SUPPORTED_MODELS: (ModelOption & { provider: AiProvider })[] = [
+  ...OPEN_AI_MODELS.map((m) => ({ ...m, provider: 'openai' as const })),
+  ...GEMINI_MODELS.map((m) => ({ ...m, provider: 'gemini' as const })),
+];
+
+/**
+ * Proveedor (SDK) que ejecuta un modelo. Los modelos que ya no están en la lista (p. ej. guardados
+ * en mensajes antiguos) se resuelven por prefijo para no romper conversaciones existentes.
+ */
+export function getModelProvider(model?: AiModel): AiProvider {
+  const provider = SUPPORTED_MODELS.find((m) => m.value === model)?.provider;
+  if (provider) return provider;
+  return model?.startsWith('gemini') ? 'gemini' : 'openai';
+}
 export const FORMAT_CONTEXT: ChatCompletionMessageParam[] = [
   {
     role: 'system',

@@ -1,9 +1,9 @@
-import type { ChatCompletionCreateParamsNonStreaming } from "openai/resources";
+import type { AiModel } from "src/SUPPORTED_MODELS";
 
 export type GPT = {
 	name: string;
 	icon: string;
-	default_model: ChatCompletionCreateParamsNonStreaming["model"]; // 'some GPT model';
+	default_model: AiModel; // 'some GPT model';
 	timestamp: string; // Date.toIsoString()
 	description: string;
 };

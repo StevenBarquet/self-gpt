@@ -2,7 +2,7 @@
 import { useContext } from 'react';
 // ---Components
 import { Spinner } from 'src/common/Spinner/Spinner';
-import { OpenAiContext } from 'src/providers/OpenAiProvider/OpenAiProvider';
+import { AiContext } from 'src/providers/AiProvider/AiProvider';
 import { Answer } from './Answer/Answer';
 import { ChatInput } from './ChatInput/ChatInput';
 import { ChatStart } from './ChatStart/ChatStart';
@@ -14,10 +14,10 @@ import style from './Chat.module.scss';
 
 export function Chat() {
   // -----------------------CONSTS, HOOKS, STATES
-  const { chatCtlr, openAiCtlr } = useContext(OpenAiContext);
+  const { chatCtlr, aiCtlr } = useContext(AiContext);
   const { isLoading, reloadChatMsgs, messages } = chatCtlr;
   const { inputCtlr, ondAsk, sdkLoading, chatLoading, stopGeneration, aiAnswer, ctxCtlr, onEditQuestion, cancelEdit, editingMessageRef } =
-    openAiCtlr;
+    aiCtlr;
 
   const { GPTs, selectedGpt, mainScreen } = useAppLogicStore();
   const currentGpt = mainScreen === 'gptConversation' ? GPTs.find((g) => g.id === selectedGpt) : undefined;

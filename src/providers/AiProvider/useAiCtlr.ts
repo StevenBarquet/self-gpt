@@ -1,24 +1,29 @@
-import { type Content, GoogleGenAI } from '@google/genai';
 import { useEffect, useMemo, useRef, useState } from 'react';
+// import {
+//   IMAGE_GENERATED_DISPLAY_SIZE,
+// IMAGE_KEYWORDS,
+//   IMAGE_PROMPT_ENHANCER,
+// } from 'src/appConfig/constants';
 import type { Message } from 'src/database/Messages/definitions';
 import { usePanelActions } from 'src/layout/Panel/usePanelActions';
-import { FORMAT_CONTEXT } from 'src/SUPPORTED_MODELS';
+import { getModelProvider } from 'src/SUPPORTED_MODELS';
 import { useAppLogicStore } from 'src/store/appLogic';
 import { useKeysStore } from 'src/store/keys';
 import { useSupabase } from 'src/utils/app/useSupabase';
 import { swalApiError } from 'src/utils/functions/alertUtils';
 import type { WithId } from 'src/utils/functions/typesUtils';
 import { useInput } from 'src/utils/hooks/useInput';
+import { createStreamAdapters } from './streamAdapters';
 
 interface Props {
   reloadChatMsgs: () => void;
 }
 
 /**
- * Descripción: Equivalente de useOpenAiCtlr usando el SDK de Gemini (@google/genai).
- * Devuelve la misma forma (métodos y estados) para poder intercambiarlos en la UI.
+ * Descripción: Controlador del chat para todos los proveedores de IA. El estado (input, edición,
+ * contexto, carga) es único; solo el SDK que ejecuta el prompt cambia según el modelo seleccionado.
  */
-export function useGeminiCtlr({ reloadChatMsgs }: Props) {
+export function useAiCtlr({ reloadChatMsgs }: Props) {
   // -----------------------CONSTS, HOOKS, STATES
   const { onClickConversation } = usePanelActions([]);
   const [chatLoading, setChatLoading] = useState(false);
@@ -34,10 +39,13 @@ export function useGeminiCtlr({ reloadChatMsgs }: Props) {
     update,
   } = useAppLogicStore();
 
-  const { GEMINI_API_KEY } = useKeysStore();
+  const { OPEN_AI_API_KEY, GEMINI_API_KEY } = useKeysStore();
   const { createUserChat, addContext, deleteMessagesFrom, populateConversations } = useSupabase();
 
-  const ai = useMemo(() => new GoogleGenAI({ apiKey: GEMINI_API_KEY }), [GEMINI_API_KEY]);
+  const streamAdapters = useMemo(
+    () => createStreamAdapters({ OPEN_AI_API_KEY, GEMINI_API_KEY }),
+    [OPEN_AI_API_KEY, GEMINI_API_KEY],
+  );
   const inputCtlr = useInput();
   const editingMessageRef = useRef<WithId<Message> | null>(null);
 
@@ -55,6 +63,11 @@ export function useGeminiCtlr({ reloadChatMsgs }: Props) {
 
   async function ondAsk() {
     try {
+      const provider = getModelProvider(selectedModel);
+      const streamCompletion = streamAdapters[provider];
+      // Antes de borrar mensajes en modo edición, para no perderlos si falta la key
+      if (!streamCompletion) throw new Error(`No hay API key guardada para "${provider}"`);
+
       const editingMsg = editingMessageRef.current;
       if (editingMsg) {
         await deleteMessagesFrom(editingMsg.conversation, editingMsg.timestamp);
@@ -72,12 +85,11 @@ export function useGeminiCtlr({ reloadChatMsgs }: Props) {
         .filter((e) => e.context)
         .filter((e) => !editingMsg || e.timestamp < editingMsg.timestamp);
 
-      const { systemInstruction, contents } = toGeminiRequest(context, inputCtlr.value);
-
-      const stream = await ai.models.generateContentStream({
+      const stream = streamCompletion({
         model: selectedModel,
-        contents,
-        config: { systemInstruction, abortSignal: signal },
+        context,
+        prompt: inputCtlr.value,
+        signal,
       });
 
       const chunks: string[] = [];
@@ -87,9 +99,8 @@ export function useGeminiCtlr({ reloadChatMsgs }: Props) {
         update({ aiAnswer: chunks.join('') }); // join una sola vez por flush
       };
 
-      for await (const chunk of stream) {
-        const part = chunk.text;
-        if (part) chunks.push(part);
+      for await (const part of stream) {
+        chunks.push(part);
 
         const now = performance.now();
         if (now - lastFlush > 500) {
@@ -111,7 +122,7 @@ export function useGeminiCtlr({ reloadChatMsgs }: Props) {
         context: ctxCheck,
         model: selectedModel,
         role: 'user',
-        conversation: id,
+        conversation: id, // Hay que cambiar este por la conversación actual o la que se crea
         original_context: false,
         timestamp: questionDate,
       };
@@ -121,7 +132,7 @@ export function useGeminiCtlr({ reloadChatMsgs }: Props) {
         context: ctxCheck,
         model: selectedModel,
         role: 'assistant',
-        conversation: id,
+        conversation: id, // Hay que cambiar este por la conversación actual o la que se crea
         original_context: false,
         is_image_prompt: false,
         timestamp: answerDate,
@@ -130,10 +141,12 @@ export function useGeminiCtlr({ reloadChatMsgs }: Props) {
       await addContext([question, answer]);
 
       postSuccessQuestion(isNewChat, id);
+
+      // console.log({ result, allMessages });
     } catch (error: any) {
       console.log(error);
       // Expected when user stops generation
-      await swalApiError(error?.message || 'Error al conectarse con Gemini');
+      await swalApiError(error?.message || 'Error al conectarse con el modelo');
       update({ aiAnswer: '' });
       setCompletionCtrl(undefined);
     } finally {
@@ -215,6 +228,46 @@ export function useGeminiCtlr({ reloadChatMsgs }: Props) {
     reloadChatMsgs();
   }
 
+  // async function generateImage(prompt: string) {
+  //   try {
+  //     setImageLoading(enhancedImages ? 'Enhancing prompt...' : '');
+  //     // Flag para mejorar el prompt original de imagen
+  //     const enhancedPrompt = enhancedImages
+  //       ? await openai.chat.completions.create({
+  //           messages: [{ role: 'user', content: IMAGE_PROMPT_ENHANCER(prompt) }],
+  //           model: 'gpt-4o',
+  //         })
+  //       : { choices: [{ message: { content: prompt } }] };
+
+  //     setImageLoading('Generating image...');
+  //     const response = await openai.images.generate({
+  //       prompt: enhancedPrompt.choices[0].message.content || prompt,
+  //       n: 1,
+  //       size: IMAGE_GENERATED_DISPLAY_SIZE,
+  //     });
+  //     setImageLoading('');
+
+  //     return {
+  //       url: response.data?.[0].url,
+  //       prompt: enhancedPrompt.choices[0].message.content,
+  //       enhanced: enhancedImages,
+  //     };
+  //   } catch (error) {
+  //     setImageLoading('');
+  //     console.error('Error generating image:', error);
+  //   }
+  // }
+
+  // function isImagePrompt(prompt: string) {
+  //   // Convertimos el prompt a minúsculas
+  //   const lowerCasePrompt = prompt.toLowerCase();
+
+  //   // Lista de keywords para detección de imagen
+
+  //   // Verificamos si alguno de los keywords aparece en el prompt
+  //   return IMAGE_KEYWORDS.some((keyword) => lowerCasePrompt.includes(keyword));
+  // }
+
   // -----------------------HOOK DATA
   return {
     chatLoading,
@@ -234,37 +287,4 @@ export function useGeminiCtlr({ reloadChatMsgs }: Props) {
   };
 }
 
-export type GeminiCtlr = ReturnType<typeof useGeminiCtlr>;
-
-// -----------------------HELPERS
-
-const isSystemRole = (role: Message['role']) => role === 'system' || role === 'developer';
-
-/**
- * Traduce el historial (formato OpenAI guardado en Supabase) al formato de Gemini:
- * - Los mensajes 'system' / 'developer' (FORMAT_CONTEXT + contexto original del GPT) van a
- *   `systemInstruction`, ya que Gemini no acepta ese rol dentro de `contents`.
- * - 'assistant' → 'model'; el resto → 'user'.
- * - Se agrega al final el prompt actual del usuario.
- */
-function toGeminiRequest(context: Pick<Message, 'role' | 'content'>[], prompt: string) {
-  const formatInstructions = FORMAT_CONTEXT.map((m) =>
-    typeof m.content === 'string' ? m.content : '',
-  );
-  const gptInstructions = context.filter((m) => isSystemRole(m.role)).map((m) => m.content);
-
-  const systemInstruction = [...formatInstructions, ...gptInstructions]
-    .filter(Boolean)
-    .join('\n\n');
-
-  const contents: Content[] = context
-    .filter((m) => !isSystemRole(m.role))
-    .map((m) => ({
-      role: m.role === 'assistant' ? 'model' : 'user',
-      parts: [{ text: m.content }],
-    }));
-
-  contents.push({ role: 'user', parts: [{ text: prompt }] });
-
-  return { systemInstruction, contents };
-}
+export type AiCtlr = ReturnType<typeof useAiCtlr>;

@@ -1,12 +1,10 @@
-import type {
-	ChatCompletionCreateParamsNonStreaming,
-	ChatCompletionMessageParam,
-} from "openai/resources";
+import type { ChatCompletionMessageParam } from "openai/resources";
+import type { AiModel } from "src/SUPPORTED_MODELS";
 
 export type Message = {
 	role: ChatCompletionMessageParam["role"];
 	content: string;
-	model: ChatCompletionCreateParamsNonStreaming["model"];
+	model: AiModel;
 	timestamp: string; // Date.toIsoString()
 	context: boolean;
 	original_context: boolean;

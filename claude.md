@@ -10,7 +10,7 @@
 
 - Vite + React 19 (full client-side SPA, no SSR)
 - Supabase (client-side SDK for database)
-- OpenAI SDK (client-side, streaming responses)
+- OpenAI SDK + Google GenAI SDK (`@google/genai`) (client-side, streaming responses; the SDK is picked per model in `AiProvider`)
 - Ant Design 5 (ConfigProvider for dark theming)
 - Formik + Yup for forms
 - Zustand (with devtools + persist middleware) for client state
@@ -33,7 +33,7 @@ src/
 │   └── Page404/        # 404 page
 ├── layout/             # App shell components (Panel, ModelSelector, nav)
 ├── common/             # Generic reusable UI building blocks (design-system level)
-├── providers/          # Logical wrappers (OpenAI, Antd, routing rules)
+├── providers/          # Logical wrappers (AI SDKs, Antd, routing rules)
 ├── store/              # Zustand stores (one file per domain)
 ├── database/           # Entity definitions (types per Supabase table)
 ├── utils/
@@ -76,7 +76,7 @@ Decide placement by asking: **who uses this component?**
 |-------------|---------------|----------|
 | Any component, context-agnostic (design-system level) | `src/common/` | `CopyButton`, `Spinner`, `DynamicIcon`, form controls |
 | All pages (app shell / global visual structure) | `src/layout/` | `Panel`, `ModelSelector`, `MessagesPagination` |
-| All pages (logical wrapper, non-visual) | `src/providers/` | `OpenAiProvider`, `AntdProv`, `RoutingRules` |
+| All pages (logical wrapper, non-visual) | `src/providers/` | `AiProvider`, `AntdProv`, `RoutingRules` |
 | A single parent component | Co-located inside the parent's folder | `Gpts/` inside `Panel/` |
 
 ### Co-location Rules
