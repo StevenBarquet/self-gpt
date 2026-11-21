@@ -1,25 +1,47 @@
 import type { ChatCompletionMessageParam } from 'openai/resources';
 import type { Message } from 'src/database/Messages/definitions';
 
+export type AiProvider = 'openai' | 'gemini';
+
 export const SUPPORTED_MODELS: {
   value: Message['model'];
   label: string;
   title: string;
+  /** SDK con el que se ejecuta el modelo (OpenAiProvider / GeminiProvider) */
+  provider: AiProvider;
 }[] = [
+  // ---------------- OpenAI
   {
     value: 'gpt-6.2-astra',
     label: 'GPT-6.2 ASTRA',
     title: 'Cost 5.4 x12 (use with caution) - $8/0.40/40.00',
+    provider: 'openai',
   },
   {
     value: 'gpt-6.2-sol',
     label: 'GPT-6.2 Sol (Coding)',
     title: 'Small, code and automation - $2/0.10/10.00',
+    provider: 'openai',
   },
   {
     value: 'gpt-6.1-terra',
     label: 'GPT-6.2 Terra (Human)',
     title: 'Visual and human - $1/0.05/5.00',
+    provider: 'openai',
+  },
+  // ---------------- Gemini
+  // TODO: reemplazar por los modelos elegidos de la doc de Gemini (value = id exacto del modelo)
+  {
+    value: 'gemini-2.5-pro',
+    label: 'Gemini 2.5 Pro',
+    title: 'TODO: descripción - $input/cached/output',
+    provider: 'gemini',
+  },
+  {
+    value: 'gemini-2.5-flash',
+    label: 'Gemini 2.5 Flash',
+    title: 'TODO: descripción - $input/cached/output',
+    provider: 'gemini',
   },
 ];
 export const FORMAT_CONTEXT: ChatCompletionMessageParam[] = [
@@ -62,7 +84,7 @@ export const FORMAT_CONTEXT: ChatCompletionMessageParam[] = [
       '  • Alinea varias ecuaciones con & y separa líneas con \\\\.',
       '- Si necesitas macros, declara \\newcommand al principio del bloque.',
       '- Explicaciones y texto descriptivo van FUERA del bloque; dentro, solo código LaTeX.',
-    ].join('\\n'),
+    ].join('\n'),
   },
   // 3) Cualquier otro texto (no código ni fórmulas)
   {

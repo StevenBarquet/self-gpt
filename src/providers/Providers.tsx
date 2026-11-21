@@ -1,6 +1,7 @@
 // ---Dependencies
 import type { ReactNode } from 'react';
 import { BrowserRouter } from 'react-router-dom';
+import { GeminiProvider } from './GeminiProvider/GeminiProvider';
 import { OpenAiProvider } from './OpenAiProvider/OpenAiProvider';
 import { RoutingRules } from './RoutingRules/RoutingRules';
 import { useScreenBreakpoints } from './useScreenBreakpoints';
@@ -24,7 +25,9 @@ export function Providers({ children }: Props) {
     <BrowserRouter>
       <AntdProvDark>
         <OpenAiProvider>
-          <RoutingRules>{children}</RoutingRules>
+          <GeminiProvider>
+            <RoutingRules>{children}</RoutingRules>
+          </GeminiProvider>
         </OpenAiProvider>
       </AntdProvDark>
     </BrowserRouter>
